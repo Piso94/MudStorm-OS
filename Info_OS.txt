@@ -1,0 +1,107 @@
+						MudStorm OS Revisione 150
+Kernel: 0.6
+Shell: 0.4
+
+MicroOS creato da Piso94/LittleHacker, a scopo puramente Hobbystico!
+
+KERNEL:
+
+## 0.1
+* Iniziato il progetto
+* Inserite funzioni:
+- Video
+- Stringe
+- Scrittura
+
+## 0.2
+* Aggiunti GDT, IDT, IRQ, ISR
+* Aggiunto input da tastiera
+* Aggiunta Shell
+* Aggiunta funzione login
+
+## 0.3
+* Migliorata la funziona login (adesso c'è anche l'username)
+* Migliorata funzione Init(inserito reboot al posto di shutdown), file load.c
+* Migliorata la funzione shutdown, adesso arresta veramente(solo le VM) 
+* Aggiunta la funzione reboot
+
+## 0.4
+* Migliorato il Kernel
+* Aggiunta la funzione printf
+* Aggiunta la funzione stoi (string to integer)
+* Aggiunta la funzione read_rtc(), che legge il tempo e la data!
+* Migliorata la gestione della tastiera, adesso, anche se cancellate tutto il testo(compreso quello scritto dall OS), la scritta(quella che farete dopo) rimarrà invarita!
+
+## 0.5
+* Migliorata la funzione shutdown. Grazie a (https://github.com/Kijewski/chaOS/blob/master/core/shutdown.c)
+* Rivisto il codice
+* Aggiunta la funzione set_color(char color) permette di cambiare il colore delle scritte! Nel file types.h ci sono i vari tipi di colori
+* Aggiunta funzione scanf
+* Migliorata la funzione DelayMs & DelayS
+* Aggiunta la funzione CPU Speed
+* Tradotto (per quello che mi e' stato possibile fare) lo scancode della tastiera da EN a IT
+* Divisi tutti gli header (file .h)
+* Eliminata funzione Init, inserita nel kernel_main.c
+* Eliminata funzione login
+* Commentato tutto il codice del file kernel_main.c & rdtsc.c & random.c
+* Aggiunta funzione toupper (string)
+* Aggiunta funzione tolower (string)
+* Aggiunta la funzione bool detect_videotype(), permette di determinare il tipo di scheda VGA (Monocromatica(ritorna true) o Colore (ritorna false)) 
+* Aggiunto il sorgente video.c, racchiude tutte le funzione della VGA: set_color, detect_videotype, scroll, putch, puts, etc.
+* Il sorgente console.c ora contiene solo: shutdown, reboot e logo
+* Rinominato il file kernel_main.c in kernel.c e il main da kernel_main a kernel
+* Rinominate le funzioni printf e scanf corrispettivamente in printk e scank
+* Rivisto il codice e sistemato
+* Sistemato il bug della tastiera(se continuavate a cancellare, si cancellava anche ">") :)
+
+## 0.6
+* Possibilità di mettere in chiaro o no una password (o un username) grazie all funzione visible(bool) (di default true)
+  Ex: printk("\nPassword:"); visible(false); scank("%s", pass); visible(true); Password: *****
+  Se dopo lo scank non mettete visible(true); le prossime scritte saranno sempre trasformate in asterischi!
+* Aggiunta la funzione strtok() (Grazie ad Apple per il codice)
+* Implementato mouse, vi mostra la posizione in X e Y del mouse! Ancora niente per il tasto sinistro e destro!
+* Sistemata la funzione visible(bool), adesso appena inserite la vostra stringa, non in chiaro, e premete invio, le prossime stringhe ritorneranno in chiaro! :)
+* Aggiunta GPL anche nel file loader/loader.S
+* Aggiunto Log! Usate:
+		- #include <log.h>
+                - Log.i(string) Per le info
+                - Log.d(string) Per il debug
+                - Log.w(string) Per gli avvisi
+                - Log.e(string) Per gli errori
+* Aggiunti Log nel kernel!
+
+SHELL:
+
+## 0.0.1
+* Iniziato il progetto
+* Aggiunti i comandi: help, dhelp, version, creator, clear, exit
+
+## 0.0.2
+* Migliorata la Shell
+* Aggiunti nuovi comandi: reboot, print, calc (beta), date
+* Rinominati comandi: creator -> author, exit -> shutdown, dhelp -> help
+* Migliorata la Shell, grazie alla funzione printf
+* Alleggerita la grafica
+
+## 0.0.3
+* Eliminata la funzione calc, dava solo problemi
+* Aggiunta una piccola funzione di debug, per ora solo per la shell
+* Aggiunto comando logo, stampa a schermo il logo dell'OS
+* Aggiunto comando beep, permette far suonare al buzzer un beep per 5s (non funziona molto bene il delay)
+* Aggiunto comando exit, permette di uscire dalla shell e di rientrare nella schermata di login
+* Rimosso il comando author e inserito nel comando version
+* Nuovo logo
+
+## 0.4
+* Rivisto e migliorato il codice della shell
+* Rinomitato il comando version in uname
+* Rimossa la stringa "Guest", al suo posto inserito ">"
+* Commentato tutto il codice della shell
+* Rimosso il comando "echo" (era utile?)
+* Aggiunta la funzione "cpu" mostra la velocità attuale della CPU(in MHz)
+* Reinserito "echo", adesso è possibile fare in questo modo: "echo qui quo qua" e come output avrete "qui quo qua"!
+* Migliorata la funzione uname, adesso se inserite uname, vi dà tutti i possibili comandi e li inserite così: Ex. uname -r
+* Aggiunta la domanda di sicurezza per reboot e shutdown
+* Migliorata la funzione di debug
+
+N.B: Questo software puo' essere visualizzato, modificato, usato, etc. basta solo che il nome del creatore, rimanga invariato!
