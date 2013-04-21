@@ -309,7 +309,7 @@ void UpdateLeds(char led)
 		{
 			leds = leds | led;	    // Else, turn led on
 		}
-}
+	}
 	while((inportb(0x64) &2) !=0);  // Loop until zero
 	outportb(0x60, 0xED);
 	while((inportb(0x64) &2) !=0 ); // Loop until zero

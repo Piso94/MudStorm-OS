@@ -19,6 +19,7 @@
 #include <intr/idt.h>
 #include <stdio.h>
 #include <kb.h>
+#include <log.h>
 
 /***
 Intel has reserved the first 32 interrupts for system use, for things like
@@ -152,11 +153,11 @@ void _fault_handler(struct regs *r)
 {
     if (r->int_no < 32)
     {
-	printk("\t\t\t\tKERNEL PANIC!");
-	printk("\n\t\t\t\t%s", exception_messages[r->int_no]);
-	UpdateLeds(CapsLock);
-	UpdateLeds(NumLock);
-	asm volatile ("cli");
-	asm volatile ("hlt");
+	   Log.e("\n\t\t\t\t  KERNEL PANIC!");
+	   printk("\n\t\t\t\t%s", exception_messages[r->int_no]);
+	   UpdateLeds(CapsLock);
+	   UpdateLeds(NumLock);
+	   asm ("cli");
+	   asm ("hlt");
     }
 }

@@ -72,7 +72,7 @@ gcc $opt kernel/intr/isrs.c -o $build/isrs.o
 echo "Linking..."
 # LD linking
 ld -m elf_i386 -T linker/linker.ld -o kernel.bin \
-				    $build/loader.o $build/kernel.o $build/shell.o \
+				        $build/kernel.o $build/shell.o \
 					$build/console.o $build/io.o $build/log.o \
 					$build/random.o $build/string.o $build/timer.o $build/stdio.o \
 					$build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/rdtsc.o \
