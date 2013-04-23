@@ -36,13 +36,13 @@ void _start(void *mbd, unsigned int magic)
 	cls(); // Pulisco lo schermo
 	
 	printk("\t\t\t   VGA type: "); // Scrive a video
-	if (!detect_videotype()) // Se la funzione ritorna false
+	if (detect_videotype()) // Se la funzione ritorna true
+	{
+		Log.v("MonoChrome\n"); // Scrive a video
+	}
+	else // Altrimenti
 	{
 		Log.d("Colour\n"); // Scrive a video
-	}
-	else // Altrimenti(se ritorna true)
-	{
-		Log.d("MonoChrome\n"); // Scrive a video
 	}
 
 	if (magic != 0x2BADB002) 

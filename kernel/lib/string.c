@@ -30,7 +30,7 @@ void *memcpy(void *dst, const void *src, size_t len)
 {
     char *sp = (char*) src;
     char *dp = (char*) dst;
-    for(; len != 0; len--) *dp++ = *sp++;
+    for( ; len != 0; len--) *dp++ = *sp++;
 	return dst;
 }
 
@@ -42,18 +42,16 @@ void memset(void *dst, int val, size_t len)
 
 void memmov (void *dst, const void *src, const unsigned int bytes)
 {
-    unsigned int i = 0;
-
-    for (i=0; i<bytes; i++) {
+    for (unsigned int i=0; i<bytes; i++) {
         ((char *)dst)[i] = ((char *)src)[i];
     }
 }
 
 void strcat (char* dst, const char* src)
 {
-	int dst_len = strlen(dst), src_len = strlen(src), i = 0;
+	int dst_len = strlen(dst), src_len = strlen(src);
 
-	for (i=0;i<(dst_len+src_len);i++)
+	for (int i=0; i<(dst_len+src_len); i++)
 	{
 		dst[dst_len + i] = src[i];
 		i++;
@@ -81,10 +79,9 @@ int strcmp(const char *str1, const char *str2)
 
 int strncmp (const char *dst, const char *src, const unsigned int bytes) 
 {
-    unsigned int i = 0;
     int result = 0;
 
-    for (i=0; i<bytes; i++) {
+    for (unsigned int i=0; i<bytes; i++) {
         if (dst[i] < src[i]) {
             result = -1;
             break;
@@ -158,7 +155,7 @@ cont:
 	 * Scan token (scan for delimiters: s += strcspn(s, delim), sort of).
 	 * Note that delim must have one NUL; we stop if we see that, too.
 	 */
-	for (;;) {
+	for ( ; ; ) {
 		c = *s++;
 		spanp = (char *)delim;
 		do {
@@ -205,10 +202,9 @@ int isdigit(int c) {
 
 char* toupper (char *src)
 {
-	int len = strlen(src),
-        i;
+	int len = strlen(src);
     
-    for (i = 0; i < len; i++)
+    for (int i=0; i < len; i++)
         if (*(src + i) >= 'a' && *(src + i) <= 'z')
             *(src + i) -= ('a' - 'A');
     
@@ -217,10 +213,9 @@ char* toupper (char *src)
 
 char* tolower (char *src)
 {
-	int len = strlen(src),
-        i;
+	int len = strlen(src);
     
-    for (i = 0; i < len; i++)
+    for (int i=0; i < len; i++)
         if (*(src + i) >= 'A' && *(src + i) <= 'Z')
             *(src + i) -= ('A' - 'a');
     

@@ -29,10 +29,10 @@ void shutdown()
 	
 	// Questa è quella nuova che spegne tutte le VM, ma non quelle reali!
 	asm volatile ("cli");
-  	for (;;)
+  	for ( ; ; )
   	{
 	      // Funziona per QEMU e Bochs
-      	      outportw (0xB004, 0x2000);
+      	  outportw (0xB004, 0x2000);
 	
 	      // Magic shutdown per Bochs e QEMU
 	      for (const char *s = "Shutdown"; *s; ++s)
@@ -46,10 +46,12 @@ void shutdown()
 void reboot()
 {
 	int good = 0x02;
-    	while (good & 0x02)
+    while (good & 0x02)
+    {
        	good = inportb(0x64);
     	outportb(0x64, 0xFE);
-	__asm__ __volatile__ ("hlt");
+    }
+	asm volatile ("hlt");
 }
 
 void logo()

@@ -15,35 +15,34 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <types.h>
 #include <rdtsc.h>
 #include <io.h>
 #include <delay.h>
 
-unsigned long long currentcycles() 
+qword currentcycles() 
 {
-    unsigned long long result; // Inizializzo la variabile "result" come "unsigned long long"
-    __asm__ __volatile__ ("rdtsc" : "=A" (result)); // Passo la velocità(attuale) della CPU alla variabile "result"
+    qword result; // Inizializzo la variabile "result" come "unsigned long long"
+    asm volatile ("rdtsc" : "=A" (result)); // Passo la velocità(attuale) della CPU alla variabile "result"
     return result; // Ritorno il valore della variabile "result"
 }
 
-int cpu_speed()
+unsigned long cpu_speed()
 {
 	asm volatile ("cli"); // Disabilito gli interrupt
 	outportb(0x43,0x34);   // set PIT channel 0 to single-shot mode
 	outportb(0x40,0);
 	outportb(0x40,0);      // program the counter will be 0x10000 - n after n ticks
-	long stsc=currentcycles(); // Richiedo la velocità attuale della CPU
+	unsigned long stsc = currentcycles(); // Richiedo la velocità attuale della CPU
 	for (int i=0x1000;i>0;i--); // Attendo 0x1000 (1s)
-	long etsc=currentcycles(); // Richiedo la velocità attuale della CPU
+	unsigned long etsc = currentcycles(); // Richiedo la velocità attuale della CPU
 	outportb(0x43,0x04);   // read PIT counter command ??
-	byte lo=inportb(0x40);
-	byte hi=inportb(0x40);
+	byte lo = inportb(0x40);
+	byte hi = inportb(0x40);
 	asm volatile ("sti"); // Abilito gli interrupt
 
-	long ticks = (0x10000 - (hi*256+lo));
+	unsigned long ticks = (0x10000 - (hi*256+lo));
 
-	return (etsc-stsc)*1193180 / ticks; // Ritorno un valore long
+	return ((etsc-stsc) * 1193180) / ticks; // Ritorno un valore unsigned long
 }
 
 void DelayS (int s)
@@ -53,12 +52,11 @@ void DelayS (int s)
 
 void DelayMs (int ms)
 {
-	unsigned long long t1 = currentcycles(); // Assegno alla variabile "t1" il valore di currentcycles()
+	qword t1 = currentcycles(); // Assegno alla variabile "t1" il valore di currentcycles()
 	for(int i=0;i<10;i++); // Attendo 10 cicli
-	unsigned long long t2 = currentcycles(); // Assegno alla variabile "t2" il valore di currentcycles()
+	qword t2 = currentcycles(); // Assegno alla variabile "t2" il valore di currentcycles()
 
-	unsigned long long t = (t2 - t1) * ms; // Assegno alla variabile "t" il valore "(t2 - t1) * ms"
-	unsigned long long i; // Inizializzo la variabile "i"	
+	qword t = (t2 - t1) * ms; // Assegno alla variabile "t" il valore "(t2 - t1) * ms"
 
-	for (i=0;i<t;i++); // Attendo fin quando "i" diventa minore di "t"
+	for (qword i=0; i<t; i++); // Attendo fin quando "i" diventa minore di "t"
 }

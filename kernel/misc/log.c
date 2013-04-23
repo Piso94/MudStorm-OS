@@ -48,6 +48,13 @@ void e(char* message)
 	set_color(WHITE);
 }
 
+void v(char* message)
+{
+	set_color(WHITE);
+	printk("%s", message);
+	set_color(WHITE);
+}
+
 /*
  * Grazie a ZioCrocifisso (PieroTofy.it)
  * per avermi illuminato sull uso delle struct
@@ -58,5 +65,6 @@ struct LOG Log =
 	&i,
 	&d,
 	&w,
-	&e
+	&e,
+	&v
 };

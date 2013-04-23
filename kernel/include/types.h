@@ -18,16 +18,7 @@
 #ifndef _TYPES_H_
 #define _TYPES_H_
 
-#define NULL ((void*)0)
-
-#define EOF (-1)
-
-#define true 1
-#define false 0
-#define TRUE 1
-#define FALSE 0
-
-#define UINT32_MAX  (0xffffffff)
+ // Colour
 
 #define BLACK 0
 #define BLUE 1
@@ -46,6 +37,19 @@
 #define YELLOW 14
 #define WHITE 15
 #define BAK_WHITE 0xF0
+
+ // Type
+
+#define NULL ((void*)0)
+
+#define EOF (-1)
+
+#define true 1
+#define false 0
+#define TRUE 1
+#define FALSE 0
+
+#define UINT32_MAX  (0xffffffff)
 
 typedef int bool;
 

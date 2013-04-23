@@ -21,6 +21,6 @@
 extern void DelayS(int s);
 extern void DelayMs(int ms);
 
-extern int cpu_speed();
+extern unsigned long cpu_speed();
 
 #endif

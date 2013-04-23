@@ -18,6 +18,8 @@
 #ifndef _RDTSC_H_
 #define _RDTSC_H_
 
-unsigned long long currentcycles();
+#include <types.h>
+
+qword currentcycles();
 
 #endif

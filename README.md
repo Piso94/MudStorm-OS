@@ -5,7 +5,7 @@ My MicroOS written in Assembler x86/C
 
 Prendendo spunto da DreamOS, le nuove versioni avranno un nome in codice (per capirci, un po' come Android)! :)
 
-Versione OS: 0.6.1 orange (Arancia)
+Versione OS: 0.6.2 orange (Arancia)
 
 |------------------------------------------|
 |COMPILAZIONE e VIRTUALIZZAZIONE MudStormOS|

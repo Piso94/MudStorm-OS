@@ -1,7 +1,7 @@
-						MudStorm OS Revisione 150
-						Versione: 0.6.1 orange (Arancia)
+						MudStorm OS Revisione 155
+						Versione: 0.6.2 orange (Arancia)
 Kernel: 0.6
-Shell: 0.4
+Shell: 0.5
 
 MicroOS creato da Piso94/LittleHacker, a scopo puramente Hobbystico!
 
@@ -71,6 +71,10 @@ KERNEL:
                 - Log.e(string) Per gli errori
 * Aggiunti Log nel kernel!
 * Rinominata la funzione visible(bool) in kbhit(), adesso basta richiamarla e la scritta successiva alla funzione verrà nascosta, come per la password Linux!
+* Aggiunta nuova funzione a Log! Log.v(string), scrive a video con colore bianco!
+* Ripulito codice!
+* Migliorata funzione cpu_speed(), adesso ritorna solo unsigned long
+* Aggiunto il nome in codice!
 
 SHELL:
 
@@ -105,5 +109,9 @@ SHELL:
 * Migliorata la funzione uname, adesso se inserite uname, vi dà tutti i possibili comandi e li inserite così: Ex. uname -r
 * Aggiunta la domanda di sicurezza per reboot e shutdown
 * Migliorata la funzione di debug
+
+## 0.5
+* Aggiunta una funzione carina...provate a scrivere "mudstorm" (senza virgolette)! :)
+* Aggiunto il nome in codice della versione alla funzione uname
 
 N.B: Questo software puo' essere visualizzato, modificato, usato, etc. basta solo che il nome del creatore, rimanga invariato!

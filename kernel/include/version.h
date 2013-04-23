@@ -18,9 +18,10 @@
 #ifndef _VERSION_H_
 #define _VERSION_H_
 
-#define REVISION "-r150"
+#define REVISION "-r155"
 #define KERNEL "0.6"
-#define SHELL "0.4"
+#define SHELL "0.5"
 #define AUTHOR "Piso94/LittleHacker"
+#define NAME "Orange"
 
 #endif

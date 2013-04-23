@@ -20,15 +20,14 @@
 
 #include <types.h>
 
-struct LOG
+extern struct LOG
 {
 	void (*i)(char* message);
 	void (*d)(char* message);
 	void (*w)(char* message);
 	void (*e)(char* message);
-};
-
-extern struct LOG Log;
+	void (*v)(char* message);
+} Log;
 
 #endif
 

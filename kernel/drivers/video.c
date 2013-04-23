@@ -20,14 +20,12 @@
 #include <string.h>
 
 unsigned short *textmemptr = (unsigned short*)(0xb8000);
-int attrib = 0x0F;
-int csr_x = 0, csr_y = 0;
+int attrib = 0x0F, csr_x, csr_y;
 
 void scroll()
 {
-    unsigned blank, temp;
-
-    blank = 0x20 | (attrib << 8);
+    unsigned blank = 0x20 | (attrib << 8);
+    unsigned temp;
 
     if(csr_y >= 25)
     {
@@ -51,11 +49,10 @@ void cls()
     /// Clear The screen
 {
     unsigned blank;
-    int i;
 
     blank = 0x20 | (attrib << 8);   // Make the "blank" (space + attribute)
 
-    for(i = 0; i < 25; i++)         // Do it on every Line of the screen
+    for(int i = 0; i < 25; i++)         // Do it on every Line of the screen
         memsetw (textmemptr + i * 80, blank, 80);  // Clear a line on the screen
 
     csr_x = 0;
@@ -119,9 +116,7 @@ void putch(char c)
 
 void puts(char *text)
 {
-    int i;
-
-    for (i = 0; i < strlen(text); i++)
+    for (int i = 0; i < strlen(text); i++)
     {
         putch(text[i]);
     }
@@ -141,6 +136,9 @@ void move_csr(int x, int y)
 
 bool detect_videotype()
 {
-	char c = ((*(volatile unsigned short*)0x410) & 0x30);
+	char c;
+
+    c = ((*(volatile unsigned short*)0x410) & 0x30);
+
 	return (c == 0x30);
 }

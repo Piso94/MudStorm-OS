@@ -20,19 +20,16 @@
 #include <kb.h>
 #include <intr/irq.h>
 
-/// These are static Variables, They are the control lines of the keyboard;
-    /// shift, caps, ctrl, ect.
-
-unsigned char shift = 0;            // Shift Key Status 
-unsigned char ctrl = 0;             // Ctrl Key Status
-unsigned char alt = 0;              // Alt Key Status 
-unsigned char caps = 0;             // Caps Lock Status
-unsigned char num = 0;              // Num Lock Status 
-unsigned char keyBuff[257];         // Keybuffer 
+unsigned char shift = 0;            	// Shift Key Status 
+unsigned char ctrl = 0;             	// Ctrl Key Status
+unsigned char alt = 0;              	// Alt Key Status 
+unsigned char caps = 0;             	// Caps Lock Status
+unsigned char num = 0;              	// Num Lock Status 
+unsigned char keyBuff[257];         	// Keybuffer 
 volatile unsigned char keyBuffEnd = 0;  // The Last key in the buffer
-int line = 2;			    // Line
-unsigned char asciiCode;            // The ASCII Code
-unsigned char leds = 0;             // The Three LED's on the keyboard.
+int line = 2;			    			// Line
+unsigned char asciiCode;            	// The ASCII Code
+unsigned char leds = 0;             	// The Three LED's on the keyboard.
 bool in_chiaro = true;
 unsigned char kbScanCodes[512] =    
 {	
@@ -80,7 +77,7 @@ unsigned char kbScanCodes[512] =
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-};
+}; // Scancode Charatters
 
 
 
@@ -171,7 +168,7 @@ void keyboard_handler(struct regs *r)
 	
 	if(!(kb_special(scanCode) | (scanCode >= 0x80)))
 	{
-		if(shift)		//Determine key that has been pressed
+		if(shift)	//Determine key that has been pressed
 		{
 			if(!caps)
 			{
@@ -198,7 +195,7 @@ void keyboard_handler(struct regs *r)
 		keyBuff[keyBuffEnd] = asciiCode;
 		if (keyBuff[keyBuffEnd] == '\b')
 		{
-			if (line > 2)
+			if ((line > 2) && (in_chiaro))
 			{
 				putch((int)keyBuff[keyBuffEnd]);
 			}
