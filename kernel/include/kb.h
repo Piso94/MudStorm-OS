@@ -29,7 +29,7 @@ extern void UpdateLeds(char led);
 extern void FlushBuffer();
 extern char getchar_int();
 extern int getchar();
-extern void visible(bool rix);
+extern void kbhit();
 extern void gets(char *s);
 extern void waitKey();
 

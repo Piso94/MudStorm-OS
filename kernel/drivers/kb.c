@@ -209,13 +209,6 @@ void keyboard_handler(struct regs *r)
 			{
 				putch((int)keyBuff[keyBuffEnd]);
 			}
-			else
-			{
-				if (!(((int)keyBuff[keyBuffEnd] == '\b') || ((int)keyBuff[keyBuffEnd] == '\n')))
-				{
-					putch('*');
-				}
-			}
 		}
 	}
 }
@@ -232,9 +225,9 @@ void waitKey()
 	while (getchar() == 0);
 }
 
-void visible(bool rix)
+void kbhit()
 {
-	in_chiaro = rix;
+	in_chiaro = false;
 }
 
 void gets(char *s)

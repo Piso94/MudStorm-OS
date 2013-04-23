@@ -70,6 +70,7 @@ KERNEL:
                 - Log.w(string) Per gli avvisi
                 - Log.e(string) Per gli errori
 * Aggiunti Log nel kernel!
+* Rinominata la funzione visible(bool) in kbhit(), adesso basta richiamarla e la scritta successiva alla funzione verrà nascosta, come per la password Linux!
 
 SHELL:
 
