@@ -1,4 +1,5 @@
 						MudStorm OS Revisione 150
+						Versione: 0.6.1 orange (Arancia)
 Kernel: 0.6
 Shell: 0.4
 
