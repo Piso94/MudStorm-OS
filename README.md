@@ -5,6 +5,8 @@ My MicroOS written in Assembler x86/C
 
 Prendendo spunto da DreamOS, le nuove versioni avranno un nome in codice (per capirci, un po' come Android)! :)
 
+In questa nuova versione ho aggiunto un piccolo easter egg! Provate a scrivere cowsay! :D Spero vi piaccia :)
+
 Versione OS: 0.6.2 orange (Arancia)
 
 |------------------------------------------|
