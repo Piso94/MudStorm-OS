@@ -15,19 +15,31 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _SHELL_H_
-#define _SHELL_H_
+#include <speaker.h>
+#include <io.h>
+#include <delay.h>
 
-extern void runShell();
+/* Speaker port enable I/O register. */
+#define SPEAKER_PORT_GATE	0x61
 
-#define NUM 11 // Con cpu 12
+/* Speaker port enable bits. */
+#define SPEAKER_GATE_ENABLE	0x03
 
-struct cmd {
-	char* cmdname;
-	void (*v_func)(void);
-	char* cmddesc;
-};
+void sound(int frequency)
+{
+	if ((frequency >= 20) & (frequency <= 20000))
+		outportb (SPEAKER_PORT_GATE, inportb (SPEAKER_PORT_GATE) | SPEAKER_GATE_ENABLE);
+}
 
-extern struct cmd shellcmd[NUM];
 
-#endif
+void nosound()
+{
+	outportb (SPEAKER_PORT_GATE, inportb (SPEAKER_PORT_GATE) & ~SPEAKER_GATE_ENABLE);
+}
+
+void beep()
+{
+	sound(440);
+	DelayS(5);
+	nosound();
+}

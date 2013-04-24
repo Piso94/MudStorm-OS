@@ -57,8 +57,10 @@ echo "Compilazione (C) Drivers..."
 gcc $opt kernel/drivers/kb.c -o $build/kb.o
 gcc $opt kernel/drivers/mouse.c -o $build/mouse.o
 gcc $opt kernel/drivers/video.c -o $build/video.o
+
 gcc $opt kernel/drivers/rtc.c -o $build/rtc.o 
 gcc $opt kernel/drivers/speaker.c -o $build/speaker.o
+gcc $opt kernel/drivers/rdtsc.c -o $build/rdtsc.o
 
 echo "Compilazione (C) int(e)r(rupt)..."
 # C int(e)r(rupt)
@@ -73,7 +75,7 @@ ld -m elf_i386 -T linker/linker.ld -o kernel.bin \
 				    $build/loader.o $build/kernel.o $build/shell.o \
 					$build/console.o $build/io.o $build/log.o \
 					$build/random.o $build/string.o $build/timer.o $build/stdio.o \
-					$build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o \
+					$build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/rdtsc.o \
 					$build/gdt.o $build/idt.o $build/irq.o $build/isrs.o
 
 echo "Linking terminato"

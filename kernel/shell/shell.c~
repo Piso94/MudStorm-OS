@@ -195,7 +195,7 @@ struct cmd shellcmd[NUM] = { // Dichiaro una struttura con tutti questi comandi
 { "clear", clear, "Pulisce lo schermo" },
 { "uname", uname, "Mostra le informazioni sull'OS. Es. uname -a" },
 { "echo", eco, "Stampa a video quello che vuoi. Es. echo Ciao" },
-{ "cowsay", cowsay, "" },
+{ "mudstorm", cowsay, "" },
 { "date", date, "Mostra la data" },
 //{ "cpu", cpu, "Mostra la velocita' attuale della CPU" },
 { "beep", bee, "Suona col buzzer" },

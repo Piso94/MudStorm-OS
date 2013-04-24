@@ -17,7 +17,7 @@
 
 #include <speaker.h>
 #include <io.h>
-#include <delay.h>
+#include <timer.h>
 
 /* Speaker port enable I/O register. */
 #define SPEAKER_PORT_GATE	0x61

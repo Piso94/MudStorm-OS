@@ -111,7 +111,7 @@ SHELL:
 * Migliorata la funzione di debug
 
 ## 0.5
-* Aggiunta una funzione carina...provate a scrivere "mudstorm" (senza virgolette)! :)
+* Aggiunta una funzione carina...provate a scrivere "cowsay" (senza virgolette)! :)
 * Aggiunto il nome in codice della versione alla funzione uname
 
 N.B: Questo software puo' essere visualizzato, modificato, usato, etc. basta solo che il nome del creatore, rimanga invariato!

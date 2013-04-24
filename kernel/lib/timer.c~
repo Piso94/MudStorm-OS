@@ -55,7 +55,7 @@ void timer_install()
 {
     unsigned long hz = 1000;                                // 1 tick / mSec
     asm("cli");                                             // Stop interrupts
-    unsigned long divisor = 119318 / hz;                   // Find the divisor
+    unsigned long divisor = 119111 / hz;                   // Find the divisor
     outportb(0x43, 0x36);              // Tell PIC we're setting it's frequency
     unsigned char l = (unsigned char)(divisor & 0xFF);      // Bitmap Low byte
     unsigned char h = (unsigned char)(divisor >> 8) & 0xFF; // Bitmap High byte

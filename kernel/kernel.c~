@@ -69,6 +69,8 @@ void _start(void *mbd, unsigned int magic)
    	asm volatile ("sti"); // Abilito gli interrupt
 	Log.i("\nInterrupt Inzializzato");
 
+	DelayS(5);
+
 	Log.i("\nAvvio Shell...\n");
 	runShell(); // Esco da questa funzione ed entro in un'altra, contenuta nel file shell/shell.c
 }
