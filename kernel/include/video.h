@@ -18,7 +18,7 @@
 #ifndef _VIDEO_H_
 #define _VIDEO_H_
 
-#include <types.h>
+#include "stddef.h"
 
 extern void scroll();
 extern void shell_csr_fix();

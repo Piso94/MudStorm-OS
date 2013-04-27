@@ -40,6 +40,6 @@ void nosound()
 void beep()
 {
 	sound(440);
-	DelayS(5);
+	delay_s(5);
 	nosound();
 }

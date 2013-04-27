@@ -15,13 +15,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _VERSION_H_
-#define _VERSION_H_
+#ifndef _KMALLOC_H_
+#define _KMALLOC_H_
 
-#define REVISION "r155"
-#define KERNEL "0.6"
-#define SHELL "0.5"
-#define AUTHOR "Piso94/LittleHacker"
-#define NAME "Orange"
+#include "stddef.h"
+
+extern uint32_t kmalloc_int(uint32_t sz, int align, uint32_t *phys);
+extern uint32_t kmalloc_a(uint32_t sz);
+extern uint32_t kmalloc_p(uint32_t sz, uint32_t *phys);
+extern uint32_t kmalloc_ap(uint32_t sz, uint32_t *phys);
+extern uint32_t kmalloc(uint32_t sz);
 
 #endif

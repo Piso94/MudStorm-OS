@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ## Creato da LittleHacker 2013
+# Impostato qemu-system-i386 (funziona su 32bit e 64bit) al posto di qemu-system-x86_64 (solo su 64bit)
 
 ## NASM Compile
 # nasm -f elf32 loader/<name_file_input(.S o .asm)> -o $build/<name_file_output.o>
@@ -16,14 +17,23 @@
 # 							$build/<name_files_input.o> ... \
 #							... ...
 
+# Pulisco lo schermo
+clear
+
+# Scrivo a video
 echo "Setto i tools..."
+# Setto la variabile PATH
 export PATH=${PATH}:/usr/local/bin
+
+# Setto le cartelle e gli argomenti per la compilazione
 build=objs
 img=out
 temp=tmp
 opt="-m32 -Wall -O -fstrength-reduce -fomit-frame-pointer -nostdinc -fno-builtin -I./kernel/include -fno-strict-aliasing -fno-common -std=gnu99 -fno-stack-protector -c"
 
+# Scrivo a video
 echo "Creo le cartelle..."
+# Creo le cartelle
 mkdir -p $build || exit
 mkdir -p $temp || exit
 
@@ -38,6 +48,7 @@ gcc $opt kernel/kernel.c -o $build/kernel.o
 echo "Compilazione (C) Shell..."
 # C shell
 gcc $opt kernel/shell/shell.c -o $build/shell.o
+gcc $opt kernel/shell/commands.c -o $build/commands.o
 
 echo "Compilazione (C) Misc..."
 # C misc
@@ -51,6 +62,8 @@ gcc $opt kernel/lib/random.c -o $build/random.o
 gcc $opt kernel/lib/string.c -o $build/string.o
 gcc $opt kernel/lib/timer.c -o $build/timer.o
 gcc $opt kernel/lib/stdio.c -o $build/stdio.o
+gcc $opt kernel/lib/malloc.c -o $build/malloc.o
+gcc $opt kernel/lib/kmalloc.c -o $build/kmalloc.o
 
 echo "Compilazione (C) Drivers..."
 # C drivers
@@ -67,12 +80,15 @@ gcc $opt kernel/intr/idt.c -o $build/idt.o
 gcc $opt kernel/intr/irq.c -o $build/irq.o
 gcc $opt kernel/intr/isrs.c -o $build/isrs.o
 
+#echo "Compilazione (C) f(ile)s(ystem)..."
+# C f(ile)s(ystem)
+
 echo "Linking..."
 # LD linking
 ld -m elf_i386 -T linker/linker.ld -o kernel.bin \
-				    $build/loader.o $build/kernel.o $build/shell.o \
+				    	$build/loader.o $build/kernel.o $build/shell.o $build/commands.o \
 					$build/console.o $build/io.o $build/log.o \
-					$build/random.o $build/string.o $build/timer.o $build/stdio.o \
+					$build/random.o $build/string.o $build/timer.o $build/stdio.o $build/malloc.o $build/kmalloc.o \
 					$build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o \
 					$build/gdt.o $build/idt.o $build/irq.o $build/isrs.o
 
@@ -111,4 +127,4 @@ rmdir $temp || exit
 echo "Completato"
 
 echo "Avvio OS con QEMU"
-qemu-system-x86_64 -fda $img/os.img
+qemu-system-i386 -fda $img/os.img

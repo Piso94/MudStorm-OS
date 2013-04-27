@@ -18,7 +18,7 @@
 #ifndef _LOG_H_
 #define _LOG_H_
 
-#include <types.h>
+#include "stddef.h"
 
 extern struct LOG
 {

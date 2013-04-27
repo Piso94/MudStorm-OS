@@ -15,13 +15,21 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _VERSION_H_
-#define _VERSION_H_
+#ifndef _COMMANDS_H_
+#define _COMMANDS_H_
 
-#define REVISION "r155"
-#define KERNEL "0.6"
-#define SHELL "0.5"
-#define AUTHOR "Piso94/LittleHacker"
-#define NAME "Orange"
+extern void help();
+extern void clear();
+extern void uname();
+extern void eco();
+extern void cowsay();
+extern void date();
+extern void bee();
+extern void debug();
+extern void logos();
+extern void reboot_command(int com);
+extern void _reboot();
+
+extern char* argv; // Inzializzo una variabile "char*" con nome "argv" con valore "NULL"
 
 #endif

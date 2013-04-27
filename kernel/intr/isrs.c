@@ -155,8 +155,8 @@ void _fault_handler(struct regs *r)
     {
 	   Log.e("\n\t\t\t\t  KERNEL PANIC!");
 	   printk("\n\t\t\t\t%s", exception_messages[r->int_no]);
-	   UpdateLeds(CapsLock);
-	   UpdateLeds(NumLock);
+	   update_leds(CapsLock);
+	   update_leds(NumLock);
 	   asm ("cli");
 	   asm ("hlt");
     }

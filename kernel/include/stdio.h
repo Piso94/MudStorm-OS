@@ -18,8 +18,8 @@
 #ifndef _STDIO_H_
 #define _STDIO_H_
 
-#include <stdarg.h>
-#include <types.h>
+#include "stdarg.h"
+#include "stddef.h"
 
 void printchar(char **str, int c);
 int prints(char **out, const char *string, int width, int pad);

@@ -81,7 +81,7 @@ unsigned char kbScanCodes[512] =
 
 
 
-void FlushBuffer()
+void flush()
 {
 	unsigned temp;
 	do
@@ -125,7 +125,7 @@ int kb_special(unsigned char key)
 			if(specKeyUp == 1) 
 			{
 				caps = !caps;
-				UpdateLeds(CapsLock);
+				update_leds(CapsLock);
 				specKeyUp = 0;
 			}
 			break;
@@ -133,7 +133,7 @@ int kb_special(unsigned char key)
 			if(specKeyUp == 1)
 			{
 				num = !num;
-				UpdateLeds(NumLock);
+				update_leds(NumLock);
 				specKeyUp = 0;
 			}
 			break;
@@ -141,7 +141,7 @@ int kb_special(unsigned char key)
 			if(specKeyUp == 1)
 			{
 				num = !num;
-				UpdateLeds(ScrollLock);
+				update_leds(ScrollLock);
 				specKeyUp = 0;
 			}
 			break;
@@ -212,13 +212,13 @@ void keyboard_handler(struct regs *r)
 
 void keyboard_install()
 {
-	FlushBuffer();                      // Anything in the buffer is crap
+	flush();                      // Anything in the buffer is crap
 	irq_install_handler(1, &keyboard_handler);  // Install Handler
 }
 
 void waitKey()
 {
-	FlushBuffer();  // Empty the Buffer of erratic data
+	flush();  // Empty the Buffer of erratic data
 	while (getchar() == 0);
 }
 
@@ -283,7 +283,7 @@ int getchar()
 	return ((int) getchar_int());
 }
 
-void UpdateLeds(char led)
+void update_leds(char led)
 {
 	if(led == 0)
 	{

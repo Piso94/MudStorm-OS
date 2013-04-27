@@ -18,8 +18,8 @@
 #ifndef _TIMER_H_
 #define _TIMER_H_
 
-extern void DelayMs(int ms);
-extern void DelayS(int s);
+extern void delay_ms(int ms);
+extern void delay_s(int s);
 extern void timer_install();
 
 #endif

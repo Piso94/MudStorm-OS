@@ -15,7 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <types.h>
+#include <boot.h>
+#include <stddef.h>
 #include <shell.h> 
 #include <string.h>
 #include <intr/gdt.h>
@@ -29,46 +30,43 @@
 #include <stdio.h>
 #include <io.h>
 #include <log.h>
+#include <kmalloc.h>
 
-void _start(void *mbd, unsigned int magic)
+extern uint32_t placement_address;
+
+void _start(struct multiboot *mbd, unsigned int magic)
 {
-	cls(); // Pulisco lo schermo
+
+	/*
+	 * Per filesystem! Li tengo, magari possono tornare utili :)
+	 * uint32_t initrd_location = *((uint32_t*)mbd->mods_addr);
+	 * uint32_t initrd_end = *(uint32_t*)(mbd->mods_addr+4);
+	 **/
+
+	cls(); // Pulisce lo schermo
 	
 	printk("\t\t\t   VGA type: "); // Scrive a video
 	if (detect_videotype()) // Se la funzione ritorna true
-	{
 		Log.v("MonoChrome\n"); // Scrive a video
-	}
 	else // Altrimenti
-	{
 		Log.d("Colour\n"); // Scrive a video
-	}
 
-	if (magic != 0x2BADB002) 
+	if (magic != 0x2BADB002) // Se magic è diverso da
 	{
-		Log.e("\n\t\t\t\t Errore");
-		Log.d("\n\t\t\t  Spegnere il Computer");
-		asm ("cli");
-		asm ("hlt");
+		Log.e("\n\t\t\t\t Errore"); // Scrive a video
+		Log.d("\n\t\t\t  Spegnere il Computer"); // Scrive a video
+		asm ("cli"); // Disabilita gli interrupt
+		asm ("hlt"); // Ferma la CPU
 	}
 
-	gdt_install(); // Inizializzo le GDT
-	Log.i("\nGDT Inzializzato");
-   	idt_install(); // Inizializzo gli IDT
-	Log.i("\nIDT Inzializzato");
-   	isrs_install(); // Inizializzo le ISR
-	Log.i("\nISR Inzializzato");
-   	irq_install(); // Inizializzo gli IRQ
-	Log.i("\nIRQ Inzializzato");
-	timer_install(); // Inizializzo il timer
-	Log.i("\nTimer Inzializzato");
-	mouse_install(); // Inizializzo il mouse
-	Log.i("\nMouse Inzializzato");
-	keyboard_install(); // Inizializzo la tastiera
-	Log.i("\nKeyboard Inzializzato");
-   	asm volatile ("sti"); // Abilito gli interrupt
-	Log.i("\nInterrupt Inzializzato");
+	gdt_install(); // Inizializza le GDT
+   	idt_install(); // Inizializza gli IDT
+   	isrs_install(); // Inizializza le ISR
+   	irq_install(); // Inizializza gli IRQ
+	timer_install(); // Inizializza il timer
+	mouse_install(); // Inizializza il mouse
+	keyboard_install(); // Inizializza la tastiera
+   	asm volatile ("sti"); // Abilita gli interrupt
 
-	Log.i("\nAvvio Shell...\n");
-	runShell(); // Esco da questa funzione ed entro in un'altra, contenuta nel file shell/shell.c
+	runShell(); // Entra nella funzione
 }

@@ -15,12 +15,13 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <types.h>
+#include <stddef.h>
 #include <console.h>
 #include <video.h>
 #include <stdio.h>
 #include <version.h>
 #include <io.h>
+#include <log.h>
 
 void shutdown()
 {
@@ -57,12 +58,12 @@ void reboot()
 void logo()
 {
 	// Nuovo Logo
-	set_color(RED);
-	printk("\t\t\t       MudStorm OS\n");
-	printk("\t\t\t       __________\n"); 
-  	printk("\t\t\t       |        |\n");
-  	printk("\t\t\t       | |\134  /| |\n");
-  	printk("\t\t\t       |_| \134/ |_|\n");
-	printk("\t\t\t  %s:%s - %s:%s\n\n", "Kernel", KERNEL, "Shell", SHELL);
+	Log.d("\t\t\t       MudStorm OS\n");
+	Log.d("\t\t\t       __________\n"); 
+  	Log.d("\t\t\t       |        |\n");
+  	Log.d("\t\t\t       | |\134  /| |\n");
+  	Log.d("\t\t\t       |_| \134/ |_|\n");
+	set_color(GREEN);
+	printk("\t\t\t %s:%s - %s:%s\n\n", "Kernel", KERNEL, "Shell", SHELL);
 	set_color(WHITE);
 }

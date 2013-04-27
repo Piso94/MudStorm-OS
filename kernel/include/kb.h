@@ -18,15 +18,15 @@
 #ifndef _KB_H_
 #define _KB_H_
 
-#include <types.h>
+#include "stddef.h"
 
 #define ScrollLock (unsigned char)0x01
 #define NumLock (unsigned char)0x02
 #define CapsLock (unsigned char)0x04
 
 extern int kb_special(unsigned char key);
-extern void UpdateLeds(char led);
-extern void FlushBuffer();
+extern void update_leds(char led);
+extern void flush();
 extern char getchar_int();
 extern int getchar();
 extern void kbhit();

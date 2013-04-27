@@ -18,8 +18,8 @@
 #ifndef _MOUSE_H_
 #define _MOUSE_H_
 
-#include <types.h>
-#include <intr/isrs.h>
+#include "stddef.h"
+#include "intr/isrs.h"
 
 extern byte mouse_x;
 extern byte mouse_y;

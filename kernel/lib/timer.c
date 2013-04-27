@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <types.h>
+#include <stddef.h>
 #include <timer.h>
 #include <io.h>
 #include <intr/irq.h>
@@ -36,7 +36,7 @@ void PIC_handler(struct regs *r)
 	}
 } 
 
-void DelayMs(int ms)
+void delay_ms(int ms)
 /// Hold the system until specified time is reached
 {
 	done = false;
@@ -45,9 +45,9 @@ void DelayMs(int ms)
 }
 
 
-void DelayS(int s)
+void delay_s(int s)
 {
-	DelayMs((s * 1000));
+	delay_ms((s * 1000));
 }
 
 void timer_install()

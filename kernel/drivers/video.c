@@ -117,9 +117,7 @@ void putch(char c)
 void puts(char *text)
 {
     for (int i = 0; i < strlen(text); i++)
-    {
         putch(text[i]);
-    }
 }
 
 void move_csr(int x, int y)
@@ -129,16 +127,15 @@ void move_csr(int x, int y)
     temp = y * 80 + x;  // Position = (y * width) +  x
 
     outportb(0x3D4, 14);        // CRT Control Register: Select Cursor Location
-    outportb(0x3D5, temp >> 8); // Send the high byte across the bus
+    outportb(0x3D5, (temp >> 8) & 0xFF); // Send the high byte across the bus
     outportb(0x3D4, 15);        // CRT Control Register: Select Send Low byte
-    outportb(0x3D5, temp);      // Send the Low byte of the cursor location
+    outportb(0x3D5, temp & 0xFF);      // Send the Low byte of the cursor location
 }
 
 bool detect_videotype()
 {
 	char c;
-
-    c = ((*(volatile unsigned short*)0x410) & 0x30);
-
-	return (c == 0x30);
+	
+	c = ((*(volatile unsigned short*)0x410) & 0x30);
+	return (c == 0x30); // true: Monochrome, false: Colour
 }

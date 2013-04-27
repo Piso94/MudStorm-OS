@@ -16,7 +16,6 @@
  */
 
 #include <log.h>
-#include <types.h>
 #include <video.h>
 #include <stdio.h>
 
@@ -50,7 +49,7 @@ void e(char* message)
 
 void v(char* message)
 {
-	set_color(WHITE);
+	set_color(BAK_WHITE);
 	printk("%s", message);
 	set_color(WHITE);
 }

@@ -15,7 +15,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <types.h>
+#include <stddef.h>
 #include <io.h>
 
 unsigned char inportb(unsigned short _port)

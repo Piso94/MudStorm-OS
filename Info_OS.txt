@@ -1,37 +1,43 @@
 						MudStorm OS Revisione 155
-						Versione: 0.6.2 orange (Arancia)
-Kernel: 0.6
-Shell: 0.5
+					      Versione: 0.6.2 orange (Arancia)
 
-MicroOS creato da Piso94/LittleHacker, a scopo puramente Hobbystico!
+						      Kernel: 0.6
+						       Shell: 0.5
 
-KERNEL:
+|-----------------------------------------------------------------------------------------------------------------------------------------|
+| Kernel																  |
+|-----------------------------------------------------------------------------------------------------------------------------------------|
 
-## 0.1
-* Iniziato il progetto
-* Inserite funzioni:
-- Video
-- Stringe
-- Scrittura
-
-## 0.2
-* Aggiunti GDT, IDT, IRQ, ISR
-* Aggiunto input da tastiera
-* Aggiunta Shell
-* Aggiunta funzione login
-
-## 0.3
-* Migliorata la funziona login (adesso c'è anche l'username)
-* Migliorata funzione Init(inserito reboot al posto di shutdown), file load.c
-* Migliorata la funzione shutdown, adesso arresta veramente(solo le VM) 
-* Aggiunta la funzione reboot
-
-## 0.4
-* Migliorato il Kernel
-* Aggiunta la funzione printf
-* Aggiunta la funzione stoi (string to integer)
-* Aggiunta la funzione read_rtc(), che legge il tempo e la data!
-* Migliorata la gestione della tastiera, adesso, anche se cancellate tutto il testo(compreso quello scritto dall OS), la scritta(quella che farete dopo) rimarrà invarita!
+## 0.6
+* Inserito fine kernel nel file linker/linker.ld
+* Inserito Log.v(char*) stampa stringe con sfondo bianco e colore nero
+* Divisa shell(shell.c) dai comandi(commands.c)
+* Tentativo di inserire il filesystem...miseramente fallito :(
+* Rinominato "types.h" in "stddef.h"
+* Possibilità di mettere in chiaro o no una password (o un username) grazie all funzione visible(bool) (di default true)
+  Ex: printk("\nPassword:"); visible(false); scank("%s", pass); visible(true); Password: *****
+  Se dopo lo scank non mettete visible(true); le prossime scritte saranno sempre trasformate in asterischi!
+* Aggiunta la funzione strtok() (Grazie ad Apple per il codice)
+* Implementato mouse, vi mostra la posizione in X e Y del mouse! Ancora niente per il tasto sinistro e destro!
+* Sistemata la funzione visible(bool), adesso appena inserite la vostra stringa, non in chiaro, e premete invio, le prossime stringhe      ritorneranno in chiaro! :)
+* Aggiunta GPL anche nel file loader/loader.S
+* Aggiunto Log! Usate:
+		- #include <log.h>
+                - Log.i(string) Per le info
+                - Log.d(string) Per il debug
+                - Log.w(string) Per gli avvisi
+                - Log.e(string) Per gli errori
+* Aggiunti Log nel kernel!
+* Rinominata la funzione visible(bool) in kbhit(), adesso basta richiamarla e la scritta successiva alla funzione verrà nascosta, come per la password Linux!
+* Aggiunta nuova funzione a Log! Log.v(string), scrive a video con colore bianco!
+* Ripulito codice!
+* Migliorata funzione cpu_speed(), adesso ritorna solo unsigned long
+* Aggiunto il nome in codice!
+* Rinominata funzione FlushBuffer() in flush()
+* Rinominata funzione UpdateLeds(char) in update_leds(char)
+* Rinominata funzione DelayMs(int) in delay_ms(int)
+* Rinominata funzione DelayS(int) in delay_s(int)
+* Rimossa funzione cpu_speed()
 
 ## 0.5
 * Migliorata la funzione shutdown. Grazie a (https://github.com/Kijewski/chaOS/blob/master/core/shutdown.c)
@@ -55,48 +61,45 @@ KERNEL:
 * Rivisto il codice e sistemato
 * Sistemato il bug della tastiera(se continuavate a cancellare, si cancellava anche ">") :)
 
-## 0.6
-* Possibilità di mettere in chiaro o no una password (o un username) grazie all funzione visible(bool) (di default true)
-  Ex: printk("\nPassword:"); visible(false); scank("%s", pass); visible(true); Password: *****
-  Se dopo lo scank non mettete visible(true); le prossime scritte saranno sempre trasformate in asterischi!
-* Aggiunta la funzione strtok() (Grazie ad Apple per il codice)
-* Implementato mouse, vi mostra la posizione in X e Y del mouse! Ancora niente per il tasto sinistro e destro!
-* Sistemata la funzione visible(bool), adesso appena inserite la vostra stringa, non in chiaro, e premete invio, le prossime stringhe ritorneranno in chiaro! :)
-* Aggiunta GPL anche nel file loader/loader.S
-* Aggiunto Log! Usate:
-		- #include <log.h>
-                - Log.i(string) Per le info
-                - Log.d(string) Per il debug
-                - Log.w(string) Per gli avvisi
-                - Log.e(string) Per gli errori
-* Aggiunti Log nel kernel!
-* Rinominata la funzione visible(bool) in kbhit(), adesso basta richiamarla e la scritta successiva alla funzione verrà nascosta, come per la password Linux!
-* Aggiunta nuova funzione a Log! Log.v(string), scrive a video con colore bianco!
-* Ripulito codice!
-* Migliorata funzione cpu_speed(), adesso ritorna solo unsigned long
-* Aggiunto il nome in codice!
+## 0.4
+* Migliorato il Kernel
+* Aggiunta la funzione printf
+* Aggiunta la funzione stoi (string to integer)
+* Aggiunta la funzione read_rtc(), che legge il tempo e la data!
+* Migliorata la gestione della tastiera, adesso, anche se cancellate tutto il testo(compreso quello scritto dall OS), la scritta(quella che farete dopo) rimarrà invarita!
 
-SHELL:
+## 0.3
+* Migliorata la funziona login (adesso c'è anche l'username)
+* Migliorata funzione Init(inserito reboot al posto di shutdown), file load.c
+* Migliorata la funzione shutdown, adesso arresta veramente(solo le VM) 
+* Aggiunta la funzione reboot
 
-## 0.0.1
+## 0.2
+* Aggiunti GDT, IDT, IRQ, ISR
+* Aggiunto input da tastiera
+* Aggiunta Shell
+* Aggiunta funzione login
+
+## 0.1
 * Iniziato il progetto
-* Aggiunti i comandi: help, dhelp, version, creator, clear, exit
+* Inserite funzioni:
+- Video
+- Stringe
+- Scrittura
 
-## 0.0.2
-* Migliorata la Shell
-* Aggiunti nuovi comandi: reboot, print, calc (beta), date
-* Rinominati comandi: creator -> author, exit -> shutdown, dhelp -> help
-* Migliorata la Shell, grazie alla funzione printf
-* Alleggerita la grafica
+|-----------------------------------------------------------------------------------------------------------------------------------------|
+| Shell																	  |
+|-----------------------------------------------------------------------------------------------------------------------------------------|
 
-## 0.0.3
-* Eliminata la funzione calc, dava solo problemi
-* Aggiunta una piccola funzione di debug, per ora solo per la shell
-* Aggiunto comando logo, stampa a schermo il logo dell'OS
-* Aggiunto comando beep, permette far suonare al buzzer un beep per 5s (non funziona molto bene il delay)
-* Aggiunto comando exit, permette di uscire dalla shell e di rientrare nella schermata di login
-* Rimosso il comando author e inserito nel comando version
-* Nuovo logo
+## 0.5
+* Divisi comandi(shell/commands.c) dalla shell(shell/shell.c)
+* reboot -r (Riavvia) -s (Spegni)
+* Unito shutdown con reboot
+* Rimosso "shutdown"
+* Sintetizzato comando "uname"
+* Rimosso comando cpu
+* Aggiunto il nome in codice della versione alla funzione uname
+* Aggiunta una funzione carina...provate a scrivere "cowsay" (senza virgolette)! :)
 
 ## 0.4
 * Rivisto e migliorato il codice della shell
@@ -110,8 +113,22 @@ SHELL:
 * Aggiunta la domanda di sicurezza per reboot e shutdown
 * Migliorata la funzione di debug
 
-## 0.5
-* Aggiunta una funzione carina...provate a scrivere "cowsay" (senza virgolette)! :)
-* Aggiunto il nome in codice della versione alla funzione uname
+## 0.0.3
+* Eliminata la funzione calc, dava solo problemi
+* Aggiunta una piccola funzione di debug, per ora solo per la shell
+* Aggiunto comando logo, stampa a schermo il logo dell'OS
+* Aggiunto comando beep, permette far suonare al buzzer un beep per 5s (non funziona molto bene il delay)
+* Aggiunto comando exit, permette di uscire dalla shell e di rientrare nella schermata di login
+* Rimosso il comando author e inserito nel comando version
+* Nuovo logo
 
-N.B: Questo software puo' essere visualizzato, modificato, usato, etc. basta solo che il nome del creatore, rimanga invariato!
+## 0.0.2
+* Migliorata la Shell
+* Aggiunti nuovi comandi: reboot, print, calc (beta), date
+* Rinominati comandi: creator -> author, exit -> shutdown, dhelp -> help
+* Migliorata la Shell, grazie alla funzione printf
+* Alleggerita la grafica
+
+## 0.0.1
+* Iniziato il progetto
+* Aggiunti i comandi: help, dhelp, version, creator, clear, exit

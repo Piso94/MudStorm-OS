@@ -15,13 +15,18 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _VERSION_H_
-#define _VERSION_H_
+#ifndef _MALLOC_H_
+#define _MALLOC_H_
 
-#define REVISION "r155"
-#define KERNEL "0.6"
-#define SHELL "0.5"
-#define AUTHOR "Piso94/LittleHacker"
-#define NAME "Orange"
+#include "stddef.h"
+
+struct _freelist
+{
+	size_t sz;
+	struct _freelist *nx;
+};
+
+extern void *malloc(size_t len);
+extern void free(void *p);
 
 #endif

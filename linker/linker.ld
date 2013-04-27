@@ -27,4 +27,7 @@ sbss = .;
 ebss = .;
 
 }
+
+end = .; _end = .; __end = .;
+
 } 
