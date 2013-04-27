@@ -1,0 +1,6 @@
+THANKS:
+
+- (Pietro Amico) -> Per avermi aiutato nella versione 0.1 del kernel!
+- (https://github.com/Kijewski/chaOS/blob/master/core/shutdown.c) -> Funzione shutdown
+- (ZioCrocifisso PieroTofy.it) -> Risolto problema con struct nei comandi Log.
+

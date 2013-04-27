@@ -27,7 +27,6 @@
                 - Log.d(string) Per il debug
                 - Log.w(string) Per gli avvisi
                 - Log.e(string) Per gli errori
-		Grazie a ZioCrocifisso PieroTofy.it per l'aiuto datomi nel creare questi comandi! :D
 * Aggiunti Log nel kernel!
 * Rinominata la funzione visible(bool) in kbhit(), adesso basta richiamarla e la scritta successiva alla funzione verrà nascosta, come per la password Linux!
 * Aggiunta nuova funzione a Log! Log.v(string), scrive a video con colore bianco!
@@ -41,7 +40,7 @@
 * Rimossa funzione cpu_speed()
 
 ## 0.5
-* Migliorata la funzione shutdown. Grazie a (https://github.com/Kijewski/chaOS/blob/master/core/shutdown.c)
+* Migliorata la funzione shutdown.
 * Rivisto il codice
 * Aggiunta la funzione set_color(char color) permette di cambiare il colore delle scritte! Nel file types.h ci sono i vari tipi di colori
 * Aggiunta funzione scanf
