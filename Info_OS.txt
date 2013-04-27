@@ -27,6 +27,7 @@
                 - Log.d(string) Per il debug
                 - Log.w(string) Per gli avvisi
                 - Log.e(string) Per gli errori
+		Grazie a ZioCrocifisso PieroTofy.it per l'aiuto datomi nel creare questi comandi! :D
 * Aggiunti Log nel kernel!
 * Rinominata la funzione visible(bool) in kbhit(), adesso basta richiamarla e la scritta successiva alla funzione verrà nascosta, come per la password Linux!
 * Aggiunta nuova funzione a Log! Log.v(string), scrive a video con colore bianco!
