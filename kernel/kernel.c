@@ -67,6 +67,9 @@ void _start(struct multiboot *mbd, unsigned int magic)
 	mouse_install(); // Inizializza il mouse
 	keyboard_install(); // Inizializza la tastiera
    	asm volatile ("sti"); // Abilita gli interrupt
+   	
+   	// To test :)
+   	printk("Memoria RAM: %u (KB)", (unsigned)mbd->mem_upper);
 
 	runShell(); // Entra nella funzione
 }
