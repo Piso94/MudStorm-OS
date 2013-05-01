@@ -17,6 +17,7 @@
 
 #include <rtc.h>
 #include <io.h>
+#include <kmalloc.h>
  
 #define CURRENT_YEAR        2013 // Change this each year!
                                
