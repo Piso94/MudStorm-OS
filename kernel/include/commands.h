@@ -29,6 +29,8 @@ extern void debug();
 extern void logos();
 extern void reboot_command(int com);
 extern void _reboot();
+extern void ls();
+extern void cd();
 
 extern char* argv; // Inzializzo una variabile "char*" con nome "argv" con valore "NULL"
 

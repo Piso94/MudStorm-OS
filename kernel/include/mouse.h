@@ -28,6 +28,6 @@ void mouse_handler(struct regs *a_r);
 void mouse_wait(byte a_type);
 void mouse_write(byte a_write);
 byte mouse_read();
-void mouse_install();
+extern void mouse_install();
 
 #endif

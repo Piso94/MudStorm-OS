@@ -20,7 +20,7 @@
 
 extern void runShell();
 
-#define NUM 9
+#define NUM 11
 
 struct cmd {
 	char* cmdname;

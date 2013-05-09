@@ -24,14 +24,16 @@
 #include <log.h>
 #include <console.h>
 
-char lst[100]; // Inizializzo una variabile "char array" con nome "lst" e caratteri(max.) "100"
+char current_dir[100] = "/";
 
 struct cmd shellcmd[NUM] = { // Dichiaro una struttura con tutti questi comandi
 { "help", help, "Mostra i comandi" },
 { "clear", clear, "Pulisce lo schermo" },
 { "uname", uname, "Mostra le informazioni sull'OS. Es. uname -a" },
+{ "ls", ls, "Mostra il contenuto della cartella corrente" },
+{ "cd", cd, "Cambia cartella" },
 { "echo", eco, "Stampa a video quello che vuoi. Es. echo Ciao" },
-{ "cowsay", cowsay, "" },
+{ "cowsay", cowsay, "Mostra una mucca" }, /* Questo non viene mostrato a video! E' l'easter egg */
 { "date", date, "Mostra la data" },
 { "beep", bee, "Suona col buzzer" },
 { "logo", logos, "Stampa a schermo il logo" },
@@ -53,29 +55,35 @@ int find(string cmd)
 void runShell()
 {
 	logo(); // Stampo a video il logo
-	Log.v("\t\t\t\t<help>\n"); // Scrivo a video
-	
+	Log.v("\t\t\t\t <help>\n"); // Scrivo a video
+
 	while(1) // Ciclo infinito
 	{
-		for(int i=0; i<101; i++) 
-			lst[i] = '\0'; // Resetto l'array di char
+		char lst[100]; // Inizializzo la variabile lst
+		
+		for(int j=0;j<100;j++)
+			lst[j] = 0; // Azzero i campi di lst
 
-		printk("\n> "); // Scrivo a video
+		//printk("\n$ "); // Scrive a video
+		set_color(GREY);
+		printk("\n%s$ ", current_dir); // Scrivo a video la directory corrente
+		set_color(WHITE);
 		scank("%s", lst); // Leggo quello che scrivi come una stringa
 
 		char* first_command = strtok(lst, " "); // Splitto nella stringa first_command la stringa prima dello spazio
 		argv = strtok(NULL, ""); // Splitto nella stringa argv la stringa dopo lo spazio
 
 		int i = find(tolower(first_command)); // Inizializzo una variable "i" come "int" con valore "find(tolower(first_command))"
+
 		if (i >= 0) // Controllo se la variabile "i" è maggiore o uguale a "0"
 		{
 			void (*commandJump)(void); // Inizializzo una variabile "*commandJump" come void
 			commandJump = shellcmd[i].v_func; // Gli do valore shellcmd[i].v_func
 			commandJump(); // Richiamo la funzione contenuta in shellcmd[i].v_func
 		}
-		else
+		else if ((i < 0) && (strcmp(first_command, "")))
 		{
-				Log.d("\nComando non trovato\n");
+				printk("\nComando non trovato\n");
 		}
 	}
 }

@@ -261,6 +261,7 @@ void gets(char *s)
 	line = 2;
 	s[i] = '\0';
 	in_chiaro = true;
+	flush();
 }
 
 char getchar_int()

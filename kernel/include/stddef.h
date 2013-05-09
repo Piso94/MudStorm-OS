@@ -36,7 +36,6 @@
 #define BRIGHT_MAGENTA 13
 #define YELLOW 14
 #define WHITE 15
-#define BAK_WHITE 0xF0
 
  // Type
 

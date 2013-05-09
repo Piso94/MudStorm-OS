@@ -15,13 +15,12 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _VERSION_H_
-#define _VERSION_H_
+#ifndef _PAGING_H_
+#define _PAGING_H_
 
-#define BUILD "210"
-#define KERNEL "0.7"
-#define SHELL "0.6"
-#define AUTHOR "Piso94/LittleHacker"
-#define NAME "Red Apple"
+#include "stddef.h"
+
+extern void enable_paging();
 
 #endif
+

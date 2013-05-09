@@ -1,19 +1,32 @@
-						MudStorm OS Revisione 155
-					      Versione: 0.6.2 orange (Arancia)
+						MudStorm OS 
+					       Revisione 210
+				     Versione: 0.6.3 Red Apple (Mela Rossa)
 
-						      Kernel: 0.6
-						       Shell: 0.5
+						Kernel: 0.7
+						Shell:  0.6
 
-|-----------------------------------------------------------------------------------------------------------------------------------------|
-| Kernel																  |
-|-----------------------------------------------------------------------------------------------------------------------------------------|
+|-------------------------------------------------------------------------------------------------|
+|					Kernel							  |
+|-------------------------------------------------------------------------------------------------|
+
+## 0.7
+* Aggiustato il paging! :)
+* Aggiunto una piccola gestione del paging! Ma se vado ad abilitarlo, mi manda in loop reboot l'os! :(
+* Tolto printk da mouse.c
+* Inserito filesystem :D
 
 ## 0.6
+* Migliorato codice
+* Aggiunto kfree(void*)
+* Aggiunte info sul caricamento di sistema(GDT, IDT, etc.) e sulla memoria ram!
+* Log.v è stato cambiato...le scritte nere con sfondo bianco lampeggiano(su Bochs e PC Reale)
+* Aggiunto flags per Memoria RAM!
 * Inserito fine kernel nel file linker/linker.ld
 * Inserito Log.v(char*) stampa stringe con sfondo bianco e colore nero
 * Divisa shell(shell.c) dai comandi(commands.c)
 * Tentativo di inserire il filesystem...miseramente fallito :(
 * Rinominato "types.h" in "stddef.h"
+* Rinominata la funzione visible(bool) in kbhit(), adesso basta richiamarla e la scritta successiva alla funzione verrà nascosta, come per la password Linux!
 * Possibilità di mettere in chiaro o no una password (o un username) grazie all funzione visible(bool) (di default true)
   Ex: printk("\nPassword:"); visible(false); scank("%s", pass); visible(true); Password: *****
   Se dopo lo scank non mettete visible(true); le prossime scritte saranno sempre trasformate in asterischi!
@@ -28,7 +41,6 @@
                 - Log.w(string) Per gli avvisi
                 - Log.e(string) Per gli errori
 * Aggiunti Log nel kernel!
-* Rinominata la funzione visible(bool) in kbhit(), adesso basta richiamarla e la scritta successiva alla funzione verrà nascosta, come per la password Linux!
 * Aggiunta nuova funzione a Log! Log.v(string), scrive a video con colore bianco!
 * Ripulito codice!
 * Migliorata funzione cpu_speed(), adesso ritorna solo unsigned long
@@ -87,11 +99,16 @@
 - Stringe
 - Scrittura
 
-|-----------------------------------------------------------------------------------------------------------------------------------------|
-| Shell																	  |
-|-----------------------------------------------------------------------------------------------------------------------------------------|
+|-------------------------------------------------------------------------------------------------|
+|					Shell							  |
+|-------------------------------------------------------------------------------------------------|
+
+## 0.6
+* Migliorata gestione "Comando non trovato", adesso viene visualizzata solo se l'utente ha SCRITTO un comando non iserito
+* Aggiunti comandi cd e ls! Non ancora usati, aspetto di implementare open(path, arguments);
 
 ## 0.5
+* Migliorati comandi uname e reboot
 * Divisi comandi(shell/commands.c) dalla shell(shell/shell.c)
 * reboot -r (Riavvia) -s (Spegni)
 * Unito shutdown con reboot

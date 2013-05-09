@@ -33,7 +33,7 @@ void shutdown()
   	for ( ; ; )
   	{
 	      // Funziona per QEMU e Bochs
-      	  outportw (0xB004, 0x2000);
+	      outportw (0xB004, 0x2000);
 	
 	      // Magic shutdown per Bochs e QEMU
 	      for (const char *s = "Shutdown"; *s; ++s)
@@ -47,23 +47,20 @@ void shutdown()
 void reboot()
 {
 	int good = 0x02;
-    while (good & 0x02)
-    {
-       	good = inportb(0x64);
-    	outportb(0x64, 0xFE);
-    }
+	while (good & 0x02)
+	{
+	    	good = inportb(0x64);
+	    	outportb(0x64, 0xFE);
+	}
 	asm volatile ("hlt");
 }
 
 void logo()
 {
 	// Nuovo Logo
-	Log.d("\t\t\t       MudStorm OS\n");
 	Log.d("\t\t\t       __________\n"); 
   	Log.d("\t\t\t       |        |\n");
   	Log.d("\t\t\t       | |\134  /| |\n");
   	Log.d("\t\t\t       |_| \134/ |_|\n");
-	set_color(GREEN);
-	printk("\t\t\t %s:%s - %s:%s\n\n", "Kernel", KERNEL, "Shell", SHELL);
-	set_color(WHITE);
+	Log.d("\t\t\t       MudStorm OS\n");
 }

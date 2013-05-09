@@ -49,9 +49,7 @@ void e(char* message)
 
 void v(char* message)
 {
-	set_color(BAK_WHITE);
 	printk("%s", message);
-	set_color(WHITE);
 }
 
 /*

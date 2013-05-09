@@ -18,6 +18,8 @@
 #include <video.h>
 #include <io.h>
 #include <string.h>
+#include <stddef.h>
+#include <kmalloc.h>
 
 unsigned short *textmemptr = (unsigned short*)(0xb8000);
 int attrib = 0x0F, csr_x, csr_y;
@@ -63,6 +65,11 @@ void cls()
 void set_color(char color)
 {
 	attrib = color;
+}
+
+void double_buffering(size_t x, size_t y, uint8_t color)
+{
+
 }
 
 void putch(char c)

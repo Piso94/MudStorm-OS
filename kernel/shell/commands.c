@@ -26,14 +26,21 @@
 #include <console.h>
 #include <video.h>
 #include <stdio.h>
+#include <fs.h>
+#include <initrd.h>
+#include <kmalloc.h>
 
 char* argv;
+
+static fs_node_t *fsnode;
+extern char current_dir[100];
+int n = 0;
 
 void help()
 {
 	for (int i=0; i<NUM; i++) // Conto fino al valore della variabile NUM(definita nel file shell.h)
 	{
-		if (i != 4)
+		if (i != 6)
 			printk("\n %s - %s", shellcmd[i].cmdname, shellcmd[i].cmddesc); 
 			// Scrive a schermo: nome del comando - descrizione
 	}
@@ -50,29 +57,37 @@ void uname()
 {
 	if (!strcmp(argv, "-a"))
 	{
-		printk("\n%s%s - %s, %s: %s - %s: %s\n%s: %s\n", "MudStormOS", 
-		REVISION, NAME, "Kernel", KERNEL, "Shell", SHELL, "Autore", AUTHOR); 
-		// Scrive a schermo "MudStormOS-Revisione, Kernel:Versione - Shell:Versione a capo Autore: Autore"
+		printk("\n%s build-> %s - %s, %s %s - %s %s\n%s %s\n", "MudStormOS", 
+		BUILD, NAME, "Kernel->", KERNEL, "Shell->", SHELL, "Autore->", AUTHOR); 
+		// Scrive a schermo "MudStormOS Revisione - Nome, Kernel:Versione - Shell:Versione a capo Autore: Autore"
 	}
 	else if (!strcmp(argv, "-r"))
 	{
-		printk("\n%s - %s\n", REVISION, NAME); // Scrivo a schermo "MudStormOS-Revisione"
+		printk("\n%s - %s\n", BUILD, NAME); // Scrivo a schermo "Revisione-Nome"
 	}
 	else if (!strcmp(argv, "-k"))
 	{
-		printk("\n%s\n", KERNEL); // Scrivo a schermo "Kernel:Versione"
+		printk("\n%s\n", KERNEL); // Scrivo a schermo "Versione" Kernel
 	}
 	else if (!strcmp(argv, "-s"))
 	{
-		printk("\n%s\n", SHELL); // Scrivo a schermo "Shell:Versione"
+		printk("\n%s\n", SHELL); // Scrivo a schermo "Versione" Shell
 	}
 	else if (!strcmp(argv, "-n"))
 	{
-		printk("\n%s\n", AUTHOR); // Scrivo a schermo "Autore: Autore"
+		printk("\n%s\n", AUTHOR); // Scrivo a schermo "Autore"
+	}
+	else if (!strcmp(argv, "-h"))
+	{
+		printk("\nUsa:\n -a (Vedi tutte le info)\n -r (Vedi numero di build e nome in codice)\n -k (Vedi versione kernel)\n -s (Vedi versione shell)\n -n (Vedi nome autore)\n");
+	}
+	else if(!strcmp(argv, NULL))
+	{
+		printk("\n%s build->%s\n", "MudStormOS", BUILD);
 	}
 	else
 	{
-		printk("\nUsa:\n -a (Vedi tutte le info)\n -r (Vedi numero di revisione e nome in codice)\n -k (Vedi versione kernel)\n -s (Vedi versione shell)\n -n (Vedi nome autore)\n");
+		printk("\nStringa non valida\n");
 	}
 }
 
@@ -153,17 +168,80 @@ void reboot_command(int com)
 
 void _reboot()
 {	
-	if (!strcmp(argv, NULL))
+	if (!strcmp(argv, "-h"))
 	{
-		printk("\nUsa:\n	-r (Riavvia)\n	-s (Spegni)");
+		printk("\nUsa:\n	-h (Mostra i comandi)\n	-s (Spegni)");
+	}
+	else if (!strcmp(argv, NULL))
+	{
+		reboot_command(0);
+	}
+	else if (!strcmp(argv, "-s"))
+	{
+		reboot_command(1);
 	}
 	else
 	{
-		if (!strcmp(argv, "-r"))
-			reboot_command(0);
-		else if (!strcmp(argv, "-s"))
-			reboot_command(1);
+		printk("\nStringa non valida\n");	
+	}
+}
+
+void ls()
+{
+	if (n == 0)
+	{
+		fsnode = fs_root;
+		n++;
+	}
+
+	printk("\n");
+	int i = 0;
+	static struct dirent *node = 0;
+
+	while ((node = readdir_fs(fsnode, i)))
+	{
+		fs_node_t *tmpfsnode = finddir_fs(fsnode, node->name);
+
+		if ((tmpfsnode->flags & 0x7) == FS_DIRECTORY)
+		{
+			dir(node->name);
+			printk(" ");
+		}
 		else
-			printk("\nStringa non valida!\n");
+		{
+			file(node->name);
+			printk(" ");
+		}
+		i++;
+	}
+	if (i == 0)
+		printk("Cartella vuota");
+	printk("\n");
+}
+
+void cd()
+{
+	if (n == 0)
+	{
+		fsnode = fs_root;
+		n++;
+	}
+
+	fs_node_t *fsnode2 = finddir_fs(fs_root, argv);
+	if (!strcmp(argv, ".."))
+	{
+		strcpy(current_dir, "/");
+		fsnode = fsnode2 = fs_root;
+		return;
+	}
+
+	if ((fsnode2->flags & 0x7) == FS_DIRECTORY)
+	{
+		strcpy(current_dir, argv);
+		fsnode = fsnode2;
+	}
+        else
+	{
+		printk("\nCartella invalida\n");
 	}
 }

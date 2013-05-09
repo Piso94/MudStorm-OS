@@ -15,13 +15,35 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _VERSION_H_
-#define _VERSION_H_
+#include <paging.h>
 
-#define BUILD "210"
-#define KERNEL "0.7"
-#define SHELL "0.6"
-#define AUTHOR "Piso94/LittleHacker"
-#define NAME "Red Apple"
+extern size_t end;
 
-#endif
+void enable_paging()
+{
+	size_t page_aligned_end = (end & 0xFFFFF000) + 0x1000;
+	size_t *page_directory = (size_t*)page_aligned_end;
+	dword addr = 0;
+	size_t *first_page_table = page_directory + 0x1000;
+
+	for (size_t i=0; i<1024; i++)
+	{
+		page_directory[i] = 0 | 2;
+	}
+
+	for (size_t i=0; i<1024; i++)
+	{
+		page_directory[i] = addr | 3;
+		addr = addr + 4096;
+	}
+	
+	page_directory[0] = (size_t)first_page_table;
+	page_directory[0] |= 3;
+	
+	asm volatile("mov %0, %%cr3":: "b"(page_directory));
+	
+	size_t cr0;
+	asm volatile("mov %%cr0, %0": "=b"(cr0));
+	cr0 |= 0x8000000;
+	asm volatile("mov %0, %%cr0":: "b"(cr0));
+}

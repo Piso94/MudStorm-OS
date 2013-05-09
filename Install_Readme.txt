@@ -24,5 +24,5 @@ Puo' essere virtualizzato con VirtualBox e QEMU (Bochs non l'ho provato), define
 |       Non capisco dove sia il problema ;(					   	|
 |_______________________________________________________________________________________|
 
-Per compilare ho usato Xubuntu 12.10, con gcc, nasm e ld! Come VirtualMachine ho usato QEMU! Se usate Linux, basta installare queste 4 cose, aprire il Terminale, andare alla cartella, e digitare './makes' o 'sh makes', e farà tutto da solo, vi chiederà la password di Root, per montare l'immagine floppy nella cartella tmp, copiare il file 'kernel.bin' al suo interno e smontare l'immagine!
-Dopo di che se avete installato QEMU, partirà automaticamente!
+Per compilare ho usato Xubuntu 12.10, con gcc, nasm e ld! Come VirtualMachine ho usato QEMU! Se usate Linux, basta installare queste 4 cose, aprire il Terminale, andare alla cartella, e digitare 'make' o 'make linux', e farà tutto da solo, vi chiederà la password di Root, per montare l'immagine floppy nella cartella tmp, copiare il file 'kernel.bin' al suo interno e smontare l'immagine!
+Dopo di che se avete installato QEMU, basterà dare il comando 'make qemu', o se volete copiarlo in un floppy: 'make floppy'

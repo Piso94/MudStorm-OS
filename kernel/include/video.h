@@ -23,6 +23,7 @@
 extern void scroll();
 extern void shell_csr_fix();
 extern void cls();
+extern void double_buffering(size_t x, size_t y, uint8_t color);
 extern void set_color(char color);
 extern void putch(char c);
 extern void puts(char* text);

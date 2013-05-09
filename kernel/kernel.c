@@ -31,25 +31,25 @@
 #include <io.h>
 #include <log.h>
 #include <kmalloc.h>
+#include <paging.h>
+#include <initrd.h>
+#include <fs.h>
+#include <commands.h>
 
 extern uint32_t placement_address;
 
 void _start(struct multiboot *mbd, unsigned int magic)
 {
-
-	/*
-	 * Per filesystem! Li tengo, magari possono tornare utili :)
-	 * uint32_t initrd_location = *((uint32_t*)mbd->mods_addr);
-	 * uint32_t initrd_end = *(uint32_t*)(mbd->mods_addr+4);
-	 **/
-
 	cls(); // Pulisce lo schermo
 	
-	printk("\t\t\t   VGA type: "); // Scrive a video
-	if (detect_videotype()) // Se la funzione ritorna true
-		Log.v("MonoChrome\n"); // Scrive a video
-	else // Altrimenti
-		Log.d("Colour\n"); // Scrive a video
+	/*
+	 * Non serve a molto! :)
+	 * printk("\t\t\t   VGA type: "); // Scrive a video
+	 * if (detect_videotype()) // Se la funzione ritorna true
+	 *	printk("MonoChrome\n"); // Scrive a video
+	 * else // Altrimenti
+	 * 	Log.d("Colour\n"); // Scrive a video
+	 **/
 
 	if (magic != 0x2BADB002) // Se magic è diverso da
 	{
@@ -59,17 +59,35 @@ void _start(struct multiboot *mbd, unsigned int magic)
 		asm ("hlt"); // Ferma la CPU
 	}
 
+	uint32_t initrd_location = *((uint32_t*)mbd->mods_addr);
+	uint32_t initrd_end = *(uint32_t*)(mbd->mods_addr + 4);
+	placement_address = initrd_end;
+
 	gdt_install(); // Inizializza le GDT
+	Log.i("GDT		[OK]");
    	idt_install(); // Inizializza gli IDT
+	Log.i("\nIDT		[OK]");
    	isrs_install(); // Inizializza le ISR
+	Log.i("\nISR		[OK]");
    	irq_install(); // Inizializza gli IRQ
+	Log.i("\nIRQ		[OK]");
 	timer_install(); // Inizializza il timer
+	Log.i("\nTimer		[OK]");
 	mouse_install(); // Inizializza il mouse
+	Log.i("\nMouse		[OK]");
 	keyboard_install(); // Inizializza la tastiera
+	Log.i("\nTastiera	[OK]");
+	enable_paging();
+	Log.i("\nPaging		[OK]");
    	asm volatile ("sti"); // Abilita gli interrupt
-   	
-   	// To test :)
-   	printk("Memoria RAM: %u (KB)", (unsigned)mbd->mem_upper);
+	Log.i("\nInterrupt	[OK]");
+	fs_root = init_initrd(initrd_location); // Inizializzo il filesystem
+	Log.i("\nRAMFS		[OK]");
+
+	set_color(GREEN);
+	unsigned ram = (unsigned)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1);
+	printk("\nRAM: %u MB	[OK]\n", ram); //Ok, funziona alla perfezione!
+	set_color(WHITE);
 
 	runShell(); // Entra nella funzione
 }

@@ -19,6 +19,7 @@
 #include <io.h>
 #include <intr/irq.h>
 #include <stdio.h>
+#include <video.h>
 
 byte mouse_cycle = 0;
 byte mouse_byte[3];
@@ -41,7 +42,6 @@ void mouse_handler(struct regs *a_r)
 			mouse_byte[2] = inportb(0x60);
 			mouse_x = mouse_byte[1];
 			mouse_y = mouse_byte[2];
-			printk("\n(x, y)\n%d, %d\n", mouse_x, mouse_y);	
 			mouse_cycle = 0;
 			break;
 	}

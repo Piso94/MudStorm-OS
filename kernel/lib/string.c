@@ -42,7 +42,8 @@ void memset(void *dst, int val, size_t len)
 
 void memmov (void *dst, const void *src, const unsigned int bytes)
 {
-    for (unsigned int i=0; i<bytes; i++) {
+    for (unsigned int i=0; i<bytes; i++) 
+    {
         ((char *)dst)[i] = ((char *)src)[i];
     }
 }
@@ -81,11 +82,15 @@ int strncmp (const char *dst, const char *src, const unsigned int bytes)
 {
     int result = 0;
 
-    for (unsigned int i=0; i<bytes; i++) {
-        if (dst[i] < src[i]) {
+    for (unsigned int i=0; i<bytes; i++) 
+    {
+        if (dst[i] < src[i]) 
+	{
             result = -1;
             break;
-        } else if (dst[i] > src[i]) {
+        } 
+	else if (dst[i] > src[i]) 
+	{
             result = 1;
             break;
         }
@@ -140,12 +145,15 @@ char *strtok(register char *s, register const char *delim)
 	 */
 cont:
 	c = *s++;
-	for (spanp = (char *)delim; (sc = *spanp++) != 0;) {
+	for (spanp = (char *)delim; (sc = *spanp++) != 0;) 
+	{
 		if (c == sc)
 			goto cont;
 	}
 
-	if (c == 0) {		/* no non-delimiter characters */
+	if (c == 0) 
+	{
+		/* no non-delimiter characters */
 		last = NULL;
 		return (NULL);
 	}
@@ -155,11 +163,14 @@ cont:
 	 * Scan token (scan for delimiters: s += strcspn(s, delim), sort of).
 	 * Note that delim must have one NUL; we stop if we see that, too.
 	 */
-	for ( ; ; ) {
+	for ( ; ; ) 
+	{
 		c = *s++;
 		spanp = (char *)delim;
-		do {
-			if ((sc = *spanp++) == c) {
+		do 
+		{
+			if ((sc = *spanp++) == c) 
+			{
 				if (c == 0)
 					s = NULL;
 				else
@@ -194,7 +205,8 @@ int stoi(char *str)
   return (result * puiss);
 }
 
-int isdigit(int c) {
+int isdigit(int c) 
+{
   if (c >= 48 && c <= 57)
     return 1;
   return 0;

@@ -15,13 +15,25 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _VERSION_H_
-#define _VERSION_H_
+#ifndef _INITRD_H_
+#define _INITRD_H_
 
-#define BUILD "210"
-#define KERNEL "0.7"
-#define SHELL "0.6"
-#define AUTHOR "Piso94/LittleHacker"
-#define NAME "Red Apple"
+#include "stddef.h"
+#include "fs.h"
+
+typedef struct
+{
+	uint32_t nfiles;
+} initrd_header_t;
+
+typedef struct
+{
+	uint8_t magic;
+	int8_t name[64];
+	uint32_t offset;
+	uint32_t length;
+} initrd_file_header_t;
+
+fs_node_t *init_initrd(uint32_t location);
 
 #endif

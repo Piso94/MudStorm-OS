@@ -25,5 +25,6 @@ extern uint32_t kmalloc_a(uint32_t sz);
 extern uint32_t kmalloc_p(uint32_t sz, uint32_t *phys);
 extern uint32_t kmalloc_ap(uint32_t sz, uint32_t *phys);
 extern uint32_t kmalloc(uint32_t sz);
+extern void kfree(void *p);
 
 #endif
