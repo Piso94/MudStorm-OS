@@ -18,55 +18,51 @@
 #ifndef _STDDEF_H_
 #define _STDDEF_H_
 
- // Colour
+// Colour
+enum
+{
+	black = 0,
+	blue = 1,
+	green = 2,
+	cyan = 3,
+	red = 4,
+	magenta = 5,
+	brown = 6,
+	grey = 7,
+	dark_grey = 8,
+	bright_blue = 9,
+	bright_green = 10,
+	bright_cyan = 11,
+	bright_red = 12,
+	bright_magenta = 13,
+	yellow = 14,
+	white = 15
+};
 
-#define BLACK 0
-#define BLUE 1
-#define GREEN 2
-#define CYAN 3
-#define RED 4
-#define MAGENTA 5
-#define BROWN 6
-#define GREY 7
-#define DARK_GREY 8
-#define BRIGHT_BLUE 9
-#define BRIGHT_GREEN 10
-#define BRIGHT_CYAN 11
-#define BRIGHT_RED 12
-#define BRIGHT_MAGENTA 13
-#define YELLOW 14
-#define WHITE 15
-
- // Type
-
+// Type
 #define NULL ((void*)0)
 
 #define EOF (-1)
 
-#define true 1
-#define false 0
-#define TRUE 1
-#define FALSE 0
+typedef int bool;
+enum
+{
+	true = 1,
+	false = 0
+};
 
 #define UINT32_MAX  (0xffffffff)
 
-typedef int bool;
-
 typedef unsigned int size_t;
-
-typedef unsigned char byte;
-typedef unsigned short int word;
-typedef unsigned long dword;
-typedef unsigned long long qword;
 
 typedef signed char int8_t;
 typedef signed short int16_t;
 typedef signed long int32_t;
-typedef signed long int64_t;
+typedef signed long long int64_t;
 
 typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned long uint32_t;
-typedef unsigned long uint64_t;
+typedef unsigned long long uint64_t;
 
 #endif

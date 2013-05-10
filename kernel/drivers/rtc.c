@@ -19,14 +19,14 @@
 #include <io.h>
 #include <kmalloc.h>
  
-#define CURRENT_YEAR        2013 // Change this each year!
+#define CURRENT_YEAR 2013
                                
-unsigned char second;
-unsigned char minute;
-unsigned char hour;
-unsigned char day;
-unsigned char month;
-unsigned int year;
+uint8_t second;
+uint8_t minute;
+uint8_t hour;
+uint8_t day;
+uint8_t month;
+size_t year;
  
 enum 
 {
@@ -41,7 +41,7 @@ int get_update_in_progress_flag()
 }
  
  
-unsigned char get_RTC_register(int reg)
+uint8_t get_RTC_register(int reg)
 {
       outportb(cmos_address, reg);
       return inportb(cmos_data);
@@ -50,16 +50,17 @@ unsigned char get_RTC_register(int reg)
  
 void read_rtc()
 {
-      unsigned char century = kmalloc(sizeof(unsigned char));
-      unsigned char last_second;
-      unsigned char last_minute;
-      unsigned char last_hour;
-      unsigned char last_day;
-      unsigned char last_month;
-      unsigned char last_year;
-      unsigned char last_century;
-      unsigned char registerB;
-      int time[3], century_register = 0x00;
+      uint8_t century = (uint8_t)kmalloc(sizeof(uint8_t));
+      uint8_t last_second;
+      uint8_t last_minute;
+      uint8_t last_hour;
+      uint8_t last_day;
+      uint8_t last_month;
+      uint8_t last_year;
+      uint8_t last_century;
+      uint8_t registerB;
+      int time[3];
+      int century_register = 0x00;
  
       // Note: This uses the "read registers until you get the same values twice in a row" technique
       //       to avoid getting dodgy/inconsistent values due to RTC updates
@@ -136,4 +137,5 @@ void read_rtc()
             year += (CURRENT_YEAR / 100) * 100;
             if(year < CURRENT_YEAR) year += 100;
       }
+      kfree(&century);
 }

@@ -21,13 +21,10 @@
 #include "stddef.h"
 #include "intr/isrs.h"
 
-extern byte mouse_x;
-extern byte mouse_y;
-
 void mouse_handler(struct regs *a_r);
-void mouse_wait(byte a_type);
-void mouse_write(byte a_write);
-byte mouse_read();
+void mouse_wait(uint8_t a_type);
+void mouse_write(uint8_t a_write);
+uint8_t mouse_read();
 extern void mouse_install();
 
 #endif

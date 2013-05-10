@@ -23,7 +23,7 @@ void enable_paging()
 {
 	size_t page_aligned_end = (end & 0xFFFFF000) + 0x1000;
 	size_t *page_directory = (size_t*)page_aligned_end;
-	dword addr = 0;
+	uint32_t addr = 0;
 	size_t *first_page_table = page_directory + 0x1000;
 
 	for (size_t i=0; i<1024; i++)

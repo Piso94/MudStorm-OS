@@ -21,30 +21,30 @@
 
 void i(char* message)
 {
-	set_color(GREEN);
+	set_color(green);
 	printk("%s", message);
-	set_color(WHITE);
+	set_color(white);
 }
 
 void d(char* message)
 {
-	set_color(MAGENTA);
+	set_color(magenta);
 	printk("%s", message);
-	set_color(WHITE);
+	set_color(white);
 }
 
 void w(char* message)
 {
-	set_color(YELLOW + BLACK);
+	set_color(yellow + black);
 	printk("%s", message);
-	set_color(WHITE);
+	set_color(white);
 }
 
 void e(char* message)
 {
-	set_color(RED);
+	set_color(red);
 	printk("%s", message);
-	set_color(WHITE);
+	set_color(white);
 }
 
 void v(char* message)

@@ -80,13 +80,13 @@ size_t relocate_module(char *name, int size)
 
 void file(char* name)
 {
-	set_color(WHITE);
+	set_color(white);
 	printk("%s", name);
 }
 
 void dir(char* name)
 {
-	set_color(BLUE);
+	set_color(blue);
 	printk("%s", name);
-	set_color(WHITE);
+	set_color(white);
 }

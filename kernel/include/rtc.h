@@ -18,13 +18,15 @@
 #ifndef _RTC_H_
 #define _RTC_H_
 
+#include "stddef.h"
+
 extern void read_rtc();
 
-extern unsigned char second;
-extern unsigned char minute;
-extern unsigned char hour;
-extern unsigned char day;
-extern unsigned char month;
-extern unsigned int year;
+extern uint8_t second;
+extern uint8_t minute;
+extern uint8_t hour;
+extern uint8_t day;
+extern uint8_t month;
+extern size_t year;
 
 #endif

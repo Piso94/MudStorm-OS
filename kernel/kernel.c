@@ -77,17 +77,17 @@ void _start(struct multiboot *mbd, unsigned int magic)
 	Log.i("\nMouse		[OK]");
 	keyboard_install(); // Inizializza la tastiera
 	Log.i("\nTastiera	[OK]");
-	enable_paging();
+	enable_paging(); // Inizializza il paging
 	Log.i("\nPaging		[OK]");
    	asm volatile ("sti"); // Abilita gli interrupt
 	Log.i("\nInterrupt	[OK]");
 	fs_root = init_initrd(initrd_location); // Inizializzo il filesystem
 	Log.i("\nRAMFS		[OK]");
 
-	set_color(GREEN);
-	unsigned ram = (unsigned)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1);
+	set_color(green);
+	unsigned ram = (unsigned)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB - 1, quindi sommo il risultato per 1!
 	printk("\nRAM: %u MB	[OK]\n", ram); //Ok, funziona alla perfezione!
-	set_color(WHITE);
+	set_color(white);
 
 	runShell(); // Entra nella funzione
 }

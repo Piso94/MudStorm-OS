@@ -117,9 +117,9 @@ void cowsay()
 	for(int i=0; i<strlen(say); i++)
 		printk("_");
 	
-	set_color(MAGENTA);
+	set_color(magenta);
 	printk("\n %s \n ", say);
-	set_color(WHITE);
+	set_color(white);
 
 	for(int i=0; i<strlen(say); i++)
 		printk("-");

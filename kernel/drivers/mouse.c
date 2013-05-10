@@ -20,11 +20,10 @@
 #include <intr/irq.h>
 #include <stdio.h>
 #include <video.h>
+// Devo includere una libreria contenente draw_mouse e click_mouse
 
-byte mouse_cycle = 0;
-byte mouse_byte[3];
-byte mouse_x = 0;
-byte mouse_y = 0;
+uint8_t mouse_cycle = 0;
+uint8_t mouse_byte[3];
 
 void mouse_handler(struct regs *a_r)
 {
@@ -32,6 +31,21 @@ void mouse_handler(struct regs *a_r)
 	{
 		case 0:
 			mouse_byte[0] = inportb(0x60);
+			if (mouse_byte[0] & 0x1)
+			{
+				//click_mouse(1);
+			}
+			/*
+			 * Centrale, non lo gestisco
+			 * if (mouse_byte[0] & 0x4)
+			 * {
+			 *	click_mouse(2);
+			 * }
+			 **/
+			if (mouse_byte[0] & 0x2)
+			{
+				//click_mouse(3);
+			}
 			mouse_cycle++;
 			break;
 		case 1:
@@ -40,16 +54,16 @@ void mouse_handler(struct regs *a_r)
 			break;
 		case 2:
 			mouse_byte[2] = inportb(0x60);
-			mouse_x = mouse_byte[1];
-			mouse_y = mouse_byte[2];
+			if ((mouse_byte[1] > 0) && (mouse_byte[2] > 0))
+				//draw_mouse(mouse_byte[1], mouse_byte[2]);
 			mouse_cycle = 0;
 			break;
 	}
 }
 
-void mouse_wait(byte a_type)
+void mouse_wait(uint8_t a_type)
 {
-	dword time_out = 100000;
+	uint32_t time_out = 100000;
 	if (a_type == 0)
 	{
 		while (time_out--)
@@ -70,7 +84,7 @@ void mouse_wait(byte a_type)
 	}
 }
 
-void mouse_write(byte a_write)
+void mouse_write(uint8_t a_write)
 {
 	mouse_wait(1);
 	outportb(0x64, 0xD4);
@@ -78,7 +92,7 @@ void mouse_write(byte a_write)
 	outportb(0x60, a_write);
 }
 
-byte mouse_read()
+uint8_t mouse_read()
 {
 	mouse_wait(0);
 	return inportb(0x60);
@@ -86,7 +100,7 @@ byte mouse_read()
 
 void mouse_install()
 {
-	byte _status;
+	uint8_t _status;
 
 	mouse_wait(1);
 	outportb(0x64, 0xA8);
