@@ -153,7 +153,7 @@ void _fault_handler(struct regs *r)
 {
     if (r->int_no < 32)
     {
-	   Log.e("\n\t\t\t\t  KERNEL PANIC!");
+	   Log.e("\n\t\t\t\t  KERNEL PANIC :/");
 	   printk("\n\t\t\t\t%s", exception_messages[r->int_no]);
 	   update_leds(CapsLock);
 	   update_leds(NumLock);

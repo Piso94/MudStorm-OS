@@ -18,7 +18,9 @@
 #ifndef _GDT_H_
 #define _GDT_H_
 
-extern void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran);
+#include <stddef.h>
+
+extern void gdt_set_gate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran);
 extern void gdt_install();
 
 #endif

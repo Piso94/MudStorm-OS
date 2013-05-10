@@ -22,14 +22,14 @@
 
 typedef char* string;
 
-extern unsigned short *memsetw(unsigned short *dest, unsigned short val, size_t count);
+extern uint16_t *memsetw(uint16_t *dest, uint16_t val, size_t count);
 extern void *memcpy(void *dst, const void *src, size_t len);
 extern void memset(void *dst, int val, size_t len);
-extern void memmov (void *dst, const void *src, const unsigned int bytes);
+extern void memmov (void *dst, const void *src, const size_t bytes);
 extern void strcat (char *dst, const char *src);
 extern int strlen(const char *str);
 extern int strcmp(const char *str1, const char *str2);
-extern int strncmp (const char *dst, const char *src, const unsigned int bytes);
+extern int strncmp (const char *dst, const char *src, const size_t bytes);
 extern char *strncpy (char *dst, register const char *src, register size_t n);
 extern char *strcpy(char *dst, const char *src);
 extern char *strtok(register char *s, register const char *delim);

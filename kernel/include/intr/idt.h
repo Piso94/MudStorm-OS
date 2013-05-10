@@ -18,7 +18,9 @@
 #ifndef _IDT_H_
 #define _IDT_H_
 
-extern void idt_set_gate(unsigned char num, unsigned long base, unsigned short sel, unsigned char flags);
+#include <stddef.h>
+
+extern void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags);
 extern void idt_install();
 
 #endif

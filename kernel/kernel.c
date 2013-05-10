@@ -35,10 +35,11 @@
 #include <initrd.h>
 #include <fs.h>
 #include <commands.h>
+#include <console.h>
 
 extern uint32_t placement_address;
 
-void _start(struct multiboot *mbd, unsigned int magic)
+void _start(struct multiboot *mbd, size_t boot_magic)
 {
 	cls(); // Pulisce lo schermo
 	
@@ -51,12 +52,20 @@ void _start(struct multiboot *mbd, unsigned int magic)
 	 * 	Log.d("Colour\n"); // Scrive a video
 	 **/
 
-	if (magic != 0x2BADB002) // Se magic è diverso da
+	set_color(green);
+	printk("Kernel:0x%x [", &boot_magic);
+	set_color(white);
+
+	if (boot_magic != 0x2BADB002) // Se magic è diverso da
 	{
-		Log.e("\n\t\t\t\t Errore"); // Scrive a video
-		Log.d("\n\t\t\t  Spegnere il Computer"); // Scrive a video
-		asm ("cli"); // Disabilita gli interrupt
-		asm ("hlt"); // Ferma la CPU
+		Log.e("FAIL"); // Scrive a video
+		Log.i("]");
+		for (int i=0;i<999999900;i++);
+		shutdown();
+	}
+	else
+	{
+		Log.i("OK]");
 	}
 
 	uint32_t initrd_location = *((uint32_t*)mbd->mods_addr);
@@ -64,7 +73,7 @@ void _start(struct multiboot *mbd, unsigned int magic)
 	placement_address = initrd_end;
 
 	gdt_install(); // Inizializza le GDT
-	Log.i("GDT		[OK]");
+	Log.i("\nGDT		[OK]");
    	idt_install(); // Inizializza gli IDT
 	Log.i("\nIDT		[OK]");
    	isrs_install(); // Inizializza le ISR
@@ -85,7 +94,7 @@ void _start(struct multiboot *mbd, unsigned int magic)
 	Log.i("\nRAMFS		[OK]");
 
 	set_color(green);
-	unsigned ram = (unsigned)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB - 1, quindi sommo il risultato per 1!
+	size_t ram = (size_t)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB meno 1, quindi sommo il risultato per 1!
 	printk("\nRAM: %u MB	[OK]\n", ram); //Ok, funziona alla perfezione!
 	set_color(white);
 

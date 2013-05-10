@@ -18,7 +18,7 @@
 #include <stddef.h>
 #include <string.h>
 
-unsigned short *memsetw(unsigned short *dest, unsigned short val, size_t count)
+uint16_t *memsetw(uint16_t *dest, uint16_t val, size_t count)
 {
     	unsigned short *temp = (unsigned short *)dest;
     	for( ; count != 0; count--) *temp++ = val;
@@ -40,7 +40,7 @@ void memset(void *dst, int val, size_t len)
     for ( ; len != 0; len--) *temp++ = val;
 }
 
-void memmov (void *dst, const void *src, const unsigned int bytes)
+void memmov (void *dst, const void *src, const size_t bytes)
 {
     for (unsigned int i=0; i<bytes; i++) 
     {
@@ -75,14 +75,14 @@ int strcmp(const char *str1, const char *str2)
     for(; *str1 == *str2; ++str1, ++str2)
         if(*str1 == 0)
             return 0;
-    return *(unsigned char *)str1 < *(unsigned char *)str2 ? -1 : 1;
+    return *(uint8_t *)str1 < *(uint8_t *)str2 ? -1 : 1;
 }
 
-int strncmp (const char *dst, const char *src, const unsigned int bytes) 
+int strncmp (const char *dst, const char *src, const size_t bytes) 
 {
     int result = 0;
 
-    for (unsigned int i=0; i<bytes; i++) 
+    for (size_t i=0; i<bytes; i++) 
     {
         if (dst[i] < src[i]) 
 	{
