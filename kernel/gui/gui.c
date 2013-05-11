@@ -15,24 +15,4 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _KB_H_
-#define _KB_H_
 
-#include "stddef.h"
-
-#define ScrollLock (unsigned char)0x01
-#define NumLock (unsigned char)0x02
-#define CapsLock (unsigned char)0x04
-
-extern int kb_special(unsigned char key);
-extern void update_leds(char led);
-extern void flush();
-extern char getchar_int();
-extern int getch();
-extern void kbhit();
-extern void gets(char *s);
-extern void waitKey();
-
-extern void keyboard_install();
-
-#endif

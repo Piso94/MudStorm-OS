@@ -19,7 +19,7 @@
 
 extern size_t end;
 
-void enable_paging()
+void paging_install()
 {
 	size_t page_aligned_end = (end & 0xFFFFF000) + 0x1000;
 	size_t *page_directory = (size_t*)page_aligned_end;

@@ -19,7 +19,7 @@
 #include <fs.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <kmalloc.h>
+#include <kheap.h>
 #include <string.h>
 initrd_header_t *initrd_header;
 initrd_file_header_t *file_headers;

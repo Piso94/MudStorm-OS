@@ -15,24 +15,20 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _KB_H_
-#define _KB_H_
+#include <fpu.h>
 
-#include "stddef.h"
+void set_fpu(const uint16_t cw)
+{
+	asm volatile ("fldcw %0" :: "m"(cw));
+}
 
-#define ScrollLock (unsigned char)0x01
-#define NumLock (unsigned char)0x02
-#define CapsLock (unsigned char)0x04
+void fpu_install()
+{
+	size_t cr4;
+	asm volatile ("mov %%cr4, %0" : "=r"(cr4));
+	cr4 |= 0x200;
+	asm volatile ("mov %0, %%cr4" :: "r"(cr4));
+	set_fpu(0x37F);
+}
 
-extern int kb_special(unsigned char key);
-extern void update_leds(char led);
-extern void flush();
-extern char getchar_int();
-extern int getch();
-extern void kbhit();
-extern void gets(char *s);
-extern void waitKey();
 
-extern void keyboard_install();
-
-#endif

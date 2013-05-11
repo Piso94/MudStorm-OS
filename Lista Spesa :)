@@ -1,0 +1,21 @@
+Da fare:
+* File System
+* Mouse (da migliorare)
+* GUI
+
+Fatte:
+* Kernel 
+* Shell
+* GDT
+* IDT
+* ISR
+* Keyboard
+* Timer
+* Paging
+* Interrupt
+* FPU
+* Speaker (da provare)
+* RTC
+* IO
+* Log
+* Memory Management (kheap->kmalloc)

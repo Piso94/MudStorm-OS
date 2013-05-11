@@ -20,7 +20,7 @@
 
 #include "stddef.h"
 
-extern void enable_paging();
+extern void paging_install();
 
 #endif
 

@@ -15,24 +15,37 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _KB_H_
-#define _KB_H_
+#ifndef _DOUBLE_H_
+#define _DOUBLE_H_
 
 #include "stddef.h"
 
-#define ScrollLock (unsigned char)0x01
-#define NumLock (unsigned char)0x02
-#define CapsLock (unsigned char)0x04
+#define SCREEN_W 800
+#define SCREEN_H 1024
 
-extern int kb_special(unsigned char key);
-extern void update_leds(char led);
-extern void flush();
-extern char getchar_int();
-extern int getch();
-extern void kbhit();
-extern void gets(char *s);
-extern void waitKey();
+typedef struct strBITMAP
+{
+	size_t w;
+	size_t h;
+	uint8_t *data;
+} bitmap;
 
-extern void keyboard_install();
+typedef struct strRECT
+{
+	long x1;
+	long y1;
+	long x2;
+	long y2;
+} rect;
+
+extern void init_dbl_buffer(void);
+extern void update_screen(void);
+extern void setpixel(bitmap *bmp, int x, int y, uint8_t color);
+extern void drawrect(bitmap *bmp, uint16_t x, uint16_t y, 
+			uint16_t x2, uint16_t y2, 
+			uint8_t color);
+void _main();
+
 
 #endif
+

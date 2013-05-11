@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <fs.h>
 #include <initrd.h>
-#include <kmalloc.h>
+#include <kheap.h>
 
 char* argv;
 

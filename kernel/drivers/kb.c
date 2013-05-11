@@ -219,7 +219,7 @@ void keyboard_install()
 void waitKey()
 {
 	flush();  // Empty the Buffer of erratic data
-	while (getchar() == 0);
+	while (getch() == 0);
 }
 
 void kbhit()
@@ -232,7 +232,7 @@ void gets(char *s)
 	init:
 	line = line;
 	int i;
-	char k = (char)getchar();
+	char k = (char)getch();
 
 	for (i = 0;k != '\n';i++)
 	{
@@ -249,13 +249,13 @@ void gets(char *s)
 			{
 				goto init;
 			}			
-			k = (char)getchar();
+			k = (char)getch();
 		}
 		else
 		{
 			s[i] = k;
 			line++;
-			k = (char)getchar();
+			k = (char)getch();
 		}
 	}
 	line = 2;
@@ -279,7 +279,7 @@ char getchar_int()
 
 	return keyBuff[0];
 }
-int getchar()
+int getch()
 {
 	return ((int) getchar_int());
 }

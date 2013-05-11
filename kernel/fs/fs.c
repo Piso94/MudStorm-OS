@@ -17,7 +17,7 @@
 
 #include <stddef.h>
 #include <fs.h>
-#include <kmalloc.h>
+#include <kheap.h>
 #include <string.h>
 #include <stdio.h>
 #include <video.h>

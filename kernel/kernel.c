@@ -30,12 +30,14 @@
 #include <stdio.h>
 #include <io.h>
 #include <log.h>
-#include <kmalloc.h>
+#include <kheap.h>
 #include <paging.h>
 #include <initrd.h>
 #include <fs.h>
 #include <commands.h>
 #include <console.h>
+#include <fpu.h>
+#include <double.h>
 
 extern uint32_t placement_address;
 
@@ -52,21 +54,25 @@ void _start(struct multiboot *mbd, size_t boot_magic)
 	 * 	Log.d("Colour\n"); // Scrive a video
 	 **/
 
+	init_dbl_buffer();
+	//_main();
+
 	set_color(green);
-	printk("Kernel:0x%x [", &boot_magic);
+	printk("Boot: 0x%x  [", &boot_magic);
 	set_color(white);
 
 	if (boot_magic != 0x2BADB002) // Se magic è diverso da
 	{
 		Log.e("FAIL"); // Scrive a video
-		Log.i("]");
 		for (int i=0;i<999999900;i++);
 		shutdown();
 	}
 	else
 	{
-		Log.i("OK]");
+		Log.i("OK");
 	}
+	
+	Log.i("]");
 
 	uint32_t initrd_location = *((uint32_t*)mbd->mods_addr);
 	uint32_t initrd_end = *(uint32_t*)(mbd->mods_addr + 4);
@@ -81,22 +87,24 @@ void _start(struct multiboot *mbd, size_t boot_magic)
    	irq_install(); // Inizializza gli IRQ
 	Log.i("\nIRQ		[OK]");
 	timer_install(); // Inizializza il timer
-	Log.i("\nTimer		[OK]");
-	mouse_install(); // Inizializza il mouse
-	Log.i("\nMouse		[OK]");
+	Log.i("\nTimer		[OK]"),
 	keyboard_install(); // Inizializza la tastiera
 	Log.i("\nTastiera	[OK]");
-	enable_paging(); // Inizializza il paging
+	mouse_install(); // Inizializza il mouse
+	Log.i("\nMouse		[OK]");
+	paging_install(); // Inizializza il paging
 	Log.i("\nPaging		[OK]");
-   	asm volatile ("sti"); // Abilita gli interrupt
-	Log.i("\nInterrupt	[OK]");
+	fpu_install(); // Inizializzo l'fpu
+	Log.i("\nFPU		[OK]");
 	fs_root = init_initrd(initrd_location); // Inizializzo il filesystem
 	Log.i("\nRAMFS		[OK]");
 
 	set_color(green);
 	size_t ram = (size_t)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB meno 1, quindi sommo il risultato per 1!
-	printk("\nRAM: %u MB	[OK]\n", ram); //Ok, funziona alla perfezione!
+	printk("\nRAM: %u MB	[OK]", ram); //Ok, funziona alla perfezione!
 	set_color(white);
+	asm volatile ("sti"); // Abilita gli interrupt
+	Log.i("\nInterrupt	[OK]\n");
 
 	runShell(); // Entra nella funzione
 }

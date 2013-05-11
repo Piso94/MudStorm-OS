@@ -65,13 +65,12 @@ echo "Compilazione (C) Lib..."
 # C lib
 gcc $optcc kernel/lib/random.c -o $build/random.o
 gcc $optcc kernel/lib/string.c -o $build/string.o
-gcc $optcc kernel/lib/timer.c -o $build/timer.o
 gcc $optcc kernel/lib/stdio.c -o $build/stdio.o
 
 echo "Compilazione (C) Mm..."
 # C mm
 gcc $optcc kernel/mm/malloc.c -o $build/malloc.o
-gcc $optcc kernel/mm/kmalloc.c -o $build/kmalloc.o
+gcc $optcc kernel/mm/kheap.c -o $build/kheap.o
 gcc $optcc kernel/mm/paging.c -o $build/paging.o
 
 echo "Compilazione (C) Drivers..."
@@ -79,8 +78,10 @@ echo "Compilazione (C) Drivers..."
 gcc $optcc kernel/drivers/kb.c -o $build/kb.o
 gcc $optcc kernel/drivers/mouse.c -o $build/mouse.o
 gcc $optcc kernel/drivers/video.c -o $build/video.o
+gcc $optcc kernel/drivers/timer.c -o $build/timer.o
 gcc $optcc kernel/drivers/rtc.c -o $build/rtc.o 
 gcc $optcc kernel/drivers/speaker.c -o $build/speaker.o
+gcc $optcc kernel/drivers/fpu.c -o $build/fpu.o
 
 echo "Compilazione (C) int(e)r(rupt)..."
 # C int(e)r(rupt)
@@ -94,6 +95,10 @@ echo "Compilazione (C) f(ile)s(ystem)..."
 gcc $optcc kernel/fs/fs.c -o $build/fs.o
 gcc $optcc kernel/fs/initrd.c -o $build/initrd.o
 
+echo "Compilazione (C) GUI..."
+# C f(ile)s(ystem)
+gcc $optcc kernel/gui/double.c -o $build/double.o
+
 echo "Linking..."
 # LD linking
 ld $optld -o kernel.bin \
@@ -101,10 +106,11 @@ ld $optld -o kernel.bin \
 	     $build/shell.o $build/commands.o \
 	     $build/console.o $build/io.o $build/log.o \
 	     $build/random.o $build/string.o $build/timer.o $build/stdio.o \
-	     $build/malloc.o $build/kmalloc.o $build/paging.o \
-	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o \
+	     $build/malloc.o $build/kheap.o $build/paging.o \
+	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/fpu.o \
 	     $build/gdt.o $build/idt.o $build/irq.o $build/isrs.o \
-	     $build/fs.o $build/initrd.o
+	     $build/fs.o $build/initrd.o \
+	     $build/double.o
 
 echo "Linking terminato"
 

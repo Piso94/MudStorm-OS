@@ -20,7 +20,6 @@
 #include <intr/irq.h>
 #include <stdio.h>
 #include <video.h>
-// Devo includere una libreria contenente draw_mouse e click_mouse
 
 uint8_t mouse_cycle = 0;
 uint8_t mouse_byte[3];
@@ -55,7 +54,9 @@ void mouse_handler(struct regs *a_r)
 		case 2:
 			mouse_byte[2] = inportb(0x60);
 			if ((mouse_byte[1] > 0) && (mouse_byte[2] > 0))
-				//draw_mouse(mouse_byte[1], mouse_byte[2]);
+			{
+
+			}
 			mouse_cycle = 0;
 			break;
 	}
