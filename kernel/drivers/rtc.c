@@ -17,7 +17,7 @@
 
 #include <rtc.h>
 #include <io.h>
-#include <kmalloc.h>
+#include <kheap.h>
  
 #define CURRENT_YEAR 2013
                                

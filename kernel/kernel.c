@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <io.h>
 #include <log.h>
-#include <kmalloc.h>
+#include <kheap.h>
 #include <paging.h>
 #include <initrd.h>
 #include <fs.h>
@@ -38,7 +38,7 @@
 
 extern uint32_t placement_address;
 
-void _start(struct multiboot *mbd, unsigned int magic)
+void _start(struct multiboot *mbd, size_t magic)
 {
 	cls(); // Pulisce lo schermo
 	
@@ -85,7 +85,7 @@ void _start(struct multiboot *mbd, unsigned int magic)
 	Log.i("\nRAMFS		[OK]");
 
 	set_color(green);
-	unsigned ram = (unsigned)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB - 1, quindi sommo il risultato per 1!
+	size_t ram = (size_t)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB - 1, quindi sommo il risultato per 1!
 	printk("\nRAM: %u MB	[OK]\n", ram); //Ok, funziona alla perfezione!
 	set_color(white);
 

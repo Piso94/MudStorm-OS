@@ -19,7 +19,7 @@
 #include <io.h>
 #include <string.h>
 #include <stddef.h>
-#include <kmalloc.h>
+#include <kheap.h>
 
 unsigned short *textmemptr = (unsigned short*)(0xb8000);
 int attrib = 0x0F, csr_x, csr_y;
