@@ -95,9 +95,9 @@ echo "Compilazione (C) f(ile)s(ystem)..."
 gcc $optcc kernel/fs/fs.c -o $build/fs.o
 gcc $optcc kernel/fs/initrd.c -o $build/initrd.o
 
-echo "Compilazione (C) GUI..."
+#echo "Compilazione (C) GUI..."
 # C f(ile)s(ystem)
-gcc $optcc kernel/gui/double.c -o $build/double.o
+#gcc $optcc kernel/gui/double.c -o $build/double.o
 
 echo "Linking..."
 # LD linking
@@ -109,8 +109,8 @@ ld $optld -o kernel.bin \
 	     $build/malloc.o $build/kheap.o $build/paging.o \
 	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/fpu.o \
 	     $build/gdt.o $build/idt.o $build/irq.o $build/isrs.o \
-	     $build/fs.o $build/initrd.o \
-	     $build/double.o
+	     $build/fs.o $build/initrd.o #\
+	     #$build/double.o
 
 echo "Linking terminato"
 

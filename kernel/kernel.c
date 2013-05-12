@@ -44,18 +44,6 @@ extern uint32_t placement_address;
 void _start(struct multiboot *mbd, size_t boot_magic)
 {
 	cls(); // Pulisce lo schermo
-	
-	/*
-	 * Non serve a molto! :)
-	 * printk("\t\t\t   VGA type: "); // Scrive a video
-	 * if (detect_videotype()) // Se la funzione ritorna true
-	 *	printk("MonoChrome\n"); // Scrive a video
-	 * else // Altrimenti
-	 * 	Log.d("Colour\n"); // Scrive a video
-	 **/
-
-	init_dbl_buffer();
-	//_main();
 
 	set_color(green);
 	printk("Boot: 0x%x  [", &boot_magic);
@@ -64,8 +52,7 @@ void _start(struct multiboot *mbd, size_t boot_magic)
 	if (boot_magic != 0x2BADB002) // Se magic è diverso da
 	{
 		Log.e("FAIL"); // Scrive a video
-		for (int i=0;i<999999900;i++);
-		shutdown();
+		for ( ; ; );
 	}
 	else
 	{
@@ -98,13 +85,13 @@ void _start(struct multiboot *mbd, size_t boot_magic)
 	Log.i("\nFPU		[OK]");
 	fs_root = init_initrd(initrd_location); // Inizializzo il filesystem
 	Log.i("\nRAMFS		[OK]");
-
-	set_color(green);
-	size_t ram = (size_t)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB meno 1, quindi sommo il risultato per 1!
-	printk("\nRAM: %u MB	[OK]", ram); //Ok, funziona alla perfezione!
-	set_color(white);
 	asm volatile ("sti"); // Abilita gli interrupt
-	Log.i("\nInterrupt	[OK]\n");
+	Log.i("\nInterrupt	[OK]");
+
+	size_t ram = (size_t)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB meno 1, quindi sommo il risultato per 1!
+	set_color(green);
+	printk("\nRAM: %u MB	[OK]\n", ram); //Ok, funziona
+	set_color(white);
 
 	runShell(); // Entra nella funzione
 }

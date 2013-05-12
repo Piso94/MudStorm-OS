@@ -60,20 +60,20 @@ void runShell()
 	while(1) // Ciclo infinito
 	{
 		char lst[100]; // Inizializzo la variabile lst
-		
-		for(int j=0;j<100;j++)
-			lst[j] = 0; // Azzero i campi di lst
-		static int y = 0;
 
-		//printk("\n~$ "); // Scrive a video	
-		if (!y)
+		for (int j=0;j<strlen(lst);j++)
+			lst[j] = 0;
+
+		static int s = 0;
+		//printk("\n~$ "); // Scrive a video
+		if (!s)
 		{
 			printk("\n%s~$ ", current_dir); // Scrivo a video la directory corrente
-			y = 1;
+			s = 1;
 		}
 		else
 		{
-			y = 0;
+			s = 0;
 		}
 		scank("%s", lst); // Leggo quello che scrivi come una stringa
 
