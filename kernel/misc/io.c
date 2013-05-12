@@ -18,26 +18,26 @@
 #include <stddef.h>
 #include <io.h>
 
-unsigned char inportb(unsigned short _port)
+uint8_t inportb(uint16_t _port)
 {
 	unsigned char rv;
 	asm volatile ("inb %1, %0" : "=a" (rv) : "dN" (_port));
 	return rv;
 }
 
-unsigned short inportw(unsigned short _port)
+uint16_t inportw(uint16_t _port)
 {
 	unsigned short result;
 	asm volatile  ("in %%dx, %%ax" : "=a" (result) : "d" (_port));
 	return result;
 }
 
-void outportb(unsigned short _port, unsigned char _data)
+void outportb(uint16_t _port, uint8_t _data)
 {
 	asm volatile ("outb %1, %0" : : "dN" (_port), "a" (_data));
 }
 
-void outportw(unsigned short _port, unsigned short _data)
+void outportw(uint16_t _port, uint16_t _data)
 {
 	asm volatile ("outw %1, %0" : : "dN" (_port), "a" (_data));
 }

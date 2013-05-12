@@ -22,10 +22,10 @@ static unsigned long int next = 1; // Inizializzo una variabile "next" come "sta
 int rand(void)
 {
     next = next * 1103515245 + 12345; // La variabile "next" è uguale a "next * 1103515245 + 12345"
-    return (unsigned int)(next / 65536) % 32768; // Ritorno "(next / 65536) % 32768" come un "unsigned int"
+    return (size_t)(next / 65536) % 32768; // Ritorno "(next / 65536) % 32768" come un "unsigned int"
 }
  
-void srand(unsigned int seed)
+void srand(size_t seed)
 {
     next = seed; // La variabile "next" è uguale alla variabile "seed"
 }

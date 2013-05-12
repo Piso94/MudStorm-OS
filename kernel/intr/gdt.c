@@ -20,19 +20,19 @@
 struct gdt_entry
     /// Define a GDT Table entry.
 {
-    unsigned short limit_low;
-    unsigned short base_low;
-    unsigned char  base_middle;
-    unsigned char  access;
-    unsigned char  granularity;
-    unsigned char  base_high;
+    uint16_t limit_low;
+    uint16_t base_low;
+    uint8_t  base_middle;
+    uint8_t  access;
+    uint8_t  granularity;
+    uint8_t  base_high;
 } __attribute__((packed));
 
 struct gdt_ptr
     /// Pointer for the CPU to access our GDT
 {
-    unsigned short limit;
-    unsigned int   base;
+    uint16_t limit;
+    size_t   base;
 } __attribute__((packed));
 
 struct gdt_entry gdt[3];    // 3 Entry GDT; Null, Code, & Data
@@ -40,7 +40,7 @@ struct gdt_ptr gp;          // Pointer to that GDT
 
 extern void _gdt_flush();    // Function in loader.asm 
 
-void gdt_set_gate(int num, unsigned long base, unsigned long limit, unsigned char access, unsigned char gran)
+void gdt_set_gate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran)
     /// Set up a descriptor in the Table, it's cause we're lazy
 {
     /* Setup the descriptor base address */
@@ -61,7 +61,7 @@ void gdt_install()
     /// Initiates our GDT with flat 32-bit addresses.
 {
     gp.limit = (sizeof(struct gdt_entry) * 3) - 1;  // Set up the Pointer
-    gp.base = (unsigned int)&gdt;                   // To the Table
+    gp.base = (size_t)&gdt;                   // To the Table
 
     gdt_set_gate(0, 0, 0, 0, 0);                // 1st Descriptor is null
     gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code Segment, Kernel Mode

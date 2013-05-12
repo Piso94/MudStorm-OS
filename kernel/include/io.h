@@ -18,9 +18,11 @@
 #ifndef _IO_H_
 #define _IO_H_
 
-extern unsigned char inportb(unsigned short);
-extern unsigned short inportw(unsigned short);
-extern void outportb(unsigned short, unsigned char);
-extern void outportw(unsigned short, unsigned short);
+#include "stddef.h"
+
+extern uint8_t inportb(uint16_t);
+extern uint16_t inportw(uint16_t);
+extern void outportb(uint16_t, uint8_t);
+extern void outportw(uint16_t, uint16_t);
 
 #endif

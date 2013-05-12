@@ -76,7 +76,7 @@ int printi(char **out, int i, int b, int sg, int width, int pad, int letbase)
 	char print_buf[PRINT_BUF_LEN];
 	register char *s;
 	register int t, neg = 0, pc = 0;
-	register unsigned int u = i;
+	register size_t u = i;
 
 	if (i == 0)
         {

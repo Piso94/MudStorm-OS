@@ -20,7 +20,7 @@
 
 uint16_t *memsetw(uint16_t *dest, uint16_t val, size_t count)
 {
-    	unsigned short *temp = (unsigned short *)dest;
+    	uint16_t *temp = (uint16_t*)dest;
     	for( ; count != 0; count--) *temp++ = val;
     	return dest;
 }
@@ -42,7 +42,7 @@ void memset(void *dst, int val, size_t len)
 
 void memmov (void *dst, const void *src, const size_t bytes)
 {
-    for (unsigned int i=0; i<bytes; i++) 
+    for (size_t i=0; i<bytes; i++) 
     {
         ((char *)dst)[i] = ((char *)src)[i];
     }

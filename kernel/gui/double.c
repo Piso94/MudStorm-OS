@@ -46,7 +46,7 @@ void update_screen(void)
 
 void setpixel(bitmap *bmp, int x, int y, uint8_t color)
 {
-	bmp->data[y * bmp->w + x];
+	bmp->data = &bmp->data[y * bmp->w + x];
 }
 
 void drawrect(bitmap *bmp, uint16_t x, uint16_t y, 

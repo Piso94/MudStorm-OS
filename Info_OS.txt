@@ -10,6 +10,9 @@
 |-------------------------------------------------------------------------------------------------|
 
 ## 0.7
+* Da unsigned a uint :D
+* Problema con la tastiera :(...risolto :)
+* Aggiunto l'FPU :D
 * Aggiustato il paging! :)
 * Aggiunto una piccola gestione del paging! Ma se vado ad abilitarlo, mi manda in loop reboot l'os! :(
 * Tolto printk da mouse.c

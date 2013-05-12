@@ -21,7 +21,7 @@
 #include <stddef.h>
 #include <kheap.h>
 
-uint16_t *textmemptr = (uint16_t*)(0xb8000);
+uint16_t *textmemptr = (uint16_t*)0xb8000;
 int attrib = 0x0F, csr_x, csr_y;
 
 void scroll()
@@ -65,11 +65,6 @@ void cls()
 void set_color(char color)
 {
 	attrib = color;
-}
-
-void double_buffering(size_t x, size_t y, uint8_t color)
-{
-
 }
 
 void putch(char c)

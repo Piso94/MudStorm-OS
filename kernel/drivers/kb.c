@@ -20,18 +20,18 @@
 #include <kb.h>
 #include <intr/irq.h>
 
-unsigned char shift = 0;            	// Shift Key Status 
-unsigned char ctrl = 0;             	// Ctrl Key Status
-unsigned char alt = 0;              	// Alt Key Status 
-unsigned char caps = 0;             	// Caps Lock Status
-unsigned char num = 0;              	// Num Lock Status 
-unsigned char keyBuff[257];         	// Keybuffer 
-volatile unsigned char keyBuffEnd = 0;  // The Last key in the buffer
+uint8_t shift = 0;            	// Shift Key Status 
+uint8_t ctrl = 0;             	// Ctrl Key Status
+uint8_t alt = 0;              	// Alt Key Status 
+uint8_t caps = 0;             	// Caps Lock Status
+uint8_t num = 0;              	// Num Lock Status 
+uint8_t keyBuff[257];         	// Keybuffer 
+volatile uint8_t keyBuffEnd = 0;  // The Last key in the buffer
 int line = 2;			    			// Line
-unsigned char asciiCode;            	// The ASCII Code
-unsigned char leds = 0;             	// The Three LED's on the keyboard.
+uint8_t asciiCode;            	// The ASCII Code
+uint8_t leds = 0;             	// The Three LED's on the keyboard.
 bool in_chiaro = true;
-unsigned char kbScanCodes[512] =    
+uint8_t kbScanCodes[512] =    
 {	
 	// Normal				
 	0, 27, '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '\'', 0, '\b',
@@ -83,7 +83,7 @@ unsigned char kbScanCodes[512] =
 
 void flush()
 {
-	unsigned temp;
+	size_t temp;
 	do
 	{
 		temp = inportb(0x64);
@@ -96,7 +96,7 @@ void flush()
 }
 
 
-int kb_special(unsigned char key)
+int kb_special(uint8_t key)
 {	
 	static int specKeyUp = 1;	// Is a key already been or being pressed?
 	switch(key) 
@@ -161,9 +161,9 @@ int kb_special(unsigned char key)
 
 void keyboard_handler(struct regs *r)
 {
-	unsigned char scanCode;
+	uint8_t scanCode;
 	scanCode = inportb(0x60);
-	unsigned char asciiCode;
+	uint8_t asciiCode;
 	
 	
 	if(!(kb_special(scanCode) | (scanCode >= 0x80)))
@@ -234,7 +234,7 @@ void gets(char *s)
 	int i;
 	char k = (char)getch();
 
-	for (i = 0;k != '\n';i++)
+	for (i = 0;(k != '\n') && (k != '\0');i++)
 	{
 		if (k == '\b')
 		{

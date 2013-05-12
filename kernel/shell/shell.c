@@ -63,11 +63,18 @@ void runShell()
 		
 		for(int j=0;j<100;j++)
 			lst[j] = 0; // Azzero i campi di lst
+		static int y = 0;
 
-		//printk("\n$ "); // Scrive a video
-		set_color(grey);
-		printk("\n%s$ ", current_dir); // Scrivo a video la directory corrente
-		set_color(white);
+		//printk("\n~$ "); // Scrive a video	
+		if (!y)
+		{
+			printk("\n%s~$ ", current_dir); // Scrivo a video la directory corrente
+			y = 1;
+		}
+		else
+		{
+			y = 0;
+		}
 		scank("%s", lst); // Leggo quello che scrivi come una stringa
 
 		char* first_command = strtok(lst, " "); // Splitto nella stringa first_command la stringa prima dello spazio
