@@ -15,25 +15,46 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _INITRD_H_
-#define _INITRD_H_
+#ifndef _BPB_H_
+#define _BPB_H_
 
 #include "stddef.h"
-#include "fs.h"
 
-typedef struct
+typedef struct _bios_paramater
 {
-	uint32_t nfiles;
-} initrd_header_t;
+	uint8_t		oemname[8];
+	uint16_t	bytespersector;
+	uint8_t		sectorspercluster;
+	uint16_t	reservedsectors;
+	uint8_t		numberoffats;
+	uint16_t	numdirentries;
+	uint16_t	numsectors;
+	uint8_t		media;
+	uint16_t	sectorsperfat;
+	uint16_t	sectorspertrack;
+	uint16_t	headspercyl;
+	size_t	hiddensectors;
+	size_t	longsectors;
+} bpb_t, *p_bpb_t;
 
-typedef struct
+typedef struct _bios_paramater_ext
 {
-	uint8_t magic;
-	int8_t name[64];
-	uint32_t offset;
-	uint32_t length;
-} initrd_file_header_t;
+	size_t	sectorsperfat32;
+	uint16_t	flags;
+	uint16_t	version;
+	size_t	rootcluster;
+	uint16_t	infocluster;
+	uint16_t	backupboot;
+	uint16_t	reserved[6];
+} bpb_ext_t, *p_bpb_ext_t;
 
-fs_node_t *init_initrd(uint32_t location);
+typedef struct _boot_sector
+{
+	uint8_t		ignore[3];
+	bpb_t		_bpb;
+	bpb_ext_t	bpbext;
+	uint8_t		filler[448];
+} bs_t, *p_bs_t;
 
 #endif
+

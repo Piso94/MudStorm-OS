@@ -18,38 +18,49 @@
 #include <log.h>
 #include <video.h>
 #include <stdio.h>
+#include <stdarg.h>
 
-void i(char* message)
+void i(const char* format, ...)
 {
+	va_list args;
+	va_start(args, format);
 	set_color(green);
-	printk("%s", message);
+	print(0, format, args);
 	set_color(white);
 }
 
-void d(char* message)
+void d(const char* format, ...)
 {
+	va_list args;
+	va_start(args, format);
 	set_color(magenta);
-	printk("%s", message);
+	print(0, format, args);
 	set_color(white);
 }
 
-void w(char* message)
+void w(const char* format, ...)
 {
+	va_list args;
+	va_start(args, format);
 	set_color(yellow + black);
-	printk("%s", message);
+	print(0, format, args);
 	set_color(white);
 }
 
-void e(char* message)
+void e(const char* format, ...)
 {
+	va_list args;
+	va_start(args, format);
 	set_color(red);
-	printk("%s", message);
+	print(0, format, args);
 	set_color(white);
 }
 
-void v(char* message)
+void v(const char* format, ...)
 {
-	printk("%s", message);
+	va_list args;
+	va_start(args, format);
+	print(0, format, args);
 }
 
 /*

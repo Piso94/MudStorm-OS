@@ -18,9 +18,9 @@
 #include <stddef.h>
 #include <string.h>
 
-unsigned short *memsetw(unsigned short *dest, unsigned short val, size_t count)
+uint16_t *memsetw(uint16_t *dest, uint16_t val, size_t count)
 {
-    	unsigned short *temp = (unsigned short *)dest;
+    	uint16_t *temp = (uint16_t*)dest;
     	for( ; count != 0; count--) *temp++ = val;
     	return dest;
 }
@@ -34,15 +34,16 @@ void *memcpy(void *dst, const void *src, size_t len)
 	return dst;
 }
 
-void memset(void *dst, int val, size_t len)
+void *memset(void *dst, int val, size_t len)
 {
-    char *temp = (char*) dst;
-    for ( ; len != 0; len--) *temp++ = val;
+	uint8_t *tmp = (uint8_t*)dst;
+	for( ;len != 0;len--, tmp[len] = val);
+	return dst;
 }
 
-void memmov (void *dst, const void *src, const unsigned int bytes)
+void memmov (void *dst, const void *src, const size_t bytes)
 {
-    for (unsigned int i=0; i<bytes; i++) 
+    for (size_t i=0; i<bytes; i++) 
     {
         ((char *)dst)[i] = ((char *)src)[i];
     }
@@ -72,17 +73,21 @@ int strlen(const char *str)
 
 int strcmp(const char *str1, const char *str2)
 {
-    for(; *str1 == *str2; ++str1, ++str2)
-        if(*str1 == 0)
-            return 0;
-    return *(unsigned char *)str1 < *(unsigned char *)str2 ? -1 : 1;
+	int res = 0;
+	while (!(res = *(uint8_t*)str1 - *(uint8_t*)str2) && *str2)
+		++str1, ++str2;
+	if (res < 0)
+		res = -1;
+	if (res > 0)
+		res = 1;
+	return res;
 }
 
-int strncmp (const char *dst, const char *src, const unsigned int bytes) 
+int strncmp (const char *dst, const char *src, const size_t bytes) 
 {
     int result = 0;
 
-    for (unsigned int i=0; i<bytes; i++) 
+    for (size_t i=0; i<bytes; i++) 
     {
         if (dst[i] < src[i]) 
 	{
@@ -117,16 +122,9 @@ char *strncpy (char *dst, register const char *src, register size_t n)
 
 char *strcpy(char *dst, const char *src)
 {
-    char c;
-    char *p = dst;
-
-    while ((c = *src++))
-    {
-        *p++ = c;
-    }
-
-    *p = '\0';
-    return dst;
+	char *_s1 = dst;
+	while ((*dst++ = *src++));
+	return _s1;
 }
 
 char *strtok(register char *s, register const char *delim)
@@ -183,6 +181,15 @@ cont:
 	/* NOTREACHED */
 }
 
+char *strchr(char *str, int ch)
+{
+	do
+	{
+		if (*str == ch)
+			return (char*)str;
+	} while (*str++);
+	return 0;
+}
 
 int stoi(char *str)
 {

@@ -15,35 +15,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <paging.h>
+#ifndef _FLP_H_
+#define _FLP_H_
 
-extern size_t end;
+#include "stddef.h"
 
-void enable_paging()
-{
-	size_t page_aligned_end = (end & 0xFFFFF000) + 0x1000;
-	size_t *page_directory = (size_t*)page_aligned_end;
-	uint32_t addr = 0;
-	size_t *first_page_table = page_directory + 0x1000;
+extern void flp_install(uint8_t drive);
+extern void flp_set_working_drive(uint8_t drive);
+extern uint8_t flp_get_working_drive();
+extern uint8_t *flp_read_sector(int sector_lba);
+extern uint8_t *flp_write_sector(int sector_lba);
 
-	for (size_t i=0; i<1024; i++)
-	{
-		page_directory[i] = 0 | 2;
-	}
+#endif
 
-	for (size_t i=0; i<1024; i++)
-	{
-		page_directory[i] = addr | 3;
-		addr = addr + 4096;
-	}
-	
-	page_directory[0] = (size_t)first_page_table;
-	page_directory[0] |= 3;
-	
-	asm volatile("mov %0, %%cr3":: "b"(page_directory));
-	
-	size_t cr0;
-	asm volatile("mov %%cr0, %0": "=b"(cr0));
-	cr0 |= 0x8000000;
-	asm volatile("mov %0, %%cr0":: "b"(cr0));
-}

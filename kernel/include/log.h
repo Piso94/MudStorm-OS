@@ -22,11 +22,11 @@
 
 extern struct LOG
 {
-	void (*i)(char* message);
-	void (*d)(char* message);
-	void (*w)(char* message);
-	void (*e)(char* message);
-	void (*v)(char* message);
+	void (*i)(const char* format, ...);
+	void (*d)(const char* format, ...);
+	void (*w)(const char* format, ...);
+	void (*e)(const char* format, ...);
+	void (*v)(const char* format, ...);
 } Log;
 
 #endif

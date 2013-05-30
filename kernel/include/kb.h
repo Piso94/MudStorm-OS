@@ -20,11 +20,14 @@
 
 #include "stddef.h"
 
-#define ScrollLock (unsigned char)0x01
-#define NumLock (unsigned char)0x02
-#define CapsLock (unsigned char)0x04
+enum
+{
+ScrollLock = (uint8_t)0x01,
+NumLock = (uint8_t)0x02,
+CapsLock = (uint8_t)0x04
+};
 
-extern int kb_special(unsigned char key);
+extern int kb_special(uint8_t key);
 extern void update_leds(char led);
 extern void flush();
 extern char getchar_int();

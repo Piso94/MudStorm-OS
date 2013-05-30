@@ -26,15 +26,9 @@
 #include <console.h>
 #include <video.h>
 #include <stdio.h>
-#include <fs.h>
-#include <initrd.h>
 #include <kheap.h>
 
 char* argv;
-
-static fs_node_t *fsnode;
-extern char current_dir[100];
-int n = 0;
 
 void help()
 {
@@ -188,60 +182,10 @@ void _reboot()
 
 void ls()
 {
-	if (n == 0)
-	{
-		fsnode = fs_root;
-		n++;
-	}
 
-	printk("\n");
-	int i = 0;
-	static struct dirent *node = 0;
-
-	while ((node = readdir_fs(fsnode, i)))
-	{
-		fs_node_t *tmpfsnode = finddir_fs(fsnode, node->name);
-
-		if ((tmpfsnode->flags & 0x7) == FS_DIRECTORY)
-		{
-			dir(node->name);
-			printk(" ");
-		}
-		else
-		{
-			file(node->name);
-			printk(" ");
-		}
-		i++;
-	}
-	if (i == 0)
-		printk("Cartella vuota");
-	printk("\n");
 }
 
 void cd()
 {
-	if (n == 0)
-	{
-		fsnode = fs_root;
-		n++;
-	}
 
-	fs_node_t *fsnode2 = finddir_fs(fs_root, argv);
-	if (!strcmp(argv, ".."))
-	{
-		strcpy(current_dir, "/");
-		fsnode = fsnode2 = fs_root;
-		return;
-	}
-
-	if ((fsnode2->flags & 0x7) == FS_DIRECTORY)
-	{
-		strcpy(current_dir, argv);
-		fsnode = fsnode2;
-	}
-        else
-	{
-		printk("\nCartella invalida\n");
-	}
 }

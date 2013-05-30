@@ -26,39 +26,39 @@ volatile bool done = false;
 void PIC_handler(struct regs *r)
 /// Callback from ISR 0
 {
-if ((done == false) && (delay > 0))
-{
-delay--;
-}
-else if (delay == 0)
-{
-done = true;
-}
+	if ((!done) && (delay > 0))
+	{
+		delay--;
+	}
+	else if (delay == 0)
+	{
+		done = true;
+	}
 }
 
 void delay_ms(int ms)
 /// Hold the system until specified time is reached
 {
-done = false;
-delay = ms;	
-while(done == false);
+	done = false;
+	delay = ms;	
+	while(!done);
 }
 
 
 void delay_s(int s)
 {
-delay_ms((s * 1000));
+	delay_ms((s * 1000));
 }
 
 void timer_install()
 /// Sets up the system clock by installing the timer handler into IRQ0
 {
-    unsigned long hz = 1000; // 1 tick / mSec
+    uint32_t hz = 1000; // 1 tick / mSec
     asm("cli"); // Stop interrupts
-    unsigned long divisor = 119318 / hz; // Find the divisor
+    uint32_t divisor = 119318 / hz; // Find the divisor
     outportb(0x43, 0x36); // Tell PIC we're setting it's frequency
-    unsigned char l = (unsigned char)(divisor & 0xFF); // Bitmap Low byte
-    unsigned char h = (unsigned char)(divisor >> 8) & 0xFF; // Bitmap High byte
+    uint8_t l = (uint8_t)(divisor & 0xFF); // Bitmap Low byte
+    uint8_t h = (uint8_t)(divisor >> 8) & 0xFF; // Bitmap High byte
     outportb(0x40, l); // Send Low Byte!
     outportb(0x40, h); // Send High Byte!
     irq_install_handler(0, PIC_handler); // Install Pointer to the ISRS Table

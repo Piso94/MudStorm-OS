@@ -25,9 +25,6 @@
 
 void shutdown()
 {
-	// Questa è l'istruzione vecchia che spegneva solo la macchina virtuale QEMU!
-	//asm volatile ("outw %1, %0" : : "dN" ((unsigned short)0xB004), "a" ((unsigned short)0x2000));
-	
 	// Questa è quella nuova che spegne tutte le VM, ma non quelle reali!
 	asm volatile ("cli");
   	for ( ; ; )

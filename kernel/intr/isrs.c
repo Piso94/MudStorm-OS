@@ -17,7 +17,6 @@
 
 #include <intr/isrs.h>
 #include <intr/idt.h>
-#include <stdio.h>
 #include <kb.h>
 #include <log.h>
 
@@ -67,41 +66,41 @@ void isrs_install()
     ///     - Access Flags (0x8E = Ring 0, Present entry)
 {
     // The first 32 Entries are intel exceptions
-    idt_set_gate(0, (unsigned)_isr0, 0x08, 0x8E);
-    idt_set_gate(1, (unsigned)_isr1, 0x08, 0x8E);
-    idt_set_gate(2, (unsigned)_isr2, 0x08, 0x8E);
-    idt_set_gate(3, (unsigned)_isr3, 0x08, 0x8E);
-    idt_set_gate(4, (unsigned)_isr4, 0x08, 0x8E);
-    idt_set_gate(5, (unsigned)_isr5, 0x08, 0x8E);
-    idt_set_gate(6, (unsigned)_isr6, 0x08, 0x8E);
-    idt_set_gate(7, (unsigned)_isr7, 0x08, 0x8E);
+    idt_set_gate(0, (size_t)_isr0, 0x08, 0x8E);
+    idt_set_gate(1, (size_t)_isr1, 0x08, 0x8E);
+    idt_set_gate(2, (size_t)_isr2, 0x08, 0x8E);
+    idt_set_gate(3, (size_t)_isr3, 0x08, 0x8E);
+    idt_set_gate(4, (size_t)_isr4, 0x08, 0x8E);
+    idt_set_gate(5, (size_t)_isr5, 0x08, 0x8E);
+    idt_set_gate(6, (size_t)_isr6, 0x08, 0x8E);
+    idt_set_gate(7, (size_t)_isr7, 0x08, 0x8E);
 
-    idt_set_gate(8, (unsigned)_isr8, 0x08, 0x8E);
-    idt_set_gate(9, (unsigned)_isr9, 0x08, 0x8E);
-    idt_set_gate(10, (unsigned)_isr10, 0x08, 0x8E);
-    idt_set_gate(11, (unsigned)_isr11, 0x08, 0x8E);
-    idt_set_gate(12, (unsigned)_isr12, 0x08, 0x8E);
-    idt_set_gate(13, (unsigned)_isr13, 0x08, 0x8E);
-    idt_set_gate(14, (unsigned)_isr14, 0x08, 0x8E);
-    idt_set_gate(15, (unsigned)_isr15, 0x08, 0x8E);
+    idt_set_gate(8, (size_t)_isr8, 0x08, 0x8E);
+    idt_set_gate(9, (size_t)_isr9, 0x08, 0x8E);
+    idt_set_gate(10, (size_t)_isr10, 0x08, 0x8E);
+    idt_set_gate(11, (size_t)_isr11, 0x08, 0x8E);
+    idt_set_gate(12, (size_t)_isr12, 0x08, 0x8E);
+    idt_set_gate(13, (size_t)_isr13, 0x08, 0x8E);
+    idt_set_gate(14, (size_t)_isr14, 0x08, 0x8E);
+    idt_set_gate(15, (size_t)_isr15, 0x08, 0x8E);
 
-    idt_set_gate(16, (unsigned)_isr16, 0x08, 0x8E);
-    idt_set_gate(17, (unsigned)_isr17, 0x08, 0x8E);
-    idt_set_gate(18, (unsigned)_isr18, 0x08, 0x8E);
-    idt_set_gate(19, (unsigned)_isr19, 0x08, 0x8E);
-    idt_set_gate(20, (unsigned)_isr20, 0x08, 0x8E);
-    idt_set_gate(21, (unsigned)_isr21, 0x08, 0x8E);
-    idt_set_gate(22, (unsigned)_isr22, 0x08, 0x8E);
-    idt_set_gate(23, (unsigned)_isr23, 0x08, 0x8E);
+    idt_set_gate(16, (size_t)_isr16, 0x08, 0x8E);
+    idt_set_gate(17, (size_t)_isr17, 0x08, 0x8E);
+    idt_set_gate(18, (size_t)_isr18, 0x08, 0x8E);
+    idt_set_gate(19, (size_t)_isr19, 0x08, 0x8E);
+    idt_set_gate(20, (size_t)_isr20, 0x08, 0x8E);
+    idt_set_gate(21, (size_t)_isr21, 0x08, 0x8E);
+    idt_set_gate(22, (size_t)_isr22, 0x08, 0x8E);
+    idt_set_gate(23, (size_t)_isr23, 0x08, 0x8E);
 
-    idt_set_gate(24, (unsigned)_isr24, 0x08, 0x8E);
-    idt_set_gate(25, (unsigned)_isr25, 0x08, 0x8E);
-    idt_set_gate(26, (unsigned)_isr26, 0x08, 0x8E);
-    idt_set_gate(27, (unsigned)_isr27, 0x08, 0x8E);
-    idt_set_gate(28, (unsigned)_isr28, 0x08, 0x8E);
-    idt_set_gate(29, (unsigned)_isr29, 0x08, 0x8E);
-    idt_set_gate(30, (unsigned)_isr30, 0x08, 0x8E);
-    idt_set_gate(31, (unsigned)_isr31, 0x08, 0x8E);
+    idt_set_gate(24, (size_t)_isr24, 0x08, 0x8E);
+    idt_set_gate(25, (size_t)_isr25, 0x08, 0x8E);
+    idt_set_gate(26, (size_t)_isr26, 0x08, 0x8E);
+    idt_set_gate(27, (size_t)_isr27, 0x08, 0x8E);
+    idt_set_gate(28, (size_t)_isr28, 0x08, 0x8E);
+    idt_set_gate(29, (size_t)_isr29, 0x08, 0x8E);
+    idt_set_gate(30, (size_t)_isr30, 0x08, 0x8E);
+    idt_set_gate(31, (size_t)_isr31, 0x08, 0x8E);
 }
 
 char *exception_messages[] =
@@ -147,17 +146,22 @@ char *exception_messages[] =
 
 
 void _fault_handler(struct regs *r)
-    /// This is where the interrupts are handled, From here, they're sent to a
-    /// Jump table that runs the interrupt specific function.
-    /* TODO: Add A jump table for software interrupts */
 {
-    if (r->int_no < 32)
-    {
-	   Log.e("\n\t\t\t\t  KERNEL PANIC!");
-	   printk("\n\t\t\t\t%s", exception_messages[r->int_no]);
-	   update_leds(CapsLock);
-	   update_leds(NumLock);
-	   asm ("cli");
-	   asm ("hlt");
+	if (r->int_no < 32)
+	{
+		Log.e("\n\t\t\t\tKERNEL PANIC :0\n\t\t\t\t%s", exception_messages[r->int_no]);
+		for (int i=0; ;i++)
+		{
+			if (i % 2)
+			{
+				update_leds(NumLock);
+				update_leds(CapsLock);
+			}
+			else
+			{
+				update_leds(CapsLock);
+				update_leds(NumLock);
+			}
+		}
     }
 }

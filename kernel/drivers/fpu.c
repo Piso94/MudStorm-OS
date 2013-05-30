@@ -15,53 +15,33 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _STDDEF_H_
-#define _STDDEF_H_
+#include <fpu.h>
 
-// Colour
-enum
+void set_fpu_cw(const uint16_t cw)
 {
-	black = 0,
-	blue = 1,
-	green = 2,
-	cyan = 3,
-	red = 4,
-	magenta = 5,
-	brown = 6,
-	grey = 7,
-	dark_grey = 8,
-	bright_blue = 9,
-	bright_green = 10,
-	bright_cyan = 11,
-	bright_red = 12,
-	bright_magenta = 13,
-	yellow = 14,
-	white = 15
-};
+	asm volatile ("fldcw %0" :: "m"(cw));
+}
 
-// Type
-#define NULL ((void*)0)
-#define EOF (-1)
-
-typedef unsigned int bool;
-enum
+void enable_fpu(void)
 {
-	true = 1,
-	false = 0
-};
+	asm volatile ("clts");
+	size_t t;
+	asm volatile ("mov %%cr4, %0" : "=r"(t));
+	t |= 3 << 9;
+	asm volatile ("mov %0, %%cr4" :: "r"(t));
+}
 
-typedef unsigned int size_t;
+void disable_fpu(void)
+{
+	size_t t;
+	asm volatile ("mov %%cr0, %0" : "=r"(t));
+	t |= 1 << 3;
+	asm volatile ("mov %0, %%cr0" :: "r"(t));
+}
 
-typedef signed char int8_t;
-typedef signed short int16_t;
-typedef signed long int32_t;
-typedef signed long long int64_t;
+void init_fpu(void)
+{
+	asm volatile ("fninit");
+	set_fpu_cw(0x37F);
+}
 
-typedef unsigned char uint8_t;
-typedef unsigned short uint16_t;
-typedef unsigned long uint32_t;
-typedef unsigned long long uint64_t;
-
-typedef unsigned short int word;
-
-#endif

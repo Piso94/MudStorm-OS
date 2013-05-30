@@ -18,7 +18,9 @@
 #ifndef _RANDOM_H_
 #define _RANDOM_H_
 
+#include "stddef.h"
+
 extern int rand(void);
-extern void srand(unsigned int seed);
+extern void srand(size_t seed);
 
 #endif

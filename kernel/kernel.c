@@ -31,63 +31,99 @@
 #include <io.h>
 #include <log.h>
 #include <kheap.h>
-#include <paging.h>
-#include <initrd.h>
-#include <fs.h>
 #include <commands.h>
+#include <fpu.h>
+#include <fat.h>
+#include <flp.h>
+#include <fsys.h>
 
-extern uint32_t placement_address;
+void cmd_read();
+
+char *flp_type()
+{
+	uint8_t flp;
+	outportb(0x70, 0x10);
+	flp = inportb(0x71);
+	uint8_t a = (flp >> 4);
+	char *drive_type[6] = { "no floppy", "360kb 5.25", "1.2mb 5.25", "720kb 3.5", "1.44mb 3.5", "2.88mb 3.5" };
+	
+	return drive_type[a];
+}
 
 void _start(struct multiboot *mbd, size_t magic)
 {
 	cls(); // Pulisce lo schermo
 	
-	/*
-	 * Non serve a molto! :)
-	 * printk("\t\t\t   VGA type: "); // Scrive a video
-	 * if (detect_videotype()) // Se la funzione ritorna true
-	 *	printk("MonoChrome\n"); // Scrive a video
-	 * else // Altrimenti
-	 * 	Log.d("Colour\n"); // Scrive a video
-	 **/
+	Log.i("Boot: 0x%x  ", &magic);
 
-	if (magic != 0x2BADB002) // Se magic è diverso da
+	if (magic != 0x2BADB002) // Se magic è diverso da ...
 	{
-		Log.e("\n\t\t\t\t Errore"); // Scrive a video
-		Log.d("\n\t\t\t  Spegnere il Computer"); // Scrive a video
+		Log.e("[FAIL]\n");
 		asm ("cli"); // Disabilita gli interrupt
 		asm ("hlt"); // Ferma la CPU
 	}
+	else
+	{
+		Log.i("[OK]\n");
+	}
 
-	uint32_t initrd_location = *((uint32_t*)mbd->mods_addr);
-	uint32_t initrd_end = *(uint32_t*)(mbd->mods_addr + 4);
-	placement_address = initrd_end;
-
+	
 	gdt_install(); // Inizializza le GDT
-	Log.i("GDT		[OK]");
+	Log.i("GDT\t\t[OK]");
    	idt_install(); // Inizializza gli IDT
-	Log.i("\nIDT		[OK]");
+	Log.i("\nIDT\t\t[OK]");
    	isrs_install(); // Inizializza le ISR
-	Log.i("\nISR		[OK]");
+	Log.i("\nISR\t\t[OK]");
    	irq_install(); // Inizializza gli IRQ
-	Log.i("\nIRQ		[OK]");
+	Log.i("\nIRQ\t\t[OK]");
 	timer_install(); // Inizializza il timer
-	Log.i("\nTimer		[OK]");
+	Log.i("\nTimer\t\t[OK]");
 	mouse_install(); // Inizializza il mouse
-	Log.i("\nMouse		[OK]");
+	Log.i("\nMouse\t\t[OK]");
 	keyboard_install(); // Inizializza la tastiera
-	Log.i("\nTastiera	[OK]");
-	enable_paging(); // Inizializza il paging
-	Log.i("\nPaging		[OK]");
+	Log.i("\nTastiera\t[OK]");
+	enable_fpu(); // Abilita l'fpu
+	init_fpu(); // Inizializza l'fpu
+	Log.i("\nFPU\t\t[OK]");
+	flp_set_working_drive(0); // Setto il drive floppy 0
+	flp_install(6); // Inizializzo il driver del floppy
+	Log.i("\nFloppy\t\t[%s]", flp_type());
+	//fat_install(); // Inizializzo il filesystem FAT // TODO: Sistemare
+	Log.e("\nFileSystem\t[JUMP]");
    	asm volatile ("sti"); // Abilita gli interrupt
-	Log.i("\nInterrupt	[OK]");
-	fs_root = init_initrd(initrd_location); // Inizializzo il filesystem
-	Log.i("\nRAMFS		[OK]");
 
-	set_color(green);
 	size_t ram = (size_t)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB - 1, quindi sommo il risultato per 1!
-	printk("\nRAM: %u MB	[OK]\n", ram); //Ok, funziona alla perfezione!
-	set_color(white);
-
+	Log.i("\nRAM: %u MB\n", ram); //Ok, funziona!	
+	//cmd_read();
 	runShell(); // Entra nella funzione
+}
+
+void cmd_read() 
+{
+	char read[40] = { 0 };
+	printk("Nome: ");
+	scank("%s\n", read);
+
+	file_t file = vol_openfile(read);
+
+	if (file.flags == FS_INVALID) 
+	{
+		Log.w("File non valido!");
+		return;
+	}
+
+	if (file.flags == FS_DIR) 
+	{
+		Log.w("Cartella!");
+		return;
+	}
+
+	while (file.eof) 
+	{
+		uint8_t buf[512];
+		vol_readfile(&file, buf, 512);
+
+		for (int i=0; i<512; i++)
+			putch(buf[i]);
+	}
 }

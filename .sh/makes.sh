@@ -28,7 +28,7 @@ export PATH=${PATH}:/usr/local/bin
 
 # Setto le cartelle e gli argomenti per la compilazione
 build=objs
-img=out
+img=img
 temp=tmp
 
 # Setto le opzioni di compilazione
@@ -71,7 +71,6 @@ echo "Compilazione (C) Mm..."
 # C mm
 gcc $optcc kernel/mm/malloc.c -o $build/malloc.o
 gcc $optcc kernel/mm/kheap.c -o $build/kheap.o
-gcc $optcc kernel/mm/paging.c -o $build/paging.o
 
 echo "Compilazione (C) Drivers..."
 # C drivers
@@ -81,6 +80,9 @@ gcc $optcc kernel/drivers/video.c -o $build/video.o
 gcc $optcc kernel/drivers/rtc.c -o $build/rtc.o 
 gcc $optcc kernel/drivers/speaker.c -o $build/speaker.o
 gcc $optcc kernel/drivers/io.c -o $build/io.o
+gcc $optcc kernel/drivers/fpu.c -o $build/fpu.o
+gcc $optcc kernel/drivers/dma.c -o $build/dma.o
+gcc $optcc kernel/drivers/flp.c -o $build/flp.o
 
 echo "Compilazione (C) int(e)r(rupt)..."
 # C int(e)r(rupt)
@@ -91,8 +93,8 @@ gcc $optcc kernel/intr/isrs.c -o $build/isrs.o
 
 echo "Compilazione (C) f(ile)s(ystem)..."
 # C f(ile)s(ystem)
-gcc $optcc kernel/fs/fs.c -o $build/fs.o
-gcc $optcc kernel/fs/initrd.c -o $build/initrd.o
+gcc $optcc kernel/fs/fat.c -o $build/fat.o
+gcc $optcc kernel/fs/fsys.c -o $build/fsys.o
 
 echo "Linking..."
 # LD linking
@@ -101,10 +103,10 @@ ld $optld -o kernel.bin \
 	     $build/shell.o $build/commands.o \
 	     $build/console.o $build/io.o $build/log.o \
 	     $build/random.o $build/string.o $build/timer.o $build/stdio.o \
-	     $build/malloc.o $build/kheap.o $build/paging.o \
-	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o \
+	     $build/malloc.o $build/kheap.o \
+	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/fpu.o $build/flp.o $build/dma.o \
 	     $build/gdt.o $build/idt.o $build/irq.o $build/isrs.o \
-	     $build/fs.o $build/initrd.o
+	     $build/fat.o $build/fsys.o
 
 echo "Linking terminato"
 
@@ -120,7 +122,6 @@ sleep 0.5 || exit
 
 echo "Richiedo permessi per copiare il file nella cartella \"tmp\""
 sudo cp kernel.bin $temp/kernel.bin || exit
-sudo cp initrd.img $temp/initrd.img || exit
 
 sleep 0.2 || exit
 

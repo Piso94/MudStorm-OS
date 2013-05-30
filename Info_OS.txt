@@ -5,11 +5,23 @@
 						Kernel: 0.7
 						Shell:  0.6
 
-|-------------------------------------------------------------------------------------------------|
-|					Kernel							  |
-|-------------------------------------------------------------------------------------------------|
+		|-----------------------------------------------------------------------|
+		|				 Kernel				  	|
+		|-----------------------------------------------------------------------|
 
 ## 0.7
+* Tolto A20 Line...dava problemi con la tastiera!
+* Tolto il paging :( e disabilitato temporaneamente il FileSystem FAT :(
+* Modificato Log., adesso è possibile usarlo come un printk :)
+* Aggiunto A20 Line!
+* Disabilitato il paging...dava problemi!
+* Inserito floppy driver, VFS e FAT...floppy OK, VFS OK, FAT non funziona :(
+* Aggiunto DMA
+* Tentativo di inserire filesystem FAT :)
+* Aggiunta piccola lettura contenuto "file"
+* Inserita la stringa che mostra dove è allocato(in memoria) il kernel
+* Sostituiti unsigned ... con uint.._t o size_t
+* Sistemato problema con la tastiera :)
 * Aggiustato il paging! :)
 * Aggiunto una piccola gestione del paging! Ma se vado ad abilitarlo, mi manda in loop reboot l'os! :(
 * Tolto printk da mouse.c
@@ -99,11 +111,12 @@
 - Stringe
 - Scrittura
 
-|-------------------------------------------------------------------------------------------------|
-|					Shell							  |
-|-------------------------------------------------------------------------------------------------|
+		|-----------------------------------------------------------------------|
+		|				  Shell				  	|
+		|-----------------------------------------------------------------------|
 
 ## 0.6
+* Disabilitato cd & ls...non servono visto che non c'è più il filesystem initrd
 * Migliorata gestione "Comando non trovato", adesso viene visualizzata solo se l'utente ha SCRITTO un comando non iserito
 * Aggiunti comandi cd e ls! Non ancora usati, aspetto di implementare open(path, arguments);
 

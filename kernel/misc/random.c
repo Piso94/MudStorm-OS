@@ -17,15 +17,15 @@
 
 #include <random.h>
 
-static unsigned long int next = 1; // Inizializzo una variabile "next" come "static unsigned long int" con valore "1"
+static uint32_t next = 1; // Inizializzo una variabile "next" come "static uint32_t" con valore "1"
  
 int rand(void)
 {
     next = next * 1103515245 + 12345; // La variabile "next" è uguale a "next * 1103515245 + 12345"
-    return (unsigned int)(next / 65536) % 32768; // Ritorno "(next / 65536) % 32768" come un "unsigned int"
+    return (size_t)(next / 65536) % 32768; // Ritorno "(next / 65536) % 32768" come un "size_t"
 }
  
-void srand(unsigned int seed)
+void srand(size_t seed)
 {
     next = seed; // La variabile "next" è uguale alla variabile "seed"
 }

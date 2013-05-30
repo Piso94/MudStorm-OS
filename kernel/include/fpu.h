@@ -15,12 +15,15 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _PAGING_H_
-#define _PAGING_H_
+#ifndef _FPU_H_
+#define _FPU_H_
 
 #include "stddef.h"
 
-extern void enable_paging();
+extern void set_fpu_cw(const uint16_t cw);
+extern void enable_fpu(void);
+extern void disable_fpu(void);
+extern void init_fpu(void);
 
 #endif
 

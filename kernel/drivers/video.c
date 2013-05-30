@@ -21,13 +21,13 @@
 #include <stddef.h>
 #include <kheap.h>
 
-unsigned short *textmemptr = (unsigned short*)(0xb8000);
+uint16_t *textmemptr = (uint16_t*)(0xb8000);
 int attrib = 0x0F, csr_x, csr_y;
 
 void scroll()
 {
-    unsigned blank = 0x20 | (attrib << 8);
-    unsigned temp;
+    size_t blank = 0x20 | (attrib << 8);
+    size_t temp;
 
     if(csr_y >= 25)
     {
@@ -50,7 +50,7 @@ void shell_csr_fix()
 void cls()
     /// Clear The screen
 {
-    unsigned blank;
+    size_t blank;
 
     blank = 0x20 | (attrib << 8);   // Make the "blank" (space + attribute)
 
@@ -74,8 +74,8 @@ void double_buffering(size_t x, size_t y, uint8_t color)
 
 void putch(char c)
 {
-    unsigned short *where;
-    unsigned att = attrib << 8;
+    uint16_t *where;
+    size_t att = attrib << 8;
 
     if(c == 0x08)   // Handle a Backspace as a control charecter
     {
@@ -129,7 +129,7 @@ void puts(char *text)
 
 void move_csr(int x, int y)
 {
-    unsigned temp;
+    size_t temp;
 
     temp = y * 80 + x;  // Position = (y * width) +  x
 
@@ -143,6 +143,6 @@ bool detect_videotype()
 {
 	char c;
 	
-	c = ((*(volatile unsigned short*)0x410) & 0x30);
+	c = ((*(volatile uint16_t*)0x410) & 0x30);
 	return (c == 0x30); // true: Monochrome, false: Colour
 }
