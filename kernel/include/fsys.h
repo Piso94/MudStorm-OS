@@ -22,7 +22,7 @@
 
 typedef struct file
 {
-	char		name[32];
+	char	name[32];
 	size_t	flags;
 	size_t	length;
 	size_t	id;

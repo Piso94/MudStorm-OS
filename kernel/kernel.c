@@ -88,21 +88,31 @@ void _start(struct multiboot *mbd, size_t magic)
 	flp_set_working_drive(0); // Setto il drive floppy 0
 	flp_install(6); // Inizializzo il driver del floppy
 	Log.i("\nFloppy\t\t[%s]", flp_type());
-	//fat_install(); // Inizializzo il filesystem FAT // TODO: Sistemare
-	Log.e("\nFileSystem\t[JUMP]");
+	fat_install(); // Inizializzo il filesystem FAT // TODO: Sistemare
+	Log.i("\nFileSystem\t[OK]");
    	asm volatile ("sti"); // Abilita gli interrupt
 
-	size_t ram = (size_t)(((mbd->mem_lower + mbd->mem_upper) / 1024) + 1); // Prendo il valore della memoria "minore", la sommo con quella "maggiore", ottengo la memoria ram in KB, divido per 1024, ottengo la ram in MB - 1, quindi sommo il risultato per 1!
-	Log.i("\nRAM: %u MB\n", ram); //Ok, funziona!	
-	//cmd_read();
+	size_t ram;
+
+	ram = (mbd->mem_lower + mbd->mem_upper) / 1024 + 1; 
+	/*
+	 * Prendo il valore della memoria "minore", 
+         * la sommo con quella "maggiore", 
+         * ottengo la memoria ram in KB, divido per 1024, 
+         * ottengo la ram in MB - 1, 
+         * quindi sommo il risultato per 1!
+         **/
+	Log.i("\nRAM: %u MB\n", ram);
+	
+	cmd_read();
 	runShell(); // Entra nella funzione
 }
 
 void cmd_read() 
 {
-	char read[40] = { 0 };
+	char read[40];
 	printk("Nome: ");
-	scank("%s\n", read);
+	scank("%s", read);
 
 	file_t file = vol_openfile(read);
 
@@ -120,10 +130,10 @@ void cmd_read()
 
 	while (file.eof) 
 	{
-		uint8_t buf[512];
-		vol_readfile(&file, buf, 512);
+		uint8_t buf[1024];
+		vol_readfile(&file, buf, 1024);
 
-		for (int i=0; i<512; i++)
-			putch(buf[i]);
+		for (int i=0; i<1024; i++)
+			printk("%c", buf[i]);
 	}
 }
