@@ -33,16 +33,16 @@ typedef struct _bios_paramater
 	uint16_t	sectorsperfat;
 	uint16_t	sectorspertrack;
 	uint16_t	headspercyl;
-	size_t	hiddensectors;
-	size_t	longsectors;
+	size_t		hiddensectors;
+	size_t		longsectors;
 } bpb_t, *p_bpb_t;
 
 typedef struct _bios_paramater_ext
 {
-	size_t	sectorsperfat32;
+	size_t		sectorsperfat32;
 	uint16_t	flags;
 	uint16_t	version;
-	size_t	rootcluster;
+	size_t		rootcluster;
 	uint16_t	infocluster;
 	uint16_t	backupboot;
 	uint16_t	reserved[6];
@@ -51,7 +51,7 @@ typedef struct _bios_paramater_ext
 typedef struct _boot_sector
 {
 	uint8_t		ignore[3];
-	bpb_t		_bpb;
+	bpb_t		bpb;
 	bpb_ext_t	bpbext;
 	uint8_t		filler[448];
 } bs_t, *p_bs_t;

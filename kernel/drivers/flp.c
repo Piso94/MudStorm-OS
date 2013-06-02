@@ -361,11 +361,16 @@ void flp_lba_to_chs(int lba, int *head, int *track, int *sector)
 	*sector = lba % (flp_sector_per_track + 1);
 }
 
-void flp_install(uint8_t irq)
+void flp_install()
 {
-	irq_install_handler(irq, flp_handler);
+	irq_install_handler(6, flp_handler);
 	flp_reset();
 	flp_drive_data(13, 1, 0xf, true);
+}
+
+void flp_uninstall()
+{
+	irq_uninstall_handler(8);
 }
 
 void flp_set_working_drive(uint8_t drive)

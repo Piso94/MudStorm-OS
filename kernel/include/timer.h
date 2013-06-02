@@ -21,5 +21,6 @@
 extern void delay_ms(int ms);
 extern void delay_s(int s);
 extern void timer_install();
+extern void timer_uninstall();
 
 #endif

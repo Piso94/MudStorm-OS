@@ -22,9 +22,27 @@
 #include <version.h>
 #include <io.h>
 #include <log.h>
+#include <flp.h>
+#include <fat.h>
+#include <kb.h>
+#include <mouse.h>
+#include <timer.h>
 
 void shutdown()
 {
+	cls();
+
+	timer_uninstall();
+	Log.i("Timer\t\t[Ok]");
+	keyboard_uninstall();
+	Log.i("\nTastiera\t[Ok]");
+	mouse_uninstall();
+	Log.i("\nMouse\t\t[Ok]");
+	fat_uninstall();
+	Log.i("\nFAT\t\t[Ok]");
+	flp_uninstall();
+	Log.i("\nFloppy\t\t[Ok]");
+
 	// Questa è quella nuova che spegne tutte le VM, ma non quelle reali!
 	asm volatile ("cli");
   	for ( ; ; )

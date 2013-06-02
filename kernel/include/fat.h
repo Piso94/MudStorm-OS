@@ -19,7 +19,7 @@
 #define _FAT_H_
 
 #include "stddef.h"
-#include "fsys.h"
+#include "vfs.h"
 
 typedef struct _dir
 {
@@ -52,8 +52,10 @@ typedef struct _mount
 extern file_t directory(const char* dir_name);
 extern void read(p_file_t file, uint8_t *buff, size_t length);
 extern file_t open(const char *name);
-extern void fat_install();
 extern void fat_mount();
+extern void fat_umount();
+extern void fat_install();
+extern void fat_uninstall();
 
 #endif
 

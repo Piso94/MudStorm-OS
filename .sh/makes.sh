@@ -61,6 +61,7 @@ gcc $optcc kernel/misc/console.c -o $build/console.o
 gcc $optcc kernel/misc/log.c -o $build/log.o
 gcc $optcc kernel/misc/timer.c -o $build/timer.o
 gcc $optcc kernel/misc/random.c -o $build/random.o
+gcc $optcc kernel/misc/cpuid.c -o $build/cpuid.o
 
 echo "Compilazione (C) Lib..."
 # C lib
@@ -93,20 +94,21 @@ gcc $optcc kernel/intr/isrs.c -o $build/isrs.o
 
 echo "Compilazione (C) f(ile)s(ystem)..."
 # C f(ile)s(ystem)
-gcc $optcc kernel/fs/fat.c -o $build/fat.o
-gcc $optcc kernel/fs/fsys.c -o $build/fsys.o
+gcc $optcc kernel/fs/fat/fat.c -o $build/fat.o
+gcc $optcc kernel/fs/vfs.c -o $build/vfs.o
 
 echo "Linking..."
 # LD linking
 ld $optld -o kernel.bin \
 	     $build/loader.o $build/kernel.o \
 	     $build/shell.o $build/commands.o \
-	     $build/console.o $build/io.o $build/log.o \
-	     $build/random.o $build/string.o $build/timer.o $build/stdio.o \
+	     $build/console.o $build/io.o \
+	     $build/random.o $build/timer.o $build/log.o $build/cpuid.o \
+	     $build/stdio.o $build/string.o \
 	     $build/malloc.o $build/kheap.o \
 	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/fpu.o $build/flp.o $build/dma.o \
 	     $build/gdt.o $build/idt.o $build/irq.o $build/isrs.o \
-	     $build/fat.o $build/fsys.o
+	     $build/fat.o $build/vfs.o
 
 echo "Linking terminato"
 

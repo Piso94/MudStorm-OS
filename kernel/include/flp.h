@@ -20,7 +20,8 @@
 
 #include "stddef.h"
 
-extern void flp_install(uint8_t drive);
+extern void flp_install();
+extern void flp_uninstall();
 extern void flp_set_working_drive(uint8_t drive);
 extern uint8_t flp_get_working_drive();
 extern uint8_t *flp_read_sector(int sector_lba);

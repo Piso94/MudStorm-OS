@@ -22,6 +22,7 @@
 
 int delay = 0;
 volatile bool done = false;
+bool uninstall = false;
 
 void PIC_handler(struct regs *r)
 /// Callback from ISR 0
@@ -39,9 +40,12 @@ void PIC_handler(struct regs *r)
 void delay_ms(int ms)
 /// Hold the system until specified time is reached
 {
-	done = false;
-	delay = ms;	
-	while(!done);
+	if (!uninstall)
+	{
+		done = false;
+		delay = ms;	
+		while(!done);
+	}
 }
 
 
@@ -54,7 +58,7 @@ void timer_install()
 /// Sets up the system clock by installing the timer handler into IRQ0
 {
     uint32_t hz = 1000; // 1 tick / mSec
-    asm("cli"); // Stop interrupts
+    asm volatile ("cli"); // Stop interrupts
     uint32_t divisor = 119318 / hz; // Find the divisor
     outportb(0x43, 0x36); // Tell PIC we're setting it's frequency
     uint8_t l = (uint8_t)(divisor & 0xFF); // Bitmap Low byte
@@ -62,5 +66,13 @@ void timer_install()
     outportb(0x40, l); // Send Low Byte!
     outportb(0x40, h); // Send High Byte!
     irq_install_handler(0, PIC_handler); // Install Pointer to the ISRS Table
-    asm("sti"); // Restore interrupts
+    asm volatile ("sti"); // Restore interrupts
+}
+
+void timer_uninstall()
+{
+	asm volatile ("cli");
+	irq_uninstall_handler(0);
+	uninstall = true;
+	asm volatile ("sti");
 }

@@ -217,6 +217,12 @@ void keyboard_install()
 	irq_install_handler(1, &keyboard_handler);  // Install Handler
 }
 
+void keyboard_uninstall()
+{
+	flush();
+	irq_uninstall_handler(1);
+}
+
 void waitKey()
 {
 	printk("Premi un tasto per continuare...");

@@ -1,5 +1,5 @@
 						MudStorm OS 
-					       Revisione 210
+					       Revisione 212
 				     Versione: 0.6.3 Red Apple (Mela Rossa)
 
 						Kernel: 0.7
@@ -10,6 +10,8 @@
 		|-----------------------------------------------------------------------|
 
 ## 0.7
+* Aggiunta piccola funzione CPUID, mostra se è CPU Intel, AMD o sconosciuta! 
+* Aggiustato(a metà) il problema con il FS, adesso non manda in panic il kernel! :)
 * Tolto A20 Line...dava problemi con la tastiera!
 * Tolto il paging :( e disabilitato temporaneamente il FileSystem FAT :(
 * Modificato Log., adesso è possibile usarlo come un printk :)
@@ -116,6 +118,7 @@
 		|-----------------------------------------------------------------------|
 
 ## 0.6
+* Migliorata la gestione della seconda stringa...usato anche per lei il tolower
 * Disabilitato cd & ls...non servono visto che non c'è più il filesystem initrd
 * Migliorata gestione "Comando non trovato", adesso viene visualizzata solo se l'utente ha SCRITTO un comando non iserito
 * Aggiunti comandi cd e ls! Non ancora usati, aspetto di implementare open(path, arguments);

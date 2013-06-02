@@ -19,7 +19,7 @@
 
 void cpuid(int in, int a, int b, int c, int d)
 {
-	asm volatile ("cpuid": "=a"(a), "=b"(b), "=c"(c), "=d"(d) : "a"(in));
+	asm ("cpuid": "=a"(a), "=b"(b), "=c"(c), "=d"(d) : "a"(in));
 }
 
 char *cpu_vendor(void)
@@ -31,10 +31,10 @@ char *cpu_vendor(void)
 	switch (ebx)
 	{
 		case 0x756e6547:
-			return "Vendor: Intel";
+			return "Intel";
 		case 0x68747541:
-			return "Vendor: AMD";
+			return "AMD";
 	}
 
-	return "Vendor: Unknown";
+	return "Sconosciuto";
 }

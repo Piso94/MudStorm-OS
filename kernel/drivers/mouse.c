@@ -121,3 +121,9 @@ void mouse_install()
 
 	irq_install_handler(12, mouse_handler);
 }
+
+void mouse_uninstall()
+{
+	mouse_write(0x00);
+	irq_uninstall_handler(12);
+}

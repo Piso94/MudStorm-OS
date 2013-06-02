@@ -35,7 +35,8 @@
 #include <fpu.h>
 #include <fat.h>
 #include <flp.h>
-#include <fsys.h>
+#include <vfs.h>
+#include <cpuid.h>
 
 void cmd_read();
 
@@ -64,32 +65,32 @@ void _start(struct multiboot *mbd, size_t magic)
 	}
 	else
 	{
-		Log.i("[OK]\n");
+		Log.i("[Ok]\n");
 	}
 
 	
 	gdt_install(); // Inizializza le GDT
-	Log.i("GDT\t\t[OK]");
+	Log.i("GDT\t\t[Ok]");
    	idt_install(); // Inizializza gli IDT
-	Log.i("\nIDT\t\t[OK]");
+	Log.i("\nIDT\t\t[Ok]");
    	isrs_install(); // Inizializza le ISR
-	Log.i("\nISR\t\t[OK]");
+	Log.i("\nISR\t\t[Ok]");
    	irq_install(); // Inizializza gli IRQ
-	Log.i("\nIRQ\t\t[OK]");
+	Log.i("\nIRQ\t\t[Ok]");
 	timer_install(); // Inizializza il timer
-	Log.i("\nTimer\t\t[OK]");
+	Log.i("\nTimer\t\t[Ok]");
 	mouse_install(); // Inizializza il mouse
-	Log.i("\nMouse\t\t[OK]");
+	Log.i("\nMouse\t\t[Ok]");
 	keyboard_install(); // Inizializza la tastiera
-	Log.i("\nTastiera\t[OK]");
+	Log.i("\nTastiera\t[Ok]");
 	enable_fpu(); // Abilita l'fpu
 	init_fpu(); // Inizializza l'fpu
-	Log.i("\nFPU\t\t[OK]");
+	Log.i("\nFPU\t\t[Ok]");
 	flp_set_working_drive(0); // Setto il drive floppy 0
-	flp_install(6); // Inizializzo il driver del floppy
+	flp_install(); // Inizializzo il driver del floppy
 	Log.i("\nFloppy\t\t[%s]", flp_type());
 	fat_install(); // Inizializzo il filesystem FAT // TODO: Sistemare
-	Log.i("\nFileSystem\t[OK]");
+	Log.i("\nFileSystem\t[Ok]");
    	asm volatile ("sti"); // Abilita gli interrupt
 
 	size_t ram;
@@ -102,7 +103,8 @@ void _start(struct multiboot *mbd, size_t magic)
          * ottengo la ram in MB - 1, 
          * quindi sommo il risultato per 1!
          **/
-	Log.i("\nRAM: %u MB\n", ram);
+	Log.i("\nCPU: %s\n", cpu_vendor());
+	Log.i("RAM: %u MB\n", ram);
 	
 	cmd_read();
 	runShell(); // Entra nella funzione
@@ -128,12 +130,12 @@ void cmd_read()
 		return;
 	}
 
-	while (file.eof) 
+	while (file.eof == -1) 
 	{
-		uint8_t buf[1024];
-		vol_readfile(&file, buf, 1024);
+		uint8_t buf[512];
+		vol_readfile(&file, buf, 512);
 
-		for (int i=0; i<1024; i++)
-			printk("%c", buf[i]);
+		for (int i=0; i<512; i++)
+			printk("%c", &buf[i]);
 	}
 }

@@ -149,7 +149,7 @@ void _fault_handler(struct regs *r)
 {
 	if (r->int_no < 32)
 	{
-		Log.e("\n\t\t\t\tKERNEL PANIC :0\n\t\t\t\t%s", exception_messages[r->int_no]);
+		Log.e("\n\t\t\t\tKERNEL PANIC ;-(\n\t\t\t\t%s", exception_messages[r->int_no]);
 		for (int i=0; ;i++)
 		{
 			if (i % 2)

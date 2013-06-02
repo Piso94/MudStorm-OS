@@ -18,7 +18,7 @@
 #ifndef _VERSION_H_
 #define _VERSION_H_
 
-#define BUILD "210"
+#define BUILD "212"
 #define KERNEL "0.7"
 #define SHELL "0.6"
 #define AUTHOR "Piso94/LittleHacker"

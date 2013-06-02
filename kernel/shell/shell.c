@@ -72,6 +72,7 @@ void runShell()
 
 		char* first_command = strtok(lst, " "); // Splitto nella stringa first_command la stringa prima dello spazio
 		argv = strtok(NULL, ""); // Splitto nella stringa argv la stringa dopo lo spazio
+		tolower(argv);
 
 		int i = find(tolower(first_command)); // Inizializzo una variable "i" come "int" con valore "find(tolower(first_command))"
 

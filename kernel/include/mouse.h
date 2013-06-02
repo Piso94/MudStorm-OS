@@ -26,5 +26,6 @@ void mouse_wait(uint8_t a_type);
 void mouse_write(uint8_t a_write);
 uint8_t mouse_read();
 extern void mouse_install();
+extern void mouse_uninstall();
 
 #endif

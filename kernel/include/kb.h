@@ -37,5 +37,6 @@ extern void gets(char *s);
 extern void waitKey();
 
 extern void keyboard_install();
+extern void keyboard_uninstall();
 
 #endif
