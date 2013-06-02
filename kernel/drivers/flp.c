@@ -370,7 +370,7 @@ void flp_install()
 
 void flp_uninstall()
 {
-	irq_uninstall_handler(8);
+	irq_uninstall_handler(6);
 }
 
 void flp_set_working_drive(uint8_t drive)
