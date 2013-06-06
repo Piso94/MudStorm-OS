@@ -35,7 +35,7 @@ typedef struct _dir
 	uint16_t	last_mode_time;
 	uint16_t	last_mode_data;
 	uint16_t	firstcluster;
-	uint16_t	filesize;
+	size_t		filesize;
 } directory_t, *p_directory_t;
 
 typedef struct _mount
@@ -50,7 +50,7 @@ typedef struct _mount
 } mount_t, *p_mount_t;
 
 extern file_t directory(const char* dir_name);
-extern void read(p_file_t file, uint8_t *buff, size_t length);
+extern void read_file(p_file_t file, uint8_t *buff, size_t length);
 extern file_t open(const char *name);
 extern void fat_mount();
 extern void fat_umount();

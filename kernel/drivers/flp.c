@@ -16,237 +16,261 @@
  */
 
 #include <flp.h>
-#include <dma.h>
 #include <io.h>
 #include <timer.h>
-#include <stdio.h>
 #include <intr/irq.h>
 
-enum flp_io
-{
-	flp_dor		= 0x3f2,
-	flp_msr		= 0x3f4,
-	flp_fifo	= 0x3f5,
-	flp_ctrl	= 0x3f7
+enum FLPYDSK_IO {
+
+	FLPYDSK_DOR		=	0x3f2,
+	FLPYDSK_MSR		=	0x3f4,
+	FLPYDSK_FIFO	=	0x3f5,
+	FLPYDSK_CTRL	=	0x3f7
 };
 
-enum flp_cmd
-{
-	flp_cmd_read_track	= 2,
-	flp_cmd_specify		= 3,
-	flp_cmd_check_stat	= 4,
-	flp_cmd_write_sect	= 5,
-	flp_cmd_read_sect	= 6,
-	flp_cmd_calibrate	= 7,
-	flp_cmd_check_int	= 8,
-	flp_cmd_format_track	= 0xd,
-	flp_cmd_seek		= 0xf
+/**
+*	Bits 0-4 of command byte. Please see chapter for additional commands
+*/
+
+enum FLPYDSK_CMD {
+
+	FDC_CMD_READ_TRACK	=	2,
+	FDC_CMD_SPECIFY		=	3,
+	FDC_CMD_CHECK_STAT	=	4,
+	FDC_CMD_WRITE_SECT	=	5,
+	FDC_CMD_READ_SECT	=	6,
+	FDC_CMD_CALIBRATE	=	7,
+	FDC_CMD_CHECK_INT	=	8,
+	FDC_CMD_FORMAT_TRACK=	0xd,
+	FDC_CMD_SEEK		=	0xf
 };
 
-enum flp_cmd_ext
-{
-	fdc_cmd_ext_skip	= 0x20,
-	fdc_cmd_ext_density	= 0x40,
-	fdc_cmd_ext_multitrack	= 0x80
+/**
+*	Additional command masks. Can be masked with above commands
+*/
+
+enum FLPYDSK_CMD_EXT {
+
+	FDC_CMD_EXT_SKIP		=	0x20,	//00100000
+	FDC_CMD_EXT_DENSITY		=	0x40,	//01000000
+	FDC_CMD_EXT_MULTITRACK	=	0x80	//10000000
 };
 
-enum flp_dor_mask
-{
-	flp_dor_mask_drive0	= 0,
-	flp_dor_mask_drive1	= 1,
-	flp_dor_mask_drive2	= 2,
-	flp_dor_mask_drive3	= 3,
-	flp_dor_mask_reset	= 4,
-	flp_dor_mask_dma	= 8,
-	
-	flp_dor_mask_drive0_motor	= 16,
-	flp_dor_mask_drive1_motor	= 32,
-	flp_dor_mask_drive2_motor	= 64,
-	flp_dor_mask_drive3_motor	= 128
+/*
+**	Digital Output Register
+*/
+
+enum FLPYDSK_DOR_MASK {
+
+	FLPYDSK_DOR_MASK_DRIVE0			=	0,	//00000000	= here for completeness sake
+	FLPYDSK_DOR_MASK_DRIVE1			=	1,	//00000001
+	FLPYDSK_DOR_MASK_DRIVE2			=	2,	//00000010
+	FLPYDSK_DOR_MASK_DRIVE3			=	3,	//00000011
+	FLPYDSK_DOR_MASK_RESET			=	4,	//00000100
+	FLPYDSK_DOR_MASK_DMA			=	8,	//00001000
+	FLPYDSK_DOR_MASK_DRIVE0_MOTOR	=	16,	//00010000
+	FLPYDSK_DOR_MASK_DRIVE1_MOTOR	=	32,	//00100000
+	FLPYDSK_DOR_MASK_DRIVE2_MOTOR	=	64,	//01000000
+	FLPYDSK_DOR_MASK_DRIVE3_MOTOR	=	128	//10000000
 };
 
-enum flp_msr_mask
-{
-	flp_msr_mask_drive1_pos_mode	= 1,
-	flp_msr_mask_drive2_pos_mode	= 2,
-	flp_msr_mask_drive3_pos_mode	= 4,
-	flp_msr_mask_drive4_pos_mode	= 8,
-	flp_msr_mask_busy	= 16,
-	flp_msr_mask_dma	= 32,
-	flp_msr_mask_dataio	= 64,
-	flp_msr_mask_datareg	= 128
+/**
+*	Main Status Register
+*/
+
+enum FLPYDSK_MSR_MASK {
+
+	FLPYDSK_MSR_MASK_DRIVE1_POS_MODE	=	1,	//00000001
+	FLPYDSK_MSR_MASK_DRIVE2_POS_MODE	=	2,	//00000010
+	FLPYDSK_MSR_MASK_DRIVE3_POS_MODE	=	4,	//00000100
+	FLPYDSK_MSR_MASK_DRIVE4_POS_MODE	=	8,	//00001000
+	FLPYDSK_MSR_MASK_BUSY				=	16,	//00010000
+	FLPYDSK_MSR_MASK_DMA				=	32,	//00100000
+	FLPYDSK_MSR_MASK_DATAIO				=	64, //01000000
+	FLPYDSK_MSR_MASK_DATAREG			=	128	//10000000
 };
 
-enum flp_st0_mask
-{
-	flp_st0_mask_drive0	= 0,
-	flp_st0_mask_drive1	= 1,
-	flp_st0_mask_drive2	= 2,
-	flp_st0_mask_drive3	= 3,
-	flp_st0_mask_head	= 4,
-	flp_st0_mask_notready	= 8,
-	flp_st0_mask_unitcheck	= 16,
-	flp_st0_mask_seekend	= 32,
-	flp_st0_intcode		= 64
+/**
+*	Controller Status Port 0
+*/
+
+enum FLPYDSK_ST0_MASK {
+
+	FLPYDSK_ST0_MASK_DRIVE0		=	0,		//00000000	=	for completness sake
+	FLPYDSK_ST0_MASK_DRIVE1		=	1,		//00000001
+	FLPYDSK_ST0_MASK_DRIVE2		=	2,		//00000010
+	FLPYDSK_ST0_MASK_DRIVE3		=	3,		//00000011
+	FLPYDSK_ST0_MASK_HEADACTIVE	=	4,		//00000100
+	FLPYDSK_ST0_MASK_NOTREADY	=	8,		//00001000
+	FLPYDSK_ST0_MASK_UNITCHECK	=	16,		//00010000
+	FLPYDSK_ST0_MASK_SEEKEND	=	32,		//00100000
+	FLPYDSK_ST0_MASK_INTCODE	=	64		//11000000
 };
 
-enum flp_st0_intcode_type
-{
-	flp_st0_type_normal	= 0,
-	flp_st0_type_abnormal	= 1,
-	flp_st0_type_invalid	= 2,
-	flp_st0_type_notread	= 3
+/*
+** LPYDSK_ST0_MASK_INTCODE types
+*/
+
+enum FLPYDSK_ST0_INTCODE_TYP {
+
+	FLPYDSK_ST0_TYP_NORMAL		=	0,
+	FLPYDSK_ST0_TYP_ABNORMAL_ERR=	1,
+	FLPYDSK_ST0_TYP_INVALID_ERR	=	2,
+	FLPYDSK_ST0_TYP_NOTREADY	=	3
 };
 
-enum flp_gap3_length
-{
-	flp_gap3_length_std	= 42,
-	flp_gap3_length_5_14	= 32,
-	flp_gap3_length_3_5	= 27
+/**
+*	GAP 3 sizes
+*/
+
+enum FLPYDSK_GAP3_LENGTH {
+
+	FLPYDSK_GAP3_LENGTH_STD = 42,
+	FLPYDSK_GAP3_LENGTH_5_14= 32,
+	FLPYDSK_GAP3_LENGTH_3_5= 27
 };
 
-enum flp_sector_dtl
-{
-	flp_sector_dtl_128	= 0,
-	flp_sector_dtl_256	= 1,
-	flp_sector_dtl_512	= 2,
-	flp_sector_dtl_1024	= 4
+/*
+**	Formula: 2^sector_number * 128, where ^ denotes "to the power of"
+*/
+
+enum FLPYDSK_SECTOR_DTL {
+
+	FLPYDSK_SECTOR_DTL_128	=	0,
+	FLPYDSK_SECTOR_DTL_256	=	1,
+	FLPYDSK_SECTOR_DTL_512	=	2,
+	FLPYDSK_SECTOR_DTL_1024	=	4
 };
 
-const int flp_irq = 6;
-const int flp_sector_per_track = 18;
+const int flp_sectors_per_track = 18;
 const int dma_buffer = 0x1000;
 const int fdc_dma_channel = 2;
 
 static uint8_t current_drive = 0;
 volatile uint8_t flp_disk_irq = 0;
 
-bool dma_initialize_flp(uint8_t *buff, size_t length)
+void flp_initialize_dma()
 {
-	union
-	{
-		uint8_t byte[4]; // Low[0], Middle[1], High[2]
-		uint32_t l;
-	} a, c;
+	outportb (0x0a,0x06);	//mask dma channel 2
+	outportb (0xd8,0xff);	//reset master flip-flop
+	outportb (0x04, 0);     //address=0x1000 
+	outportb (0x04, 0x10);
+	outportb (0xd8, 0xff);  //reset master flip-flop
+	outportb (0x05, 0xff);  //count to 0x23ff (number of bytes in a 3.5" floppy disk track)
+	outportb (0x05, 0x23);
+	outportb (0x80, 0);     //external page register = 0
+	outportb (0x0a, 0x02);  //unmask dma channel 2
+}
 
-	a.l = (size_t)buff;
-	c.l = (size_t)length - 1;
-	
-	if ((a.l >> 24) || (c.l >> 16) || (((a.l & 0xffff) + c.l) >> 16))
-	{
-		printk("\nDMA Errore!");
-		return false;
-	}
+void flp_read_dma()
+{
+	outportb (0x0a, 0x06); //mask dma channel 2
+	outportb (0x0b, 0x56); //single transfer, address increment, autoinit, read, channel 2
+	outportb (0x0a, 0x02); //unmask dma channel 2
+}
 
-	dma_reset(1);
-	dma_mask_channel(fdc_dma_channel);
-	dma_reset_flipflop(1);
-	dma_set_address(fdc_dma_channel, a.byte[0], a.byte[1]);
-	dma_reset_flipflop(1);
-	dma_set_count(fdc_dma_channel, c.byte[0], c.byte[1]);
-	dma_set_read(fdc_dma_channel);
-	dma_unmask_all(1);
-
-	return true;
+void flp_write_dma()
+{
+	outportb (0x0a, 0x06); //mask dma channel 2
+	outportb (0x0b, 0x5a); //single transfer, address increment, autoinit, write, channel 2
+	outportb (0x0a, 0x02); //unmask dma channel 2
 }
 
 uint8_t flp_read_status()
 {
-	return inportb(flp_msr);
+	return inportb(FLPYDSK_MSR);
 }
 
 void flp_write_dor(uint8_t val)
 {
-	outportb(flp_dor, val);
+	outportb(FLPYDSK_DOR, val);
 }
 
 void flp_send_cmd(uint8_t cmd)
 {
 	for (int i=0;i<500;i++)
-		if (flp_read_status() & flp_msr_mask_datareg)
-			return outportb(flp_fifo, cmd);
+		if (flp_read_status() & FLPYDSK_MSR_MASK_DATAREG)
+			return outportb(FLPYDSK_FIFO, cmd);
 }
 
 uint8_t flp_read_data()
 {
 	for (int i=0;i<500;i++)
-		if (flp_read_status() & flp_msr_mask_datareg)
-			return inportb(flp_fifo);
+		if (flp_read_status() & FLPYDSK_MSR_MASK_DATAREG)
+			return inportb(FLPYDSK_FIFO);
 	return 0;
 }
 
 void flp_write_ccr(uint8_t val)
 {
-	outportb(flp_ctrl, val);
+	outportb(FLPYDSK_CTRL, val);
 }
 
-inline void flp_wait_irq()
+void flp_wait_irq()
 {
-	while (flp_disk_irq == 0)
-		;
-	flp_disk_irq = 0;
+	while (!flp_disk_irq)
+		flp_disk_irq = 0;
 }
 
-void flp_handler()
+void flpdisk_irq()
 {
-	asm ("pusha");
 	asm ("cli");
 	flp_disk_irq = 1;
 	asm ("sti");
-	asm ("popa");
 }
 
-void flp_check_int(size_t *st0, size_t *cyl)
+void flp_check_int(size_t* st0, size_t* cyl)
 {
-	flp_send_cmd(flp_cmd_check_int);
-	
-	*st0 = flp_read_data();
-	*cyl = flp_read_data();
+	flp_send_cmd(FDC_CMD_CHECK_INT);
+
+	*st0 = flp_read_status();
+	*cyl = flp_read_status();
 }
 
-void flp_ctrl_motor (bool status)
+void flp_ctrl_motor(bool b)
 {
 	if (current_drive > 3)
 		return;
 
 	uint8_t motor = 0;
-
+	
 	switch (current_drive)
 	{
 		case 0:
-			motor = flp_dor_mask_drive0_motor;
+			motor = FLPYDSK_DOR_MASK_DRIVE0_MOTOR;
 			break;
 		case 1:
-			motor = flp_dor_mask_drive1_motor;
+			motor = FLPYDSK_DOR_MASK_DRIVE1_MOTOR;
 			break;
 		case 2:
-			motor = flp_dor_mask_drive2_motor;
+			motor = FLPYDSK_DOR_MASK_DRIVE2_MOTOR;
 			break;
 		case 3:
-			motor = flp_dor_mask_drive3_motor;
+			motor = FLPYDSK_DOR_MASK_DRIVE3_MOTOR;
 			break;
 	}
-	
-	if (status)
-		flp_write_dor((uint8_t)(current_drive | motor | flp_dor_mask_reset | flp_dor_mask_dma));
-	else
-		flp_write_dor(flp_dor_mask_reset);
 
-	delay_ms(5);
+	if (b)
+		flp_write_dor((uint8_t)(current_drive | motor | FLPYDSK_DOR_MASK_RESET | FLPYDSK_DOR_MASK_DMA));
+	else
+		flp_write_dor(FLPYDSK_DOR_MASK_RESET);
+
+	delay_ms(20);
 }
 
 void flp_drive_data(uint8_t stepr, uint8_t loadt, uint8_t unloadt, bool dma)
 {
 	uint8_t data = 0;
 
-	flp_send_cmd(flp_cmd_specify);
-	data = (((stepr & 0xf) << 4) | (unloadt & 0xf));
-	flp_send_cmd(data);
+	flp_send_cmd(FDC_CMD_SPECIFY);
+	
+	data = ((stepr & 0xf) << 4) | (unloadt & 0xf);
+		flp_send_cmd(data);
 	data = ((loadt << 1) | ((dma) ? 0 : 1));
-	flp_send_cmd(data);
+		flp_send_cmd(data);
 }
 
-int flp_calibrate (uint8_t drive)
+int flp_calibrate(uint8_t drive)
 {
 	size_t st0, cyl;
 	
@@ -257,7 +281,7 @@ int flp_calibrate (uint8_t drive)
 	
 	for (int i=0;i<10;i++)
 	{
-		flp_send_cmd(flp_cmd_calibrate);
+		flp_send_cmd(FDC_CMD_CALIBRATE);
 		flp_send_cmd(drive);
 		flp_wait_irq();
 		flp_check_int(&st0, &cyl);
@@ -268,7 +292,7 @@ int flp_calibrate (uint8_t drive)
 			return 0;
 		}
 	}
-
+	
 	flp_ctrl_motor(false);
 	return -1;
 }
@@ -280,7 +304,7 @@ void flp_disable_ctrl()
 
 void flp_enable_ctrl()
 {
-	flp_write_dor(flp_dor_mask_reset | flp_dor_mask_dma);
+	flp_write_dor(FLPYDSK_DOR_MASK_RESET | FLPYDSK_DOR_MASK_DMA);
 }
 
 void flp_reset()
@@ -290,14 +314,13 @@ void flp_reset()
 	flp_disable_ctrl();
 	flp_enable_ctrl();
 	flp_wait_irq();
-	
-	for(int i=0;i<4;i++)
+
+	for (int i=0;i<4;i++)
 		flp_check_int(&st0, &cyl);
 	
 	flp_write_ccr(0);
 
 	flp_drive_data(3, 16, 240, true);
-
 	flp_calibrate(current_drive);
 }
 
@@ -305,49 +328,43 @@ void flp_read_sector_imp(uint8_t head, uint8_t track, uint8_t sector)
 {
 	size_t st0, cyl;
 	
-	if (!dma_initialize_flp((uint8_t*)dma_buffer, 512))
-	{
-		printk("\nDMA Buffer: Errore!");
-		return;
-	}
-
-	dma_set_read(fdc_dma_channel);
-
-	flp_send_cmd(flp_cmd_read_sect | fdc_cmd_ext_multitrack | fdc_cmd_ext_skip | fdc_cmd_ext_density);
+	flp_initialize_dma();
+	flp_read_dma();
+	flp_send_cmd(FDC_CMD_READ_SECT | FDC_CMD_EXT_MULTITRACK | FDC_CMD_EXT_SKIP | FDC_CMD_EXT_DENSITY);
 	flp_send_cmd(head << 2 | current_drive);
 	flp_send_cmd(track);
 	flp_send_cmd(head);
 	flp_send_cmd(sector);
-	flp_send_cmd(flp_sector_dtl_512);
-	flp_send_cmd(((sector + 1) >= flp_sector_per_track) ? flp_sector_per_track : (sector + 1));
-	flp_send_cmd(flp_gap3_length_3_5);
+	flp_send_cmd(FLPYDSK_SECTOR_DTL_512);
+	flp_send_cmd(((sector + 1) >= flp_sectors_per_track) ? flp_sectors_per_track : sector + 1);
+	flp_send_cmd(FLPYDSK_GAP3_LENGTH_3_5);
 	flp_send_cmd(0xff);
-
+	
 	flp_wait_irq();
-
-	for(int j=0;j<7;j++)
+	
+	for (int i=0;i<7;i++)
 		flp_read_data();
-
+	
 	flp_check_int(&st0, &cyl);
 }
 
 int flp_seek(uint8_t cyl, uint8_t head)
 {
-	size_t st0, cyl0;
-
+	size_t st0, cyl1;
+	
 	if (current_drive >= 4)
 		return -1;
-	
+
 	for (int i=0;i<10;i++)
 	{
-		flp_send_cmd(flp_cmd_seek);
-		flp_send_cmd((head << 2) | current_drive);
+		flp_send_cmd(FDC_CMD_SEEK);
+		flp_send_cmd((head) << 2 | current_drive);
 		flp_send_cmd(cyl);
 		
 		flp_wait_irq();
-		flp_check_int(&st0, &cyl0);
-
-		if (cyl0 == cyl)
+		flp_check_int(&st0, &cyl1);
+		
+		if (cyl1 == cyl)
 			return 0;
 	}
 	
@@ -356,14 +373,15 @@ int flp_seek(uint8_t cyl, uint8_t head)
 
 void flp_lba_to_chs(int lba, int *head, int *track, int *sector)
 {
-	*head = (lba % (flp_sector_per_track * 2)) / flp_sector_per_track;
-	*track = lba / (flp_sector_per_track * 2);
-	*sector = lba % (flp_sector_per_track + 1);
+	*head = (lba % (flp_sectors_per_track * 2)) / (flp_sectors_per_track);
+   	*track = lba / (flp_sectors_per_track * 2);
+   	*sector = lba % flp_sectors_per_track + 1;
 }
 
 void flp_install()
 {
-	irq_install_handler(6, flp_handler);
+	irq_install_handler(6, flpdisk_irq);
+	flp_initialize_dma();
 	flp_reset();
 	flp_drive_data(13, 1, 0xf, true);
 }
@@ -375,8 +393,10 @@ void flp_uninstall()
 
 void flp_set_working_drive(uint8_t drive)
 {
-	if (drive < 4)
-		current_drive = drive;
+	if (drive >= 4)
+		return;
+	
+	current_drive = drive;
 }
 
 uint8_t flp_get_working_drive()
@@ -384,76 +404,20 @@ uint8_t flp_get_working_drive()
 	return current_drive;
 }
 
-uint8_t *flp_read_sector(int sector_lba)
+uint8_t* flp_read_sector(int sector_lba)
 {
 	if (current_drive >= 4)
-	{
-		printk("\nFloppy: Errore Drive!\n");
 		return (uint8_t*)-1;
-	}
 	
 	int head = 0, track = 0, sector = 1;
-	
 	flp_lba_to_chs(sector_lba, &head, &track, &sector);
 
 	flp_ctrl_motor(true);
-
 	if (flp_seek((uint8_t)track, (uint8_t)head) != 0)
-	{
-		printk("\nFloppy: Errore Seek!\n");
-		return (uint8_t*)-1;
-	}
-
+		return 0;
+	
 	flp_read_sector_imp((uint8_t)head, (uint8_t)track, (uint8_t)sector);
 	flp_ctrl_motor(false);
-
+	
 	return (uint8_t*)dma_buffer;
-}
-
-void flp_write_sector_imp(uint8_t head, uint8_t track, uint8_t sector)
-{
-	size_t st0, cyl;
-	
-	dma_set_write();
-	
-	flp_send_cmd(flp_cmd_write_sect | fdc_cmd_ext_multitrack | fdc_cmd_ext_density);
-	flp_send_cmd(head << 2 | current_drive);
-	flp_send_cmd(track);
-	flp_send_cmd(head);
-	flp_send_cmd(sector);
-	flp_send_cmd(flp_sector_dtl_512);
-	flp_send_cmd(flp_sector_per_track);
-	flp_send_cmd(flp_gap3_length_3_5);
-	flp_send_cmd(0xFF);
-
-	flp_wait_irq();
-	
-	for (int i=0;i<7;i++)
-		flp_read_data();
-
-	flp_check_int(&st0, &cyl);
-}
-
-uint8_t *flp_write_sector(int sector_lba)
-{
-	if (current_drive >= 4)
-	{
-		printk("\nFloppy: Errore Drive!\n");
-		return (uint8_t*)-1;
-	}
-
-	int head = 0, track = 0, sector = 1;
-	flp_lba_to_chs(sector_lba, &head, &track, &sector);
-	flp_ctrl_motor(true);
-	
-	if (flp_seek((uint8_t)track, (uint8_t)head) != 0)
-	{
-		printk("\nFloppy: Errore Seek!\n");
-		return (uint8_t*)-1;
-	}
-
-	flp_write_sector_imp((uint8_t)head, (uint8_t)track, (uint8_t)sector);
-	flp_ctrl_motor(false);
-	
-	return (uint8_t*)0;
 }

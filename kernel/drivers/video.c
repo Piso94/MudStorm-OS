@@ -144,5 +144,5 @@ bool detect_videotype()
 	char c;
 	
 	c = ((*(volatile uint16_t*)0x410) & 0x30);
-	return (c == 0x30); // true: Monochrome, false: Colour
+	return (c != 0x30); // false: Monochrome, true: Colour
 }

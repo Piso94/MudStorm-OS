@@ -82,7 +82,6 @@ gcc $optcc kernel/drivers/rtc.c -o $build/rtc.o
 gcc $optcc kernel/drivers/speaker.c -o $build/speaker.o
 gcc $optcc kernel/drivers/io.c -o $build/io.o
 gcc $optcc kernel/drivers/fpu.c -o $build/fpu.o
-gcc $optcc kernel/drivers/dma.c -o $build/dma.o
 gcc $optcc kernel/drivers/flp.c -o $build/flp.o
 
 echo "Compilazione (C) int(e)r(rupt)..."
@@ -106,7 +105,7 @@ ld $optld -o kernel.bin \
 	     $build/random.o $build/timer.o $build/log.o $build/cpuid.o \
 	     $build/stdio.o $build/string.o \
 	     $build/malloc.o $build/kheap.o \
-	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/fpu.o $build/flp.o $build/dma.o \
+	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/fpu.o $build/flp.o \
 	     $build/gdt.o $build/idt.o $build/irq.o $build/isrs.o \
 	     $build/fat.o $build/vfs.o
 

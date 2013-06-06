@@ -16,6 +16,7 @@
  */
 
 #include <cpuid.h>
+#include <kheap.h>
 
 void cpuid(int in, int a, int b, int c, int d)
 {
@@ -24,10 +25,11 @@ void cpuid(int in, int a, int b, int c, int d)
 
 char *cpu_vendor(void)
 {
-	uint32_t ebx = 0, unused = 0;
+	uint32_t ebx = (uint32_t)kmalloc(sizeof(uint32_t));
+	uint32_t unused = (uint32_t)kmalloc(sizeof(uint32_t));
 
 	cpuid(0, unused, ebx, unused, unused);
-	
+
 	switch (ebx)
 	{
 		case 0x756e6547:

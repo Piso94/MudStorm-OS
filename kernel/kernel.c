@@ -107,7 +107,7 @@ void _start(struct multiboot *mbd, size_t magic)
 	Log.i("RAM: %u MB\n", ram);
 	
 	cmd_read();
-	runShell(); // Entra nella funzione
+	//runShell(); // Entra nella funzione
 }
 
 void cmd_read() 
@@ -116,26 +116,20 @@ void cmd_read()
 	printk("Nome: ");
 	scank("%s", read);
 
-	file_t file = vol_openfile(read);
+	file_t file = open(0);
 
-	if (file.flags == FS_INVALID) 
+	if (file.flags != FS_FILE) 
 	{
-		Log.w("File non valido!");
+		Log.w("Non è un file!");
 		return;
 	}
 
-	if (file.flags == FS_DIR) 
-	{
-		Log.w("Cartella!");
-		return;
-	}
-
-	while (file.eof == -1) 
+	while (file.eof != EOF) 
 	{
 		uint8_t buf[512];
-		vol_readfile(&file, buf, 512);
+		(void)read_file(&file, buf, 512);
 
 		for (int i=0; i<512; i++)
-			printk("%c", &buf[i]);
+			printk("%c", buf[i]);
 	}
 }

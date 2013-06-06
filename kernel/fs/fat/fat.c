@@ -74,7 +74,7 @@ file_t directory(const char *dir_name)
 
 	for (int sector=0;sector<14;sector++)
 	{
-		buff = flp_read_sector(mount_info.rootoffset + sector);
+		buff = (uint8_t*)flp_read_sector(mount_info.rootoffset + sector);
 		dir = (p_directory_t)buff;
 		
 		for (int i=0;i<16;i++)
@@ -107,75 +107,66 @@ file_t directory(const char *dir_name)
 	return file;
 }
 
-void read(p_file_t file, uint8_t *buff, size_t length)
+void read_file(p_file_t file, uint8_t *buff, size_t length)
 {
 	if (file)
 	{
-		size_t ph_sector = ((32 + (file->currentcluster)) - 1);
+		size_t ph_sector = 32 + (file->currentcluster - 1);
 		uint8_t *sector = (uint8_t*)flp_read_sector(ph_sector);
 		
 		memcpy(buff, sector, 512);
 
-		size_t fat_offset = (file->currentcluster + (file->currentcluster / 2));
-		size_t fat_sector = (1 + (fat_offset / SECTOR_SIZE));
-		size_t entry_offset = (fat_offset % SECTOR_SIZE);
+		size_t fat_offset = file->currentcluster + (file->currentcluster / 2);
+		size_t fat_sector = 1 + (fat_offset / SECTOR_SIZE);
+		size_t entry_offset = fat_offset % SECTOR_SIZE;
 		
 		sector = (uint8_t*)flp_read_sector(fat_sector);
 		memcpy(FAT, sector, 512);
 
 		sector = (uint8_t*)flp_read_sector(fat_sector + 1);
-		memcpy((FAT + SECTOR_SIZE), sector, 512);
+		memcpy(FAT + SECTOR_SIZE, sector, 512);
 
 		uint16_t next_cluster = *(uint16_t*)&FAT[entry_offset];
 		
 		if (file->currentcluster & 0x0001)
-		{
 			next_cluster >>= 4;
-			printk("Next_cluster >>= 4");
-		}
 		else
-		{
 			next_cluster &= 0x0FFF;
-			printk("Next_cluster &= 0x0FFF");
-		}
 
 		if (next_cluster >= 0xff8)
 		{
 			file->eof = -1;
-			printk("EOF!");
 			return;
 		}
 
-		if (next_cluster == 0)
+		if (!next_cluster)
 		{
 			file->eof = -1;
-			printk("EOF!");
 			return;
 		}
-		delay_ms(5);
 
 		file->currentcluster = next_cluster;
 	}
 }
 
-void fat_close(p_file_t file)
+void close(p_file_t file)
 {
 	if (file)
 		file->flags = FS_INVALID;
 }
 
-file_t opendir(file_t file, const char *filename)
+file_t opendir(file_t _file, const char *filename)
 {
-	file_t file1;
+	file_t file;
 	
 	char dos_filename[11];
 	todos_filename(filename, dos_filename, 11);
 	dos_filename[11] = 0;
 
-	while (file.eof == -1)
+	while (_file.eof == 0)
 	{
 		uint8_t buff[512];
-		read(&file1, buff, 512);
+		read_file(&file, buff, 512);
 		
 		p_directory_t pdir = (p_directory_t)buff;
 
@@ -187,24 +178,24 @@ file_t opendir(file_t file, const char *filename)
 
 			if (!strcmp(name, dos_filename))
 			{
-				strcpy(file1.name, filename);
-				file1.id = 0;
-				file1.currentcluster = pdir->firstcluster;
-				file1.length = pdir->filesize;
-				file1.eof = 0;
-				file1.length = pdir->filesize;
+				strcpy(file.name, filename);
+				file.id = 0;
+				file.currentcluster = pdir->firstcluster;
+				file.length = pdir->filesize;
+				file.eof = 0;
+				file.length = pdir->filesize;
 				
 				if (pdir->attr == 0x10)
-					file1.flags = FS_DIR;
+					file.flags = FS_DIR;
 				else
-					file1.flags = FS_FILE;
-				return file1;
+					file.flags = FS_FILE;
+				return file;
 			}
 			pdir++;
 		}
 	}
-	file1.flags = FS_INVALID;
-	return file1;
+	file.flags = FS_INVALID;
+	return file;
 }
 
 file_t open(const char* filename)
@@ -257,7 +248,7 @@ file_t open(const char* filename)
 		if (curdir.flags == FS_FILE)
 			return curdir;
 
-		p = strchr(++p, '/');
+		p = strchr(p + 1, '/');
 		if (p)
 			p++;
 	}
@@ -269,12 +260,8 @@ file_t open(const char* filename)
 void fat_mount()
 {
 	p_bs_t bootsector;
-	uint8_t *sector;
 
-	sector = flp_read_sector(0);
-
-	for (int i=0;i<sizeof(p_bs_t)-2;i++)
-		((uint8_t*)&bootsector)[i] = sector[i];
+	bootsector = (p_bs_t)flp_read_sector(19);
 
 	mount_info.numsectors = bootsector->bpb.numsectors;
 	mount_info.fatoffset  = 1;
@@ -282,7 +269,7 @@ void fat_mount()
 	mount_info.fatentrysize = 8;
 	mount_info.numrootentries = bootsector->bpb.numdirentries;
 	mount_info.rootoffset = (bootsector->bpb.numberoffats * bootsector->bpb.sectorsperfat) + 1;
-	mount_info.rootsize   = (bootsector->bpb.numdirentries * 32) / (bootsector->bpb.bytespersector + 0.5f);
+	mount_info.rootsize   = (bootsector->bpb.numdirentries * 32) / bootsector->bpb.bytespersector;
 }
 
 void fat_umount()
@@ -302,8 +289,8 @@ void fat_install()
 	sys_fat.directory = directory;
 	sys_fat.mount     = fat_mount;
 	sys_fat.open      = open;
-	sys_fat.read      = read;
-	sys_fat.close     = fat_close;
+	sys_fat.read      = read_file;
+	sys_fat.close     = close;
 
 	vol_register_fsys(&sys_fat, 0);
 	fat_mount();

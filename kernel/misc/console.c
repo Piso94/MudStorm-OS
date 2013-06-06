@@ -27,6 +27,7 @@
 #include <kb.h>
 #include <mouse.h>
 #include <timer.h>
+#include <fpu.h>
 
 void shutdown()
 {
@@ -42,6 +43,8 @@ void shutdown()
 	Log.i("\nFAT\t\t[Ok]");
 	flp_uninstall();
 	Log.i("\nFloppy\t\t[Ok]");
+	disable_fpu();
+	Log.i("\nFPU\t\t[Ok]");
 
 	// Questa è quella nuova che spegne tutte le VM, ma non quelle reali!
 	asm volatile ("cli");

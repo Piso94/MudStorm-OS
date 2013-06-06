@@ -89,8 +89,38 @@ dd FLAGS
 dd CHECKSUM
 
 STACKSIZE equ 0x4000
+resb 0
+start:			  jmp boot
+resb 0x7C00
+nop
 
-start:
+bits 16
+
+bpbOEM:                   DB 8		;"bootdisc"
+
+bpbBytesPerSector:        DW 512
+bpbSectorsPerCluster:     DB 1
+bpbReservedSectors:       DW 1
+bpbNumberOfFATs:          DB 2
+bpbRootEntries:           DW 224
+bpbTotalSectors:          DW 2880
+bpbMedia:                 DB 0xf0      ;// 1.44 MB FD(f0)
+bpbSectorsPerFAT:         DW 9      
+bpbSectorsPerTrack:       DW 18
+bpbHeadsPerCylinder:      DW 2
+bpbHiddenSectors:         DD 0
+
+bpbTotalSectorsBig:       DD 0
+bsDriveNumber:            DB 0
+bsUnused:                 DB 0
+bsExtBootSignature:       DB 0x29
+bsSerialNumber:           DD 0xa0a1a2a3
+bsVolumeLabel:            DB "FLOPPY"
+bsFileSystem:             DB "FAT12"
+
+bits 32
+
+boot:
 mov esp, stack+STACKSIZE
 push eax
 push ebx
