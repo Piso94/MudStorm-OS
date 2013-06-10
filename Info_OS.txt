@@ -10,6 +10,7 @@
 		|-----------------------------------------------------------------------|
 
 ## 0.7
+* Tolto il drive Floppy e il FileSystem(anche il VFS)! Non riesco ad implementarlo...credo di implementare il driver HardDisk e Filesystem FAT
 * Sistemato problema del kernel panic con il filesystem! Era un problema del codice floppy! :)
 * Aggiunta piccola funzione CPUID, mostra se è CPU Intel, AMD o sconosciuta! 
 * Aggiustato(a metà) il problema con il FS, adesso non manda in panic il kernel! :)

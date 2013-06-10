@@ -33,23 +33,7 @@
 #include <kheap.h>
 #include <commands.h>
 #include <fpu.h>
-#include <fat.h>
-#include <flp.h>
-#include <vfs.h>
 #include <cpuid.h>
-
-void cmd_read();
-
-char *flp_type()
-{
-	uint8_t flp;
-	outportb(0x70, 0x10);
-	flp = inportb(0x71);
-	uint8_t a = (flp >> 4);
-	char *drive_type[6] = { "no floppy", "360kb 5.25", "1.2mb 5.25", "720kb 3.5", "1.44mb 3.5", "2.88mb 3.5" };
-	
-	return drive_type[a];
-}
 
 void _start(struct multiboot *mbd, size_t magic)
 {
@@ -86,11 +70,6 @@ void _start(struct multiboot *mbd, size_t magic)
 	enable_fpu(); // Abilita l'fpu
 	init_fpu(); // Inizializza l'fpu
 	Log.i("\nFPU\t\t[Ok]");
-	flp_set_working_drive(0); // Setto il drive floppy 0
-	flp_install(); // Inizializzo il driver del floppy
-	Log.i("\nFloppy\t\t[%s]", flp_type());
-	fat_install(); // Inizializzo il filesystem FAT // TODO: Sistemare
-	Log.i("\nFileSystem\t[Ok]");
    	asm volatile ("sti"); // Abilita gli interrupt
 
 	size_t ram;
@@ -106,30 +85,5 @@ void _start(struct multiboot *mbd, size_t magic)
 	Log.i("\nCPU: %s\n", cpu_vendor());
 	Log.i("RAM: %u MB\n", ram);
 	
-	cmd_read();
-	//runShell(); // Entra nella funzione
-}
-
-void cmd_read() 
-{
-	char read[40];
-	printk("Nome: ");
-	scank("%s", read);
-
-	file_t file = open(0);
-
-	if (file.flags != FS_FILE) 
-	{
-		Log.w("Non è un file!");
-		return;
-	}
-
-	while (file.eof != EOF) 
-	{
-		uint8_t buf[512];
-		(void)read_file(&file, buf, 512);
-
-		for (int i=0; i<512; i++)
-			printk("%c", buf[i]);
-	}
+	runShell(); // Entra nella funzione
 }

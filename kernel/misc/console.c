@@ -22,8 +22,6 @@
 #include <version.h>
 #include <io.h>
 #include <log.h>
-#include <flp.h>
-#include <fat.h>
 #include <kb.h>
 #include <mouse.h>
 #include <timer.h>
@@ -39,10 +37,6 @@ void shutdown()
 	Log.i("\nTastiera\t[Ok]");
 	mouse_uninstall();
 	Log.i("\nMouse\t\t[Ok]");
-	fat_uninstall();
-	Log.i("\nFAT\t\t[Ok]");
-	flp_uninstall();
-	Log.i("\nFloppy\t\t[Ok]");
 	disable_fpu();
 	Log.i("\nFPU\t\t[Ok]");
 
