@@ -44,7 +44,7 @@ mkdir -p $temp || exit
 
 echo "Compilazione (ASM) Loader..."
 # ASM loader
-nasm $optasm loader/loader.S -o $build/loader.o
+nasm $optasm loader/loader.asm -o $build/loader.o
 
 echo "Compilazione (C) Kernel..."
 # C kernel
@@ -82,6 +82,8 @@ gcc $optcc kernel/drivers/rtc.c -o $build/rtc.o
 gcc $optcc kernel/drivers/speaker.c -o $build/speaker.o
 gcc $optcc kernel/drivers/io.c -o $build/io.o
 gcc $optcc kernel/drivers/fpu.c -o $build/fpu.o
+gcc $optcc kernel/drivers/dma.c -o $build/dma.o
+gcc $optcc kernel/drivers/flp.c -o $build/flp.o
 
 echo "Compilazione (C) int(e)r(rupt)..."
 # C int(e)r(rupt)
@@ -89,6 +91,11 @@ gcc $optcc kernel/intr/gdt.c -o $build/gdt.o
 gcc $optcc kernel/intr/idt.c -o $build/idt.o
 gcc $optcc kernel/intr/irq.c -o $build/irq.o
 gcc $optcc kernel/intr/isrs.c -o $build/isrs.o
+
+echo "Compilazione (C) F(ile) S(ystem)..."
+# C F(ile) S(ystem)
+gcc $optcc kernel/fs/fat.c -o $build/fat.o
+gcc $optcc kernel/fs/vfs.c -o $build/vfs.o
 
 echo "Linking..."
 # LD linking
@@ -99,8 +106,9 @@ ld $optld -o kernel.bin \
 	     $build/random.o $build/timer.o $build/log.o $build/cpuid.o \
 	     $build/stdio.o $build/string.o \
 	     $build/malloc.o $build/kheap.o \
-	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/fpu.o \
-	     $build/gdt.o $build/idt.o $build/irq.o $build/isrs.o
+	     $build/kb.o $build/mouse.o $build/video.o $build/rtc.o $build/speaker.o $build/fpu.o $build/dma.o $build/flp.o \
+	     $build/gdt.o $build/idt.o $build/irq.o $build/isrs.o \
+	     $build/fat.o $build/vfs.o
 
 echo "Linking terminato"
 

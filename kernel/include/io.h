@@ -22,7 +22,11 @@
 
 extern uint8_t inportb(uint16_t);
 extern uint16_t inportw(uint16_t);
+extern void inportsm(uint16_t port, uint8_t *data, uint32_t size);
+extern uint16_t inports(uint16_t _port);
 extern void outportb(uint16_t, uint8_t);
 extern void outportw(uint16_t, uint16_t);
+extern void outportsm(uint16_t port, uint8_t *data, uint32_t size);
+extern void outports(uint16_t _port, uint16_t _data);
 
 #endif

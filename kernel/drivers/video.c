@@ -21,7 +21,7 @@
 #include <stddef.h>
 #include <kheap.h>
 
-uint16_t *textmemptr = (uint16_t*)(0xb8000);
+uint16_t *vga = (uint16_t*)(0xb8000);
 int attrib = 0x0F, csr_x, csr_y;
 
 void scroll()
@@ -33,9 +33,9 @@ void scroll()
     {
         temp = csr_y - 25 + 1;
         
-        memcpy (textmemptr, textmemptr + temp * 80, (25 - temp) * 80 * 2);
+        memcpy (vga, vga + temp * 80, (25 - temp) * 80 * 2);
 
-        memsetw (textmemptr + (25 - temp) * 80, blank, 80);
+        memsetw (vga + (25 - temp) * 80, blank, 80);
         
         csr_y = 24;
     }
@@ -55,7 +55,7 @@ void cls()
     blank = 0x20 | (attrib << 8);   // Make the "blank" (space + attribute)
 
     for(int i = 0; i < 25; i++)         // Do it on every Line of the screen
-        memsetw (textmemptr + i * 80, blank, 80);  // Clear a line on the screen
+        memsetw (vga + i * 80, blank, 80);  // Clear a line on the screen
 
     csr_x = 0;
     csr_y = 0;
@@ -82,7 +82,7 @@ void putch(char c)
         if(csr_x != 0) 
 	{
 		csr_x--;					// Move it back one space
-		where = textmemptr + (csr_y * 80 + csr_x);	// Find where we are
+		where = vga + (csr_y * 80 + csr_x);	// Find where we are
         	*where = ' ' | att;				// Make it blank.
 	}
     }
@@ -105,7 +105,7 @@ void putch(char c)
 
     else if(c >= ' ')   // Any ASCII non-Controll code:
     {
-        where = textmemptr + (csr_y * 80 + csr_x);
+        where = vga + (csr_y * 80 + csr_x);
         *where = c | att;	// Character AND attributes: color
         csr_x++;
     }

@@ -20,38 +20,48 @@
 
 #include "stddef.h"
 
-typedef struct file
-{
-	char	name[32];
-	size_t	flags;
-	size_t	length;
-	size_t	id;
-	size_t	eof;
-	size_t	position;
-	size_t	currentcluster;
-	size_t	device_id;
-} file_t, *p_file_t;
+/**
+*	File
+*/
+typedef struct _FILE {
 
-typedef struct _file_system
-{
-	char		name[8];
-	file_t		(*directory)	(const char *dir);
-	void		(*mount)	();
-	void		(*read)		(p_file_t file, uint8_t *buff, size_t length);
-	void		(*close)	(p_file_t);
-	file_t		(*open)		(const char *filename);
-} file_sys_t, *p_file_sys_t;
+	char        name[32];
+	unsigned    flags;
+	unsigned    fileLength;
+	unsigned    id;
+	unsigned    eof;
+	unsigned    position;
+	unsigned    currentCluster;
+	unsigned    deviceID;
 
-#define FS_FILE	   0
-#define FS_DIR	   1
-#define FS_INVALID 2
+}FILE, *PFILE;
 
-extern file_t vol_openfile(const char *name);
-extern void vol_readfile(p_file_t file, uint8_t *buff, size_t length);
-extern void vol_closefile(p_file_t file);
-extern void vol_register_fsys(p_file_sys_t fsys, size_t device_id);
-extern void vol_unregister_fsys(p_file_sys_t fsys);
-extern void vol_unregister_fsys_id(size_t device_id);
+/**
+*	Filesystem interface
+*/
+typedef struct _FILE_SYSTEM {
+
+	char Name [8];
+	FILE               (*Directory)  (const char* DirectoryName);
+	void	           (*Mount)      ();
+	void               (*Read)       (PFILE file, unsigned char* Buffer, unsigned int Length);
+	void	           (*Close)      (PFILE);
+	FILE               (*Open)       (const char* FileName);
+
+}FILESYSTEM, *PFILESYSTEM;
+
+/**
+*	File flags
+*/
+#define FS_FILE       0
+#define FS_DIRECTORY  1
+#define FS_INVALID    2
+
+extern FILE volOpenFile (const char* fname);
+extern void volReadFile (PFILE file, unsigned char* Buffer, unsigned int Length);
+extern void volCloseFile (PFILE file);
+extern void volRegisterFileSystem (PFILESYSTEM, unsigned int deviceID);
+extern void volUnregisterFileSystem (PFILESYSTEM);
+extern void volUnregisterFileSystemByID (unsigned int deviceID);
 
 #endif
-

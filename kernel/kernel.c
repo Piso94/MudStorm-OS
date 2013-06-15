@@ -34,6 +34,8 @@
 #include <commands.h>
 #include <fpu.h>
 #include <cpuid.h>
+#include <flp.h>
+#include <fat.h>
 
 void _start(struct multiboot *mbd, size_t magic)
 {
@@ -43,15 +45,14 @@ void _start(struct multiboot *mbd, size_t magic)
 
 	if (magic != 0x2BADB002) // Se magic è diverso da ...
 	{
-		Log.e("[FAIL]\n");
+		Log.e("[FAIL]");
 		asm ("cli"); // Disabilita gli interrupt
 		asm ("hlt"); // Ferma la CPU
 	}
 	else
 	{
-		Log.i("[Ok]\n");
+		Log.i("[Ok]\n\n");
 	}
-
 	
 	gdt_install(); // Inizializza le GDT
 	Log.i("GDT\t\t[Ok]");
@@ -70,6 +71,11 @@ void _start(struct multiboot *mbd, size_t magic)
 	enable_fpu(); // Abilita l'fpu
 	init_fpu(); // Inizializza l'fpu
 	Log.i("\nFPU\t\t[Ok]");
+	flp_install();
+	Log.i("\nFloppy\t\t[Ok]");
+	fat_install();
+	Log.i("\nFAT\t\t[Ok]\n\n");
+
    	asm volatile ("sti"); // Abilita gli interrupt
 
 	size_t ram;
@@ -82,7 +88,7 @@ void _start(struct multiboot *mbd, size_t magic)
          * ottengo la ram in MB - 1, 
          * quindi sommo il risultato per 1!
          **/
-	Log.i("\nCPU: %s\n", cpu_vendor());
+	Log.i("CPU: %s\n", cpu_vendor());
 	Log.i("RAM: %u MB\n", ram);
 	
 	runShell(); // Entra nella funzione

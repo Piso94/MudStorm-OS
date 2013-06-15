@@ -26,10 +26,17 @@
 #include <mouse.h>
 #include <timer.h>
 #include <fpu.h>
+#include <flp.h>
+#include <fat.h>
 
 void shutdown()
 {
 	cls();
+
+	/* Post-spegnimento...
+	   Disattiva tutti gli IRQ
+           e anche il FAT 
+         **/
 
 	timer_uninstall();
 	Log.i("Timer\t\t[Ok]");
@@ -39,6 +46,10 @@ void shutdown()
 	Log.i("\nMouse\t\t[Ok]");
 	disable_fpu();
 	Log.i("\nFPU\t\t[Ok]");
+	flp_uninstall();
+	Log.i("\nFloppy\t[Ok]");
+	fat_uninstall();
+	Log.i("\nFAT\t\t[Ok]");
 
 	// Questa è quella nuova che spegne tutte le VM, ma non quelle reali!
 	asm volatile ("cli");

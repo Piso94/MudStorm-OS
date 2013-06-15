@@ -32,6 +32,20 @@ uint16_t inportw(uint16_t _port)
 	return result;
 }
 
+
+void inportsm(uint16_t port, uint8_t *data, uint32_t size)
+{
+	asm volatile ("rep insw" : "+D" (data), "+c" (size) : "d" (port) : "memory");
+}
+
+uint16_t inports(uint16_t _port)
+{
+	uint16_t rv;
+	asm volatile ("inw %1, %0" : "=a" (rv) : "dN" (_port));
+	return rv;
+}
+
+
 void outportb(uint16_t _port, uint8_t _data)
 {
 	asm volatile ("outb %1, %0" : : "dN" (_port), "a" (_data));
@@ -40,4 +54,14 @@ void outportb(uint16_t _port, uint8_t _data)
 void outportw(uint16_t _port, uint16_t _data)
 {
 	asm volatile ("outw %1, %0" : : "dN" (_port), "a" (_data));
+}
+
+void outports(uint16_t _port, uint16_t _data)
+{
+	asm volatile ("outw %1, %0" : : "dN" (_port), "a" (_data));
+}
+
+void outportsm(uint16_t port, uint8_t *data, uint32_t size)
+{
+	asm volatile ("rep outsw" : "+S" (data), "+c" (size) : "d" (port));
 }

@@ -15,42 +15,24 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <speaker.h>
-#include <io.h>
-#include <timer.h>
+#ifndef _FLP_H_
+#define _FLP_H_
 
-/* Speaker port enable I/O register. */
-#define SPEAKER_PORT_GATE	0x61
+#include "stddef.h"
 
-/* Speaker port enable bits. */
-#define SPEAKER_GATE_ENABLE	0x03
+extern void flp_install();
+extern void flp_uninstall();
 
-void sound(int frequency)
-{
-	uint32_t div;
-	uint8_t tmp;
+//! set current working drive
+extern void flpydsk_set_working_drive (uint8_t drive);
 
-	div = 1193180 / frequency;
-	outportb(0x43, 0xb6);
-	outportb(0x42, (uint8_t)(div));
-	outportb(0x42, (uint8_t)(div >> 8));
+//! get current working drive
+extern uint8_t flpydsk_get_working_drive ();
 
-	tmp = inportb(0x61);
-	if (tmp != (tmp | 3))
-		outportb(0x61, tmp | 3);
-}
+//! read a sector
+extern uint8_t* flpydsk_read_sector (int sectorLBA);
 
+//! converts an LBA address to CHS
+void flpydsk_lba_to_chs (int lba,int *head,int *track,int *sector);
 
-void nosound()
-{
-	uint8_t tmp = (inportb(0x61) & 0xFC);
-	
-	outportb(0x61, tmp);
-}
-
-void beep()
-{
-	sound(440);
-	delay_s(2);
-	nosound();
-}
+#endif
