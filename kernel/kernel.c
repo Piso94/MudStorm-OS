@@ -34,8 +34,6 @@
 #include <commands.h>
 #include <fpu.h>
 #include <cpuid.h>
-#include <flp.h>
-#include <fat.h>
 
 void _start(struct multiboot *mbd, size_t magic)
 {
@@ -71,10 +69,6 @@ void _start(struct multiboot *mbd, size_t magic)
 	enable_fpu(); // Abilita l'fpu
 	init_fpu(); // Inizializza l'fpu
 	Log.i("\nFPU\t\t[Ok]");
-	flp_install();
-	Log.i("\nFloppy\t\t[Ok]");
-	fat_install();
-	Log.i("\nFAT\t\t[Ok]\n\n");
 
    	asm volatile ("sti"); // Abilita gli interrupt
 
@@ -88,8 +82,8 @@ void _start(struct multiboot *mbd, size_t magic)
          * ottengo la ram in MB - 1, 
          * quindi sommo il risultato per 1!
          **/
-	Log.i("CPU: %s\n", cpu_vendor());
-	Log.i("RAM: %u MB\n", ram);
-	
+	Log.i("\nCPU: %s", cpu_vendor());
+	Log.i("\nRAM: %u MB\n", ram);
+
 	runShell(); // Entra nella funzione
 }
