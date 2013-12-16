@@ -33,46 +33,38 @@
 #include <kheap.h>
 #include <commands.h>
 #include <fpu.h>
-#include <cpuid.h>
+
+size_t ram;
 
 void _start(struct multiboot *mbd, size_t magic)
 {
 	cls(); // Pulisce lo schermo
-	
-	Log.i("Boot: 0x%x  ", &magic);
 
 	if (magic != 0x2BADB002) // Se magic è diverso da ...
 	{
-		Log.e("[FAIL]");
+		Log.e("Boot [FAIL]");
+		delay_ms(500); // Attendo 1/2 secondo
 		asm ("cli"); // Disabilita gli interrupt
 		asm ("hlt"); // Ferma la CPU
 	}
 	else
 	{
-		Log.i("[Ok]\n\n");
+		Log.i("Boot [Ok]\n\n");
+		delay_ms(500); // Attendo 1/2 secondo
+		cls(); // Pulisce lo schermo
 	}
 	
 	gdt_install(); // Inizializza le GDT
-	Log.i("GDT\t\t[Ok]");
    	idt_install(); // Inizializza gli IDT
-	Log.i("\nIDT\t\t[Ok]");
    	isrs_install(); // Inizializza le ISR
-	Log.i("\nISR\t\t[Ok]");
    	irq_install(); // Inizializza gli IRQ
-	Log.i("\nIRQ\t\t[Ok]");
 	timer_install(); // Inizializza il timer
-	Log.i("\nTimer\t\t[Ok]");
 	mouse_install(); // Inizializza il mouse
-	Log.i("\nMouse\t\t[Ok]");
 	keyboard_install(); // Inizializza la tastiera
-	Log.i("\nTastiera\t[Ok]");
 	enable_fpu(); // Abilita l'fpu
 	init_fpu(); // Inizializza l'fpu
-	Log.i("\nFPU\t\t[Ok]");
 
    	asm volatile ("sti"); // Abilita gli interrupt
-
-	size_t ram;
 
 	ram = (mbd->mem_lower + mbd->mem_upper) / 1024 + 1; 
 	/*
@@ -82,8 +74,6 @@ void _start(struct multiboot *mbd, size_t magic)
          * ottengo la ram in MB - 1, 
          * quindi sommo il risultato per 1!
          **/
-	Log.i("\nCPU: %s", cpu_vendor());
-	Log.i("\nRAM: %u MB\n", ram);
 
 	runShell(); // Entra nella funzione
 }

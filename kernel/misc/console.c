@@ -15,11 +15,11 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <boot.h>
 #include <stddef.h>
 #include <console.h>
 #include <video.h>
 #include <stdio.h>
-#include <version.h>
 #include <io.h>
 #include <log.h>
 #include <kb.h>
@@ -27,13 +27,12 @@
 #include <timer.h>
 #include <fpu.h>
 
-void shutdown()
+void halt()
 {
 	cls();
 
 	/* Post-spegnimento...
 	   Disattiva tutti gli IRQ
-           e anche il FAT 
          **/
 
 	timer_uninstall();
@@ -75,6 +74,7 @@ void reboot()
 void logo()
 {
 	// Nuovo Logo
+	Log.i("\t\t\t      RAM: %u MB\n", ram);
 	Log.d("\t\t\t       __________\n"); 
   	Log.d("\t\t\t       |        |\n");
   	Log.d("\t\t\t       | |\134  /| |\n");

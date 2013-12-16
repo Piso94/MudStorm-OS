@@ -19,7 +19,6 @@
 #include <shell.h>
 #include <stddef.h>
 #include <rtc.h>
-#include <version.h>
 #include <string.h>
 #include <speaker.h>
 #include <log.h>
@@ -34,7 +33,7 @@ void help()
 {
 	for (int i=0; i<NUM; i++) // Conto fino al valore della variabile NUM(definita nel file shell.h)
 	{
-		if (i != 6)
+		if (i != 3)
 			printk("\n %s - %s", shellcmd[i].cmdname, shellcmd[i].cmddesc); 
 			// Scrive a schermo: nome del comando - descrizione
 	}
@@ -45,44 +44,6 @@ void clear()
 {
 	cls(); // Pulisco lo schermo
 	logo(); // Stampo a video il logo
-}
-
-void uname()
-{
-	if (!strcmp(argv, "-a"))
-	{
-		printk("\n%s build-> %s - %s, %s %s - %s %s\n%s %s\n", "MudStormOS", 
-		BUILD, NAME, "Kernel->", KERNEL, "Shell->", SHELL, "Autore->", AUTHOR); 
-		// Scrive a schermo "MudStormOS Revisione - Nome, Kernel:Versione - Shell:Versione a capo Autore: Autore"
-	}
-	else if (!strcmp(argv, "-r"))
-	{
-		printk("\n%s - %s\n", BUILD, NAME); // Scrivo a schermo "Revisione-Nome"
-	}
-	else if (!strcmp(argv, "-k"))
-	{
-		printk("\n%s\n", KERNEL); // Scrivo a schermo "Versione" Kernel
-	}
-	else if (!strcmp(argv, "-s"))
-	{
-		printk("\n%s\n", SHELL); // Scrivo a schermo "Versione" Shell
-	}
-	else if (!strcmp(argv, "-n"))
-	{
-		printk("\n%s\n", AUTHOR); // Scrivo a schermo "Autore"
-	}
-	else if (!strcmp(argv, "-h"))
-	{
-		printk("\nUsa:\n -a (Vedi tutte le info)\n -r (Vedi numero di build e nome in codice)\n -k (Vedi versione kernel)\n -s (Vedi versione shell)\n -n (Vedi nome autore)\n");
-	}
-	else if(!strcmp(argv, NULL))
-	{
-		printk("\n%s build->%s\n", "MudStormOS", BUILD);
-	}
-	else
-	{
-		printk("\nStringa non valida\n");
-	}
 }
 
 void eco()
@@ -152,40 +113,12 @@ void logos()
 	logo(); // Richiamo la funzione logo();
 }
 
-void reboot_command(int com)
-{
-	if (com == 0)
-		reboot();
-	else
-		shutdown();
-}
-
 void _reboot()
 {	
-	if (!strcmp(argv, "-h"))
-	{
-		printk("\nUsa:\n	-h (Mostra i comandi)\n	-s (Spegni)");
-	}
-	else if (!strcmp(argv, NULL))
-	{
-		reboot_command(0);
-	}
-	else if (!strcmp(argv, "-s"))
-	{
-		reboot_command(1);
-	}
-	else
-	{
-		printk("\nStringa non valida\n");	
-	}
+	reboot();
 }
 
-void ls()
+void _halt()
 {
-
-}
-
-void cd()
-{
-
+	halt();
 }

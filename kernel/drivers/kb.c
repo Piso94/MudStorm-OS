@@ -99,6 +99,7 @@ void flush()
 
 int kb_special(uint8_t key)
 {	
+	//printk(" %x ", key); Debug
 	static int specKeyUp = 1;	// Is a key already been or being pressed?
 	switch(key) 
 	{
@@ -151,7 +152,17 @@ int kb_special(uint8_t key)
 		case 0xC6: // Scroll Up
 			specKeyUp = 1;
 			break;
-		case 0xE0:
+		case 0xE0: // Directional up (up)
+			
+			break;
+		case 0xC8: // Directional up (down)
+			
+			break;
+		case 0x50: // Directional down (up)
+			
+			break;
+		case 0xD0: // Directional down (down)
+			
 			break;
 		default:
 			return(0);

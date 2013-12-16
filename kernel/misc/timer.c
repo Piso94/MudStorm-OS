@@ -22,7 +22,7 @@
 
 int delay = 0;
 volatile bool done = false;
-bool uninstall = false;
+bool uninstall = true;
 
 void PIC_handler(struct regs *r)
 /// Callback from ISR 0

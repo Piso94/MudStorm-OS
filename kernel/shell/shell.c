@@ -24,20 +24,16 @@
 #include <log.h>
 #include <console.h>
 
-char current_dir[100] = "/";
-
 struct cmd shellcmd[NUM] = { // Dichiaro una struttura con tutti questi comandi
 { "help", help, "Mostra i comandi" },
 { "clear", clear, "Pulisce lo schermo" },
-{ "uname", uname, "Mostra le informazioni sull'OS. Es. uname -a" },
-{ "ls", ls, "Mostra il contenuto della cartella corrente" },
-{ "cd", cd, "Cambia cartella" },
 { "echo", eco, "Stampa a video quello che vuoi. Es. echo Ciao" },
 { "cowsay", cowsay, "Mostra una mucca" }, /* Questo non viene mostrato a video! E' l'easter egg */
 { "date", date, "Mostra la data" },
-{ "beep", bee, "Suona col buzzer" },
+{ "beep", bee, "Suona col buzzer(non funziona)" },
 { "logo", logos, "Stampa a schermo il logo" },
-{ "reboot", _reboot, "Spegne o riavvia la macchina" },
+{ "reboot", _reboot, "Riavvia la macchina" },
+{ "halt", _halt, "Spegne la macchina" },
 };
 
 int find(string cmd)
@@ -65,9 +61,7 @@ void runShell()
 			lst[j] = 0; // Azzero i campi di lst
 
 		//printk("\n$ "); // Scrive a video
-		set_color(grey);
-		printk("\n%s$ ", current_dir); // Scrivo a video la directory corrente
-		set_color(white);
+		printk("\n$ "); // Scrivo a video la directory corrente
 		scank("%s", lst); // Leggo quello che scrivi come una stringa
 
 		char* first_command = strtok(lst, " "); // Splitto nella stringa first_command la stringa prima dello spazio

@@ -20,15 +20,14 @@
 
 extern void help();
 extern void clear();
-extern void uname();
 extern void eco();
 extern void cowsay();
 extern void date();
 extern void bee();
 extern void debug();
 extern void logos();
-extern void reboot_command(int com);
 extern void _reboot();
+extern void _halt();
 extern void ls();
 extern void cd();
 

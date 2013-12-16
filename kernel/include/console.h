@@ -18,7 +18,7 @@
 #ifndef _CONSOLE_H_
 #define _CONSOLE_H_
 
-extern void shutdown();
+extern void halt();
 extern void reboot();
 extern void logo();
 

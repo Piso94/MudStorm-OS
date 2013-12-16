@@ -62,4 +62,6 @@ struct multiboot
 
 typedef struct multiboot_header multiboot_header_t;
 
+extern size_t ram;
+
 #endif
